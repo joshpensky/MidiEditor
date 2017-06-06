@@ -4,7 +4,8 @@ package cs3500.hw05;
  * Represents a note in a piece of music.
  */
 public class Note {
-  private PitchType pitch;
+  private Pitch pitch;
+  private Octave octave;
   private int duration;
   private int position;
 
@@ -12,13 +13,15 @@ public class Note {
    * Constructs a new {@code Note} object with the given parameters.
    *
    * @param pitch       the pitch of the note
+   * @param octave      the octave of the pitch
    * @param duration    how long the note lasts (measured in beats)
    * @param position    the starting position of the note in a piece
    * @throws IllegalArgumentException if the given pitch is uninitialized, or if the duration or
    * position are negative
    */
-  public Note(PitchType pitch, int duration, int position) throws IllegalArgumentException {
-    this.setPitch(pitch);
+  public Note(Pitch pitch, Octave octave, int duration, int position)
+              throws IllegalArgumentException {
+    this.setPitch(pitch, octave);
     this.setDuration(duration);
     this.setPosition(position);
   }
@@ -33,7 +36,7 @@ public class Note {
     if (other == null) {
       throw new IllegalArgumentException("Cannot make duplicate from uninitialized note.");
     }
-    this.setPitch(other.pitch);
+    this.setPitch(other.pitch, other.octave);
     this.setDuration(other.duration);
     this.setPosition(other.position);
   }
@@ -47,6 +50,7 @@ public class Note {
     }
     Note other = (Note) o;
     return this.pitch.equals(other.pitch)
+        && this.octave.equals(other.octave)
         && this.duration == other.duration
         && this.position == other.position;
   }
@@ -60,7 +64,7 @@ public class Note {
 
   @Override
   public String toString() {
-    return "Pitch: " + this.pitch.toString()
+    return "Pitch: " + this.pitch.toString() + this.octave.getValue()
         + "\nDuration: " + this.duration
         + "\nPosition: " + this.position;
   }
@@ -69,13 +73,17 @@ public class Note {
    * Sets the pitch of the note to the given variable.
    *
    * @param pitch      the new pitch of this note
-   * @throws IllegalArgumentException if the given pitch is uninitialized
+   * @param octave     the new octave for the pitch
+   * @throws IllegalArgumentException if the given pitch or octave is uninitialized
    */
-  public void setPitch(PitchType pitch) throws IllegalArgumentException {
+  public void setPitch(Pitch pitch, Octave octave) throws IllegalArgumentException {
     if (pitch == null) {
       throw new IllegalArgumentException("Cannot set uninitialized pitch.");
+    } else if (octave == null) {
+      throw new IllegalArgumentException("Cannot set uninitialized octave.");
     }
     this.pitch = pitch;
+    this.octave = octave;
   }
 
   /**
