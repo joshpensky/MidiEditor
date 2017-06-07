@@ -64,21 +64,14 @@ public class Octave {
    * starting position in the piece.
    *
    * @param pitch      the pitch of the note
-   * @param duration   the duration of the note (measured in beats)
    * @param position   the starting position of the note
+   * @param duration   the duration of the note (measured in beats)
    * @throws IllegalArgumentException if the given pitch is uninitialized, if the duration or
    * position are negative, or if s note already exists at the given position
    */
-  public void add(Pitch pitch, int duration, int position) throws IllegalArgumentException {
+  public void add(Pitch pitch, int position, int duration) throws IllegalArgumentException {
     this.checkPitchException(pitch);
-    List<Note> pitchList = this.pitches.get(pitch);
-    for (Note n : pitchList) {
-      if (n.samePosition(position)) {
-        throw new IllegalArgumentException("Note already exists at given position.");
-      }
-    }
     this.addNoteInOrder(pitch, new Note(position, duration));
-    this.checkForOverlays(pitch);
   }
 
   /**
@@ -93,7 +86,7 @@ public class Octave {
     this.checkPitchException(pitch);
     List<Note> pitchList = this.pitches.get(pitch);
     for (Note n : pitchList) {
-      if (n.samePosition(position)) {
+      if (n.comparePosition(position) == 0) {
         pitchList.remove(n);
         return;
       }
@@ -113,14 +106,18 @@ public class Octave {
   public void editPitch(Pitch pitch, int position, Pitch newPitch) throws IllegalArgumentException {
     this.checkPitchException(pitch);
     this.checkPitchException(newPitch);
-    List<Note> pitchList = this.pitches.get(pitch);
-    for (Note n : pitchList) {
-      if (n.samePosition(position)) {
-        this.addNoteInOrder(newPitch, pitchList.remove(pitchList.indexOf(n)));
-        return;
+    if (!pitch.equals(newPitch)) {
+      List<Note> pitchList = this.pitches.get(pitch);
+      for (Note n : pitchList) {
+        if (n.comparePosition(position) == 0) {
+          Note test = new Note(n);
+          this.addNoteInOrder(newPitch, test);
+          pitchList.remove(n);
+          return;
+        }
       }
+      throw new IllegalArgumentException("Note does not exist at given position.");
     }
-    throw new IllegalArgumentException("Note does not exist at given position.");
   }
 
   /**
@@ -135,17 +132,19 @@ public class Octave {
   public void editPosition(Pitch pitch, int position, int newPosition)
                            throws IllegalArgumentException {
     this.checkPitchException(pitch);
-    List<Note> pitchList = this.pitches.get(pitch);
-    for (Note n : pitchList) {
-      if (n.samePosition(newPosition)) {
-        throw new IllegalArgumentException("Note already exists at the new position.");
-      } else if (n.samePosition(position)) {
-        n.setPosition(newPosition);
-        this.checkForOverlays(pitch);
-        return;
+    if (position != newPosition) {
+      List<Note> pitchList = this.pitches.get(pitch);
+      for (Note n : pitchList) {
+        if (n.comparePosition(position) == 0) {
+          Note test = new Note(n);
+          test.setPosition(newPosition);
+          this.addNoteInOrder(pitch, test);
+          pitchList.remove(n);
+          return;
+        }
       }
+      throw new IllegalArgumentException("Note does not exist at given position.");
     }
-    throw new IllegalArgumentException("Note does not exist at given position.");
   }
 
   /**
@@ -162,9 +161,8 @@ public class Octave {
     this.checkPitchException(pitch);
     List<Note> pitchList = this.pitches.get(pitch);
     for (Note n : pitchList) {
-      if (n.samePosition(position)) {
+      if (n.comparePosition(position) == 0) {
         n.setDuration(newDuration);
-        this.checkForOverlays(pitch);
         return;
       }
     }
@@ -191,28 +189,20 @@ public class Octave {
    * @param note    the note to be added
    */
   private void addNoteInOrder(Pitch pitch, Note note) {
+    if (note == null) {
+      throw new IllegalArgumentException("Cannot add uninitialized note.");
+    }
     List<Note> pitchList = this.pitches.get(pitch);
     int addIndex = 0;
     for (int i = 0; i < pitchList.size(); i++) {
-      if (!pitchList.get(i).startsBefore(note)) {
+      int comparison = pitchList.get(i).comparePosition(note);
+      if (comparison == 0) {
+        throw new IllegalArgumentException("Note already exists at this position.");
+      } else if (comparison < 0) {
         addIndex = i;
         break;
       }
     }
     pitchList.add(addIndex, note);
-    this.checkForOverlays(pitch);
-  }
-
-  /**
-   * Helper to the addNoteInOrder method. Checks for overlaying errors in the octave at the given
-   * pitch from adding new notes.
-   *
-   * @param pitch   the pitch to be checked
-   */
-  private void checkForOverlays(Pitch pitch) {
-    List<Note> pitchList = this.pitches.get(pitch);
-    for (int i = 1; i < pitchList.size(); i++) {
-      pitchList.get(i - 1).overlay(pitchList.get(i));
-    }
   }
 }

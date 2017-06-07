@@ -98,50 +98,20 @@ public final class Note {
   }
 
   /**
-   * Checks if the given position is the same as this note's.
-   *
-   * @param position   the position to be checked against
-   * @return true if it's the same position, false otherwise
-   */
-  boolean samePosition(int position) {
-    return this.position == position;
-  }
-
-  /**
    * Checks if this note starts before the given note.
    *
    * @param other   the note being checked against
    * @return true if this note starts before the other, false otherwise
    * @throws IllegalArgumentException if the given note is uninitialized
    */
-  boolean startsBefore(Note other) throws IllegalArgumentException {
+  int comparePosition(Note other) throws IllegalArgumentException {
     if (other == null) {
       throw new IllegalArgumentException("Cannot use uninitialized note.");
     }
-    return this.position < other.position;
+    return Integer.compare(this.position, other.position);
   }
 
-  /**
-   * Overlays two (in-order) notes onto each other and separates them accordingly:
-   * If the second note starts before or when the first ends, the first note is cut right before
-   * the second starts.
-   * Additionally, if the first note ends after the second note ends, the second note gains
-   * the difference in duration from the second note's end to the first note's.
-   *
-   * @param other   the note being checked against
-   * @throws IllegalArgumentException if the given note is uninitialized, or if the given note
-   * starts before or at the same time as this note
-   */
-  void overlay(Note other) throws IllegalArgumentException {
-    if (!this.startsBefore(other)) {
-      throw new IllegalArgumentException("Given note should start after this one.");
-    } else if (other.position <= this.endPoint) {
-      if (other.endPoint < this.endPoint) {
-        other.duration += this.endPoint - other.endPoint;
-        other.setEndPoint();
-      }
-      this.duration -= (this.endPoint - other.position) + 1;
-      this.setEndPoint();
-    }
+  int comparePosition(int position) throws IllegalArgumentException {
+    return Integer.compare(this.position, position);
   }
 }

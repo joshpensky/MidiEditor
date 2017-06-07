@@ -81,10 +81,10 @@ public class Piece {
    *
    * @throws IllegalArgumentException if the given note is uninitialized
    */
-  public void addNote(int octave, Pitch pitch, int duration, int position)
+  public void addNote(int octave, Pitch pitch, int position, int duration)
                       throws IllegalArgumentException {
     checkOctaveException(octave);
-    this.octaves.get(octave).add(pitch, duration, position);
+    this.octaves.get(octave).add(pitch, position, duration);
   }
 
   /**
@@ -123,7 +123,7 @@ public class Piece {
   public void editPosition(int octave, Pitch pitch, int position, int newPosition)
     throws IllegalArgumentException {
     checkOctaveException(octave);
-    this.octaves.get(octave).add(pitch, position, newPosition);
+    this.octaves.get(octave).add(pitch, newPosition, position);
   }
 
   /**

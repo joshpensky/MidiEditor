@@ -16,22 +16,18 @@ public class EditorModel implements EditorOperations<Piece> {
   }
 
   public EditorModel(Piece... pieces) throws IllegalArgumentException {
-    if (pieces == null) {
-      throw new IllegalArgumentException();
-    }
-    this.pieces = new ArrayList<>();
+    this();
     for (Piece p : pieces) {
       if (p == null) {
-        throw new IllegalArgumentException();
+        throw new IllegalArgumentException("A given piece was uninitialized.");
       }
       this.pieces.add(p);
     }
-    this.opened = null;
   }
 
   @Override
   public void create(String title, int measure) throws IllegalArgumentException {
-     return;
+
   }
 
   @Override

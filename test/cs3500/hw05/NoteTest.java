@@ -172,41 +172,4 @@ public class NoteTest {
     n.setPosition(52);
     assertEquals("Duration: 3\nPosition: 52", n.toString());
   }
-
-  // Tests for the overlay method
-  @Test
-  public void overlayAfter() {
-    Note n1 = new Note(4, 4);
-    Note n2 = new Note(6, 3);
-    n1.overlay(n2);
-    assertEquals(n1, new Note(4, 2));
-    assertEquals(n2, new Note(6, 3));
-  }
-
-  @Test
-  public void overlayAfterLongerThanShort() {
-    Note n1 = new Note(4, 7);
-    Note n2 = new Note(6, 3);
-    n1.overlay(n2);
-    assertEquals(n1, new Note(4, 2));
-    assertEquals(n2, new Note(6, 5));
-  }
-
-  @Test
-  public void overlayEquals() {
-    Note n1 = new Note(4, 3);
-    Note n2 = new Note(6, 3);
-    n1.overlay(n2);
-    assertEquals(n1, new Note(4, 2));
-    assertEquals(n2, new Note(6, 3));
-  }
-
-  @Test
-  public void overlayBefore() {
-    Note n1 = new Note(4, 2);
-    Note n2 = new Note(6, 3);
-    n1.overlay(n2);
-    assertEquals(n1, new Note(4, 2));
-    assertEquals(n2, new Note(6, 3));
-  }
 }
