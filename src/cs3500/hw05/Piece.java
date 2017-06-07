@@ -38,22 +38,36 @@ public class Piece {
    * Copy constructor.
    * Constructs a copy of the given {@code Piece} object with a new title.
    *
-   * @param title      the title of the piece
    * @param other      the piece to be copied
    * @throws IllegalArgumentException if the given title or piece are uninitialized
    */
-  public Piece(String title, Piece other) throws IllegalArgumentException {
-    if (title == null) {
-      throw new IllegalArgumentException("Cannot set piece to an uninitialized title.");
-    } else if (other == null) {
+  public Piece(Piece other) throws IllegalArgumentException {
+    if (other == null) {
       throw new IllegalArgumentException("Cannot duplicate uninitialized piece.");
     }
-    this.title = title;
+    this.title = other.title;
     this.measure = other.measure;
     this.octaves = new HashMap<>();
     for (int i = 1; i <= 10; i++) {
       this.octaves.put(i, new Octave(other.octaves.get(i)));
     }
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    } else if (!(o instanceof Piece)) {
+      return false;
+    }
+    Piece other = (Piece) o;
+    for (Integer i : this.octaves.keySet()) {
+      if (!this.octaves.get(i).equals(other.octaves.get(i))) {
+        return false;
+      }
+    }
+    return this.title.equals(other.title)
+        && this.measure == other.measure;
   }
 
   @Override
@@ -85,7 +99,7 @@ public class Piece {
   public void addNote(int octave, Pitch pitch, int position, int duration)
       throws IllegalArgumentException {
     checkOctaveException(octave);
-    this.octaves.get(octave).add(pitch, position, duration);
+    this.octaves.get(octave).addNote(pitch, position, duration);
   }
 
   /**
@@ -96,7 +110,7 @@ public class Piece {
    */
   public void removeNote(int octave, Pitch pitch, int position) throws IllegalArgumentException {
     checkOctaveException(octave);
-    this.octaves.get(octave).remove(pitch, position);
+    this.octaves.get(octave).removeNote(pitch, position);
   }
 
   /**
@@ -123,7 +137,7 @@ public class Piece {
   public void editPosition(int octave, Pitch pitch, int position, int newPosition)
       throws IllegalArgumentException {
     checkOctaveException(octave);
-    this.octaves.get(octave).add(pitch, newPosition, position);
+    this.octaves.get(octave).editPosition(pitch, newPosition, position);
   }
 
   /**
@@ -170,5 +184,19 @@ public class Piece {
     for (Integer i : this.octaves.keySet()) {
       this.octaves.get(i).merge(new Octave(other.octaves.get(i)));
     }
+  }
+
+  /**
+   * Checks if the given title is the same as this piece's title.
+   *
+   * @param title   the title to be checked
+   * @return true if the titles match, false otherwise
+   * @throws IllegalArgumentException if the given title is uninitialized
+   */
+  boolean sameTitle(String title) throws IllegalArgumentException {
+    if (title == null) {
+      throw new IllegalArgumentException("Given title is uninitialized.");
+    }
+    return this.title.equals(title);
   }
 }

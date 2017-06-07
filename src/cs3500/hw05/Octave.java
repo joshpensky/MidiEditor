@@ -45,6 +45,26 @@ public class Octave {
   }
 
   @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    } else if (!(o instanceof Octave)) {
+      return false;
+    }
+    Octave other = (Octave) o;
+    for (Pitch p : this.pitches.keySet()) {
+      List<Note> thisPitch = this.pitches.get(p);
+      List<Note> otherPitch = other.pitches.get(p);
+      for (Note n : thisPitch) {
+        if (!otherPitch.contains(n)) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
+  @Override
   public String toString() {
     // TODO
     return "";
@@ -90,7 +110,7 @@ public class Octave {
    * position are negative, if the duration is zero, or if a note already exists at the given
    * position
    */
-  void add(Pitch pitch, int position, int duration) throws IllegalArgumentException {
+  void addNote(Pitch pitch, int position, int duration) throws IllegalArgumentException {
     this.checkPitchException(pitch);
     this.addNoteInOrder(pitch, new Note(position, duration));
   }
@@ -103,7 +123,7 @@ public class Octave {
    * @throws IllegalArgumentException if the given pitch is uninitialized, or if there is no note
    * at the given position
    */
-  void remove(Pitch pitch, int position) throws IllegalArgumentException {
+  void removeNote(Pitch pitch, int position) throws IllegalArgumentException {
     this.checkPitchException(pitch);
     List<Note> pitchList = this.pitches.get(pitch);
     for (Note n : pitchList) {
