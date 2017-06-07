@@ -1,6 +1,8 @@
 package cs3500.hw05;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -36,10 +38,10 @@ public class Piece {
 
   /**
    * Copy constructor.
-   * Constructs a copy of the given {@code Piece} object with a new title.
+   * Constructs a copy of the given {@code Piece} object.
    *
    * @param other      the piece to be copied
-   * @throws IllegalArgumentException if the given title or piece are uninitialized
+   * @throws IllegalArgumentException if the given piece is uninitialized
    */
   public Piece(Piece other) throws IllegalArgumentException {
     if (other == null) {
@@ -73,7 +75,51 @@ public class Piece {
   @Override
   public String toString() {
     // TODO
-    return "";
+    return this.stringBuilder();
+  }
+
+  private String stringBuilder() {
+    List<List<String>> arr = this.getStringArray();
+    int octaveLength = arr.get(0).size();
+    int padNumbers = Integer.toString(octaveLength).length();
+    StringBuilder builder = new StringBuilder();
+    for (int i = 0; i < octaveLength; i++) {
+      if (i > 0) {
+        builder.append(Utils.padString(Integer.toString(i - 1), padNumbers, Utils.Alignment.RIGHT));
+      } else {
+        builder.append(Utils.padString("", padNumbers, Utils.Alignment.RIGHT));
+      }
+      builder.append("  ");
+      for (List<String> pitchCol : arr) {
+        builder.append(pitchCol.get(i));
+      }
+      builder.append("\n");
+    }
+    return builder.toString();
+  }
+
+
+  private List<List<String>> getStringArray() {
+    List<List<List<String>>> builder = new ArrayList<>();
+    String empty = Utils.padString("", 5, Utils.Alignment.CENTER);
+    int maxLength = 0;
+    for (int i = 1; i <= 10; i++) {
+      Octave o = this.octaves.get(i);
+      if (!o.isEmpty()) {
+        builder.add(o.getStringArray(i, 5));
+      }
+      maxLength = Math.max(maxLength, o.getLength());
+    }
+    List<List<String>> piece = new ArrayList<>();
+    for (List<List<String>> octave : builder) {
+      for (List<String> pitchCol : octave) {
+        while (pitchCol.size() <= maxLength) {
+          pitchCol.add(empty);
+        }
+        piece.add(pitchCol);
+      }
+    }
+    return piece;
   }
 
   /**

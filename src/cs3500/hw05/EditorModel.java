@@ -10,11 +10,20 @@ public class EditorModel implements EditorOperations<Piece> {
   private List<Piece> pieces;
   private Piece opened;
 
+  /**
+   * Creates a new {@code EditorModel} with no pieces in memory.
+   */
   public EditorModel() {
     this.pieces = new ArrayList<>();
     this.opened = null;
   }
 
+  /**
+   * Creates a new {@code EditorModel} with the given pieces in memory to be opened or edited.
+   *
+   * @param pieces   the pieces to be added to the model's memory
+   * @throws IllegalArgumentException if any of the given pieces are uninitialized
+   */
   public EditorModel(Piece... pieces) throws IllegalArgumentException {
     this();
     for (Piece p : pieces) {

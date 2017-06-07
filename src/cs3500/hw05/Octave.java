@@ -66,8 +66,70 @@ public class Octave {
 
   @Override
   public String toString() {
+    if (this.isEmpty()) {
+      return "";
+    }
     // TODO
     return "";
+  }
+
+  String stringBuilder(int octaveNum, int padding) {
+    List<List<String>> arr = getStringArray(octaveNum, padding);
+    int octaveLength = arr.get(0).size();
+    int padNumbers = Integer.toString(octaveLength).length();
+    StringBuilder builder = new StringBuilder();
+    for (int i = 0; i < octaveLength; i++) {
+      if (i > 0) {
+        builder.append(Utils.padString(Integer.toString(i - 1), padNumbers, Utils.Alignment.RIGHT));
+      } else {
+        builder.append(Utils.padString("", padNumbers, Utils.Alignment.RIGHT));
+      }
+      builder.append("  ");
+      for (List<String> pitchCol : arr) {
+        builder.append(pitchCol.get(i));
+      }
+      builder.append("\n");
+    }
+    return builder.toString();
+  }
+
+  List<List<String>> getStringArray(int octaveNum, int padding) {
+    String onset = Utils.padString("X", padding, Utils.Alignment.CENTER);
+    String sustain = Utils.padString("|", padding, Utils.Alignment.CENTER);
+    String empty = Utils.padString("", padding, Utils.Alignment.CENTER);
+    List<List<String>> builder = new ArrayList<>();
+    for (Pitch p : Pitch.values()) {
+      //System.out.println(p.toString());
+      List<Note> notes = this.pitches.get(p);
+      List<String> pitchCol = new ArrayList<>();
+      int length = 0;
+      if (notes.size() > 0) {
+        length = notes.get(notes.size() - 1).getEndPoint();
+      }
+      for (int i = 0; i <= length; i++) {
+        pitchCol.add(empty);
+      }
+      for (Note n : notes) {
+        int start = n.getPosition();
+        int end = n.getEndPoint();
+        pitchCol.set(start, onset);
+        for (int i = start + 1; i <= end; i++) {
+          pitchCol.set(i, sustain);
+        }
+      }
+      pitchCol.add(0, Utils.padString(p.toString() + octaveNum, padding, Utils.Alignment.CENTER));
+      builder.add(pitchCol);
+    }
+    int maxLength = 0;
+    for (List<String> pitchCol : builder) {
+      maxLength = Math.max(maxLength, pitchCol.size());
+    }
+    for (List<String> pitchCol : builder) {
+      while (pitchCol.size() < maxLength) {
+        pitchCol.add(empty);
+      }
+    }
+    return builder;
   }
 
   /**
@@ -77,7 +139,7 @@ public class Octave {
    */
   public boolean isEmpty() {
     for (List<Note> list : this.pitches.values()) {
-      if (list.isEmpty()) {
+      if (list.size() != 0) {
         return false;
       }
     }
@@ -93,7 +155,10 @@ public class Octave {
     int longest = 0;
     for (Pitch p : this.pitches.keySet()) {
       List<Note> pitchList = this.pitches.get(p);
-      int length = pitchList.get(pitchList.size() - 1).getEndPoint();
+      int length = 0;
+      if (pitchList.size() > 0) {
+        length = pitchList.get(pitchList.size() - 1).getEndPoint();
+      }
       longest = Math.max(longest, length);
     }
     return longest;
