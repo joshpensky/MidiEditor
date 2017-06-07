@@ -15,7 +15,7 @@ public class Octave {
    * Default constructor.
    * Creates a new {@code Octave} object.
    */
-  public Octave() {
+  Octave() {
     this.pitches = new HashMap<>();
     for (Pitch p : Pitch.values()) {
       this.pitches.put(p, new ArrayList<>());
@@ -28,7 +28,7 @@ public class Octave {
    *
    * @param other    the octave to be copied
    */
-  public Octave(Octave other) {
+  Octave(Octave other) {
     this.pitches = new HashMap<>();
     for (Pitch p : Pitch.values()) {
       List<Note> newNotes = new ArrayList<>();
@@ -42,6 +42,7 @@ public class Octave {
 
   @Override
   public String toString() {
+    // TODO
     return "";
   }
 
@@ -52,11 +53,26 @@ public class Octave {
    */
   public boolean emptyOctave() {
     for (List<Note> list : this.pitches.values()) {
-      if (list.size() > 0) {
+      if (list.isEmpty()) {
         return false;
       }
     }
     return true;
+  }
+
+  /**
+   * Gets the length of this octave.
+   *
+   * @return the length of this octave
+   */
+  int getLength() {
+    int longest = 0;
+    for (Pitch p : this.pitches.keySet()) {
+      List<Note> pitchList = this.pitches.get(p);
+      int length = pitchList.get(pitchList.size() - 1).getEndPoint();
+      longest = Math.max(longest, length);
+    }
+    return longest;
   }
 
   /**
@@ -67,9 +83,10 @@ public class Octave {
    * @param position   the starting position of the note
    * @param duration   the duration of the note (measured in beats)
    * @throws IllegalArgumentException if the given pitch is uninitialized, if the duration or
-   * position are negative, or if s note already exists at the given position
+   * position are negative, if the duration is zero, or if a note already exists at the given
+   * position
    */
-  public void add(Pitch pitch, int position, int duration) throws IllegalArgumentException {
+  void add(Pitch pitch, int position, int duration) throws IllegalArgumentException {
     this.checkPitchException(pitch);
     this.addNoteInOrder(pitch, new Note(position, duration));
   }
@@ -82,11 +99,11 @@ public class Octave {
    * @throws IllegalArgumentException if the given pitch is uninitialized, or if there is no note
    * at the given position
    */
-  public void remove(Pitch pitch, int position) throws IllegalArgumentException {
+  void remove(Pitch pitch, int position) throws IllegalArgumentException {
     this.checkPitchException(pitch);
     List<Note> pitchList = this.pitches.get(pitch);
     for (Note n : pitchList) {
-      if (n.comparePosition(position) == 0) {
+      if (n.getPosition() == position) {
         pitchList.remove(n);
         return;
       }
@@ -103,13 +120,13 @@ public class Octave {
    * @throws IllegalArgumentException if either of the given pitches are uninitialized, or if
    * there is no note at the given position
    */
-  public void editPitch(Pitch pitch, int position, Pitch newPitch) throws IllegalArgumentException {
+  void editPitch(Pitch pitch, int position, Pitch newPitch) throws IllegalArgumentException {
     this.checkPitchException(pitch);
     this.checkPitchException(newPitch);
     if (!pitch.equals(newPitch)) {
       List<Note> pitchList = this.pitches.get(pitch);
       for (Note n : pitchList) {
-        if (n.comparePosition(position) == 0) {
+        if (n.getPosition() == position) {
           Note test = new Note(n);
           this.addNoteInOrder(newPitch, test);
           pitchList.remove(n);
@@ -129,13 +146,13 @@ public class Octave {
    * @throws IllegalArgumentException if the given pitch is uninitialized, if there is no note at
    * the given position, or if the new position is negative
    */
-  public void editPosition(Pitch pitch, int position, int newPosition)
+  void editPosition(Pitch pitch, int position, int newPosition)
                            throws IllegalArgumentException {
     this.checkPitchException(pitch);
     if (position != newPosition) {
       List<Note> pitchList = this.pitches.get(pitch);
       for (Note n : pitchList) {
-        if (n.comparePosition(position) == 0) {
+        if (n.getPosition() == position) {
           Note test = new Note(n);
           test.setPosition(newPosition);
           this.addNoteInOrder(pitch, test);
@@ -154,14 +171,14 @@ public class Octave {
    * @param position      the starting position of the note to be edited
    * @param newDuration   the new duration of the edited note
    * @throws IllegalArgumentException if the given pitch is uninitialized, if there is no note at
-   * the given position, or if the new duration is negative
+   * the given position, or if the new duration is negative or zero
    */
-  public void editDuration(Pitch pitch, int position, int newDuration)
+  void editDuration(Pitch pitch, int position, int newDuration)
                            throws IllegalArgumentException {
     this.checkPitchException(pitch);
     List<Note> pitchList = this.pitches.get(pitch);
     for (Note n : pitchList) {
-      if (n.comparePosition(position) == 0) {
+      if (n.getPosition() == position) {
         n.setDuration(newDuration);
         return;
       }
@@ -187,15 +204,16 @@ public class Octave {
    *
    * @param pitch   the pitch the note is at
    * @param note    the note to be added
+   * @throws IllegalArgumentException if the given note is uninitialized
    */
-  private void addNoteInOrder(Pitch pitch, Note note) {
+  private void addNoteInOrder(Pitch pitch, Note note) throws IllegalArgumentException {
     if (note == null) {
       throw new IllegalArgumentException("Cannot add uninitialized note.");
     }
     List<Note> pitchList = this.pitches.get(pitch);
     int addIndex = 0;
     for (int i = 0; i < pitchList.size(); i++) {
-      int comparison = pitchList.get(i).comparePosition(note);
+      int comparison = Integer.compare(pitchList.get(i).getPosition(), note.getPosition());
       if (comparison == 0) {
         throw new IllegalArgumentException("Note already exists at this position.");
       } else if (comparison < 0) {
@@ -204,5 +222,27 @@ public class Octave {
       }
     }
     pitchList.add(addIndex, note);
+  }
+
+  /**
+   * Creates copies of all of the notes from the given octave and adds them to this octave if a
+   * note does not already exist at the same position.
+   *
+   * @param other   the octave to be merged with
+   * @throws IllegalArgumentException if given octave is uninitialized
+   */
+  void merge(Octave other) throws IllegalArgumentException {
+    if (other == null) {
+      throw new IllegalArgumentException("Given octave is uninitialized.");
+    }
+    for (Pitch p : this.pitches.keySet()) {
+      for (Note n : other.pitches.get(p)) {
+        try {
+          this.addNoteInOrder(p, new Note(n));
+        } catch (IllegalArgumentException e) {
+          // Note already exists at same position in this octave, do not merge
+        }
+      }
+    }
   }
 }

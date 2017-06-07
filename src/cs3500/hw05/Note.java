@@ -90,6 +90,15 @@ public final class Note {
   }
 
   /**
+   * Gets the starting position of this note.
+   *
+   * @return the starting position of this note
+   */
+  int getPosition() {
+    return this.position;
+  }
+
+  /**
    * Sets the end point of the note, using the duration and position of this note.
    * This is used for checking where a note lies in between another note.
    */
@@ -98,20 +107,11 @@ public final class Note {
   }
 
   /**
-   * Checks if this note starts before the given note.
+   * Gets the ending position of this note.
    *
-   * @param other   the note being checked against
-   * @return true if this note starts before the other, false otherwise
-   * @throws IllegalArgumentException if the given note is uninitialized
+   * @return the ending position of this note
    */
-  int comparePosition(Note other) throws IllegalArgumentException {
-    if (other == null) {
-      throw new IllegalArgumentException("Cannot use uninitialized note.");
-    }
-    return Integer.compare(this.position, other.position);
-  }
-
-  int comparePosition(int position) throws IllegalArgumentException {
-    return Integer.compare(this.position, position);
+  int getEndPoint() {
+    return this.endPoint;
   }
 }

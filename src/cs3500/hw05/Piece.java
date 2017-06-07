@@ -12,10 +12,10 @@ public class Piece {
   private int measure;
 
   /**
-   * New Constructor.
-   * Constructs a brand new {@code Piece} object with a title and a measure.
+   * Default constructor.
+   * Constructs a new {@code Piece} object with a title and a measure.
    *
-   * @param title       the title of the piece
+   * @param title      the title of the piece
    * @param measure    the measure of the piece (usually 3 or 4 beats)
    * @throws IllegalArgumentException if the given title is uninitialized, or if the measure is
    * negative
@@ -35,45 +35,46 @@ public class Piece {
   }
 
   /**
-   * Duplicate Constructor.
-   * Constructs a duplicate {@code Piece} using the given piece, but with different references.
+   * Copy constructor.
+   * Constructs a copy of the given {@code Piece} object with a new title.
    *
-   * @param title       the title of the piece
-   * @param piece      the piece to be copied
+   * @param title      the title of the piece
+   * @param other      the piece to be copied
    * @throws IllegalArgumentException if the given title or piece are uninitialized
    */
-  public Piece(String title, Piece piece) throws IllegalArgumentException {
+  public Piece(String title, Piece other) throws IllegalArgumentException {
     if (title == null) {
       throw new IllegalArgumentException("Cannot set piece to an uninitialized title.");
-    } else if (piece == null) {
+    } else if (other == null) {
       throw new IllegalArgumentException("Cannot duplicate uninitialized piece.");
     }
     this.title = title;
-    this.measure = piece.measure;
+    this.measure = other.measure;
     this.octaves = new HashMap<>();
     for (int i = 1; i <= 10; i++) {
-      this.octaves.put(i, new Octave());
+      this.octaves.put(i, new Octave(other.octaves.get(i)));
     }
-    // TODO
-    // Create copy of piece for octaves
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    // TODO
-    return false;
-  }
-
-  @Override
-  public int hashCode() {
-    // TODO
-    return 0;
   }
 
   @Override
   public String toString() {
     // TODO
     return "";
+  }
+
+  /**
+   * Gets the length of this piece.
+   *
+   * @return the length of this piece
+   */
+  private int getLength() {
+    int longest = 0;
+    for (Integer i : this.octaves.keySet()) {
+      Octave octave = this.octaves.get(i);
+      int length = octave.getLength();
+      longest = Math.max(longest, length);
+    }
+    return longest;
   }
 
   /**
@@ -138,20 +139,37 @@ public class Piece {
     this.octaves.get(octave).editDuration(pitch, position, newDuration);
   }
 
+  /**
+   * Helper to the addNote, removeNote, editPitch, editPosition, and editDuration methods.
+   * Checks if the given octave exists in a piece.
+   *
+   * @param octave   the octave to be checked
+   */
   private void checkOctaveException(int octave) {
-    if (octave < 1 || octave > 10) {
+    if (!this.octaves.keySet().contains(octave)) {
       throw new IllegalArgumentException("Given octave does not exist.");
     }
   }
 
   /**
-   * Merges this piece with the given one, combing all notes together.
-   * @param name       the new title of the merged piece
+   * Merges this piece with the given one, without keeping the same references to the given piece.
+   *
+   * @param title      the new title of the merged piece
    * @param other      the piece to be merged with
-   * @throws IllegalArgumentException if the given title or piece are uninitialized
+   * @throws IllegalArgumentException if the given title or piece are uninitialized, or if the
+   * measures of this and the given pieces aren't the same
    */
-  public void merge(String name, Piece other) throws IllegalArgumentException {
-    // TODO
-    return;
+  public void merge(String title, Piece other) throws IllegalArgumentException {
+    if (title == null) {
+      throw new IllegalArgumentException("Cannot set merged piece to uninitialized title.");
+    } else if (other == null) {
+      throw new IllegalArgumentException("Cannot merge with uninitialized piece.");
+    } else if (other.measure != this.measure) {
+      throw new IllegalArgumentException("The measures of both pieces do not match.");
+    }
+    this.title = title;
+    for (Integer i : this.octaves.keySet()) {
+      this.octaves.get(i).merge(new Octave(other.octaves.get(i)));
+    }
   }
 }
