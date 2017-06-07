@@ -17,18 +17,18 @@ public interface EditorOperations<K> {
 
   void close() throws IllegalStateException;
 
-  void addNote(OctaveType octave, Pitch pitch, int duration, int position)
+  void addNote(int octave, Pitch pitch, int duration, int position)
       throws IllegalArgumentException;
 
-  void removeNote(OctaveType octave, Pitch pitch, int position)
+  void removeNote(int octave, Pitch pitch, int position)
       throws IllegalArgumentException;
 
-  void editPitch(OctaveType octave, Pitch pitch, int position, Pitch newPitch)
+  void editPitch(int octave, Pitch pitch, int position, Pitch newPitch)
       throws IllegalArgumentException;
 
-  void editDuration(OctaveType octave, Pitch pitch, int position, int newDuration)
+  void editDuration(int octave, Pitch pitch, int position, int newDuration)
       throws IllegalArgumentException;
 
-  void editPosition(OctaveType octave, Pitch pitch, int position, int newPosition)
+  void editPosition(int octave, Pitch pitch, int position, int newPosition)
       throws IllegalArgumentException;
 }

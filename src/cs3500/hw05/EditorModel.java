@@ -55,31 +55,31 @@ public class EditorModel implements EditorOperations<Piece> {
   }
 
   @Override
-  public void addNote(OctaveType octave, Pitch pitch, int duration, int position)
+  public void addNote(int octave, Pitch pitch, int duration, int position)
                       throws IllegalArgumentException {
     return;
   }
 
   @Override
-  public void removeNote(OctaveType octave, Pitch pitch, int position)
+  public void removeNote(int octave, Pitch pitch, int position)
                          throws IllegalArgumentException {
     return;
   }
 
   @Override
-  public void editPitch(OctaveType octave, Pitch pitch, int position, Pitch newPitch)
+  public void editPitch(int octave, Pitch pitch, int position, Pitch newPitch)
                         throws IllegalArgumentException {
     return;
   }
 
   @Override
-  public void editDuration(OctaveType octave, Pitch pitch, int position, int newDuration)
+  public void editDuration(int octave, Pitch pitch, int position, int newDuration)
                            throws IllegalArgumentException {
     return;
   }
 
   @Override
-  public void editPosition(OctaveType octave, Pitch pitch, int position, int newPosition)
+  public void editPosition(int octave, Pitch pitch, int position, int newPosition)
                            throws IllegalArgumentException {
     return;
   }

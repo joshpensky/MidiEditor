@@ -7,7 +7,7 @@ import java.util.Map;
  * Represents a musical piece that can be edited in the editor.
  */
 public class Piece {
-  private Map<OctaveType, Octave> octaves;
+  private Map<Integer, Octave> octaves;
   private String title;
   private int measure;
 
@@ -29,8 +29,8 @@ public class Piece {
     this.title = title;
     this.measure = measure;
     this.octaves = new HashMap<>();
-    for (OctaveType o : OctaveType.values()) {
-      this.octaves.put(o, new Octave());
+    for (int i = 1; i <= 10; i++) {
+      this.octaves.put(i, new Octave());
     }
   }
 
@@ -51,8 +51,8 @@ public class Piece {
     this.title = title;
     this.measure = piece.measure;
     this.octaves = new HashMap<>();
-    for (OctaveType o : OctaveType.values()) {
-      this.octaves.put(o, new Octave());
+    for (int i = 1; i <= 10; i++) {
+      this.octaves.put(i, new Octave());
     }
     // TODO
     // Create copy of piece for octaves
@@ -81,9 +81,10 @@ public class Piece {
    *
    * @throws IllegalArgumentException if the given note is uninitialized
    */
-  public void addNote(OctaveType octave, Pitch pitch, int duration, int position)
+  public void addNote(int octave, Pitch pitch, int duration, int position)
                       throws IllegalArgumentException {
-    return;
+    checkOctaveException(octave);
+    this.octaves.get(octave).add(pitch, duration, position);
   }
 
   /**
@@ -92,9 +93,10 @@ public class Piece {
    * @throws IllegalArgumentException if the given note is uninitialized, or if the note does not
    * exist in the piece
    */
-  public void removeNote(OctaveType octave, Pitch pitch, int position)
+  public void removeNote(int octave, Pitch pitch, int position)
                          throws IllegalArgumentException {
-    return;
+    checkOctaveException(octave);
+    this.octaves.get(octave).remove(pitch, position);
   }
 
   /**
@@ -105,20 +107,10 @@ public class Piece {
    * @throws IllegalArgumentException if the given note or pitch are uninitialized, or if the note
    * does not exist in the piece
    */
-  public void editPitch(OctaveType octave, Pitch pitch, int position, Pitch newPitch)
+  public void editPitch(int octave, Pitch pitch, int position, Pitch newPitch)
                         throws IllegalArgumentException {
-    return;
-  }
-
-  /**
-   * Edits the duration of a given note from the piece, if possible.
-   *
-   * @throws IllegalArgumentException if the given note is uninitialized, the duration is
-   * negative, or if the note does not exist in the piece
-   */
-  public void editDuration(OctaveType octave, Pitch pitch, int position, int newDuration)
-                           throws IllegalArgumentException {
-    return;
+    checkOctaveException(octave);
+    this.octaves.get(octave).editPitch(pitch, position, newPitch);
   }
 
   /**
@@ -128,9 +120,28 @@ public class Piece {
    * @throws IllegalArgumentException if the given note is uninitialized, the position is
    * negative, or if the note does not exist in the piece
    */
-  public void editPosition(OctaveType octave, Pitch pitch, int position, int newPosition)
+  public void editPosition(int octave, Pitch pitch, int position, int newPosition)
+    throws IllegalArgumentException {
+    checkOctaveException(octave);
+    this.octaves.get(octave).add(pitch, position, newPosition);
+  }
+
+  /**
+   * Edits the duration of a given note from the piece, if possible.
+   *
+   * @throws IllegalArgumentException if the given note is uninitialized, the duration is
+   * negative, or if the note does not exist in the piece
+   */
+  public void editDuration(int octave, Pitch pitch, int position, int newDuration)
                            throws IllegalArgumentException {
-    return;
+    checkOctaveException(octave);
+    this.octaves.get(octave).editDuration(pitch, position, newDuration);
+  }
+
+  private void checkOctaveException(int octave) {
+    if (octave < 1 || octave > 10) {
+      throw new IllegalArgumentException("Given octave does not exist.");
+    }
   }
 
   /**
@@ -140,6 +151,7 @@ public class Piece {
    * @throws IllegalArgumentException if the given title or piece are uninitialized
    */
   public void merge(String name, Piece other) throws IllegalArgumentException {
+    // TODO
     return;
   }
 }

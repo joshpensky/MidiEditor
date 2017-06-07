@@ -17,12 +17,17 @@ public class NoteTest {
   // Tests for the constructor
   @Test(expected = IllegalArgumentException.class)
   public void constructNegativeDuration() {
-    new Note(-1, 3);
+    new Note(3, -1);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void constructZeroDuration() {
+    new Note(24, 0);
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void constructNegativePosition() {
-    new Note(3, -1);
+    new Note(-1, 3);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -32,20 +37,20 @@ public class NoteTest {
 
   @Test
   public void constructNew() {
-    Note n = new Note(3, 5);
+    Note n = new Note(5, 3);
     assertEquals("Duration: 3\nPosition: 5", n.toString());
   }
 
   @Test
   public void constructDuplicateSameData() {
-    Note n = new Note(3, 5);
+    Note n = new Note(5, 3);
     Note n2 = new Note(n);
     assertEquals(n2.toString(), n.toString());
   }
 
   @Test
   public void constructDuplicateDifferentReferences() {
-    Note n = new Note(3, 5);
+    Note n = new Note(5, 3);
     Note n2 = new Note(n);
     n.setPosition(4);
     assertNotEquals(n2.toString(), n.toString());
@@ -54,46 +59,46 @@ public class NoteTest {
   // Tests for the equals method
   @Test
   public void equalsSameObject() {
-    Note n = new Note(4, 2);
+    Note n = new Note(2, 4);
     assertTrue(n.equals(n));
   }
 
   @Test
   public void equalsNull() {
-    Note n = new Note(4, 2);
+    Note n = new Note(2, 4);
     assertFalse(n.equals(null));
   }
 
   @Test
   public void equalsDifferentObjectType() {
-    Note n = new Note(4, 2);
+    Note n = new Note(2, 4);
     assertFalse(n.equals(3));
   }
 
   @Test
   public void equalsDifferentDuration() {
-    Note n = new Note(4, 2);
-    Note n2 = new Note(3, 2);
+    Note n = new Note(2, 4);
+    Note n2 = new Note(2, 3);
     assertFalse(n.equals(n2));
   }
 
   @Test
   public void equalsDifferentPosition() {
-    Note n = new Note(4, 2);
-    Note n2 = new Note(4, 5);
+    Note n = new Note(2, 4);
+    Note n2 = new Note(5, 4);
     assertFalse(n.equals(n2));
   }
 
   @Test
   public void equalsSameValues() {
-    Note n = new Note(4, 2);
-    Note n2 = new Note(4, 2);
+    Note n = new Note(2, 4);
+    Note n2 = new Note(2, 4);
     assertTrue(n.equals(n2));
   }
 
   @Test
   public void equalsDuplicate() {
-    Note n = new Note(4, 2);
+    Note n = new Note(2, 4);
     Note n2 = new Note(n);
     assertTrue(n.equals(n2));
   }
@@ -101,7 +106,7 @@ public class NoteTest {
   // Tests for the hashCode method
   @Test
   public void hashCodeNormal() {
-    Note n = new Note(4, 2);
+    Note n = new Note(2, 4);
     assertEquals(40002, n.hashCode());
   }
 
@@ -114,13 +119,13 @@ public class NoteTest {
   // Tests for the toString method
   @Test
   public void toStringNoChange() {
-    Note n = new Note(15, 23);
+    Note n = new Note(23, 15);
     assertEquals("Duration: 15\nPosition: 23", n.toString());
   }
 
   @Test
   public void toStringChangeDuration() {
-    Note n = new Note(15, 23);
+    Note n = new Note(23, 15);
     String toString = n.toString();
     n.setDuration(82);
     assertNotEquals(n.toString(), toString);
@@ -128,7 +133,7 @@ public class NoteTest {
 
   @Test
   public void toStringChangePosition() {
-    Note n = new Note(15, 23);
+    Note n = new Note(23, 15);
     String toString = n.toString();
     n.setPosition(82);
     assertNotEquals(n.toString(), toString);
@@ -137,13 +142,19 @@ public class NoteTest {
   // Tests for the setDuration method
   @Test(expected = IllegalArgumentException.class)
   public void setDurationNegative() {
-    Note n = new Note(3, 24);
+    Note n = new Note(24, 3);
     n.setPosition(-32);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void setDurationZero() {
+    Note n = new Note(24, 3);
+    n.setDuration(0);
   }
 
   @Test
   public void setDurationValid() {
-    Note n = new Note(3, 24);
+    Note n = new Note(24, 3);
     n.setDuration(52);
     assertEquals("Duration: 52\nPosition: 24", n.toString());
   }
@@ -151,14 +162,51 @@ public class NoteTest {
   // Tests for the setDuration method
   @Test(expected = IllegalArgumentException.class)
   public void setPositionNegative() {
-    Note n = new Note(3, 24);
+    Note n = new Note(24, 3);
     n.setPosition(-32);
   }
 
   @Test
   public void setPositionValid() {
-    Note n = new Note(3, 24);
+    Note n = new Note(24, 3);
     n.setPosition(52);
     assertEquals("Duration: 3\nPosition: 52", n.toString());
+  }
+
+  // Tests for the overlay method
+  @Test
+  public void overlayAfter() {
+    Note n1 = new Note(4, 4);
+    Note n2 = new Note(6, 3);
+    n1.overlay(n2);
+    assertEquals(n1, new Note(4, 2));
+    assertEquals(n2, new Note(6, 3));
+  }
+
+  @Test
+  public void overlayAfterLongerThanShort() {
+    Note n1 = new Note(4, 7);
+    Note n2 = new Note(6, 3);
+    n1.overlay(n2);
+    assertEquals(n1, new Note(4, 2));
+    assertEquals(n2, new Note(6, 5));
+  }
+
+  @Test
+  public void overlayEquals() {
+    Note n1 = new Note(4, 3);
+    Note n2 = new Note(6, 3);
+    n1.overlay(n2);
+    assertEquals(n1, new Note(4, 2));
+    assertEquals(n2, new Note(6, 3));
+  }
+
+  @Test
+  public void overlayBefore() {
+    Note n1 = new Note(4, 2);
+    Note n2 = new Note(6, 3);
+    n1.overlay(n2);
+    assertEquals(n1, new Note(4, 2));
+    assertEquals(n2, new Note(6, 3));
   }
 }
