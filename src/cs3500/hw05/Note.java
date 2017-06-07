@@ -52,9 +52,10 @@ public final class Note {
 
   @Override
   public int hashCode() {
-    return (this.duration * 10000) + this.position;
+    return (this.position * 10000) + this.duration;
   }
 
+  // TODO
   @Override
   public String toString() {
     return "Duration: " + this.duration

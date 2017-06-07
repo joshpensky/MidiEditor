@@ -27,8 +27,12 @@ public class Octave {
    * Creates a copy of the given {@code Octave} object.
    *
    * @param other    the octave to be copied
+   * @throws IllegalArgumentException if the given octave is uninitialized
    */
-  Octave(Octave other) {
+  Octave(Octave other) throws IllegalArgumentException {
+    if (other == null) {
+      throw new IllegalArgumentException("Given octave is uninitialized.");
+    }
     this.pitches = new HashMap<>();
     for (Pitch p : Pitch.values()) {
       List<Note> newNotes = new ArrayList<>();
@@ -51,7 +55,7 @@ public class Octave {
    *
    * @return true if this octave is empty, false otherwise
    */
-  public boolean emptyOctave() {
+  public boolean isEmpty() {
     for (List<Note> list : this.pitches.values()) {
       if (list.isEmpty()) {
         return false;
@@ -146,8 +150,7 @@ public class Octave {
    * @throws IllegalArgumentException if the given pitch is uninitialized, if there is no note at
    * the given position, or if the new position is negative
    */
-  void editPosition(Pitch pitch, int position, int newPosition)
-                           throws IllegalArgumentException {
+  void editPosition(Pitch pitch, int position, int newPosition) throws IllegalArgumentException {
     this.checkPitchException(pitch);
     if (position != newPosition) {
       List<Note> pitchList = this.pitches.get(pitch);
@@ -173,8 +176,7 @@ public class Octave {
    * @throws IllegalArgumentException if the given pitch is uninitialized, if there is no note at
    * the given position, or if the new duration is negative or zero
    */
-  void editDuration(Pitch pitch, int position, int newDuration)
-                           throws IllegalArgumentException {
+  void editDuration(Pitch pitch, int position, int newDuration) throws IllegalArgumentException {
     this.checkPitchException(pitch);
     List<Note> pitchList = this.pitches.get(pitch);
     for (Note n : pitchList) {
@@ -240,7 +242,7 @@ public class Octave {
         try {
           this.addNoteInOrder(p, new Note(n));
         } catch (IllegalArgumentException e) {
-          // Note already exists at same position in this octave, do not merge
+          // Note already exists at same position in this octave, do not add it to merge
         }
       }
     }

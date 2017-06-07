@@ -83,7 +83,7 @@ public class Piece {
    * @throws IllegalArgumentException if the given note is uninitialized
    */
   public void addNote(int octave, Pitch pitch, int position, int duration)
-                      throws IllegalArgumentException {
+      throws IllegalArgumentException {
     checkOctaveException(octave);
     this.octaves.get(octave).add(pitch, position, duration);
   }
@@ -94,8 +94,7 @@ public class Piece {
    * @throws IllegalArgumentException if the given note is uninitialized, or if the note does not
    * exist in the piece
    */
-  public void removeNote(int octave, Pitch pitch, int position)
-                         throws IllegalArgumentException {
+  public void removeNote(int octave, Pitch pitch, int position) throws IllegalArgumentException {
     checkOctaveException(octave);
     this.octaves.get(octave).remove(pitch, position);
   }
@@ -109,7 +108,7 @@ public class Piece {
    * does not exist in the piece
    */
   public void editPitch(int octave, Pitch pitch, int position, Pitch newPitch)
-                        throws IllegalArgumentException {
+      throws IllegalArgumentException {
     checkOctaveException(octave);
     this.octaves.get(octave).editPitch(pitch, position, newPitch);
   }
@@ -122,7 +121,7 @@ public class Piece {
    * negative, or if the note does not exist in the piece
    */
   public void editPosition(int octave, Pitch pitch, int position, int newPosition)
-    throws IllegalArgumentException {
+      throws IllegalArgumentException {
     checkOctaveException(octave);
     this.octaves.get(octave).add(pitch, newPosition, position);
   }
@@ -134,7 +133,7 @@ public class Piece {
    * negative, or if the note does not exist in the piece
    */
   public void editDuration(int octave, Pitch pitch, int position, int newDuration)
-                           throws IllegalArgumentException {
+      throws IllegalArgumentException {
     checkOctaveException(octave);
     this.octaves.get(octave).editDuration(pitch, position, newDuration);
   }

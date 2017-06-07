@@ -27,7 +27,7 @@ public class EditorModel implements EditorOperations<Piece> {
 
   @Override
   public void create(String title, int measure) throws IllegalArgumentException {
-
+    return;
   }
 
   @Override
@@ -52,31 +52,31 @@ public class EditorModel implements EditorOperations<Piece> {
 
   @Override
   public void addNote(int octave, Pitch pitch, int duration, int position)
-                      throws IllegalArgumentException {
+      throws IllegalArgumentException {
     return;
   }
 
   @Override
   public void removeNote(int octave, Pitch pitch, int position)
-                         throws IllegalArgumentException {
+      throws IllegalArgumentException {
     return;
   }
 
   @Override
   public void editPitch(int octave, Pitch pitch, int position, Pitch newPitch)
-                        throws IllegalArgumentException {
+      throws IllegalArgumentException {
     return;
   }
 
   @Override
   public void editDuration(int octave, Pitch pitch, int position, int newDuration)
-                           throws IllegalArgumentException {
+      throws IllegalArgumentException {
     return;
   }
 
   @Override
   public void editPosition(int octave, Pitch pitch, int position, int newPosition)
-                           throws IllegalArgumentException {
+      throws IllegalArgumentException {
     return;
   }
 }

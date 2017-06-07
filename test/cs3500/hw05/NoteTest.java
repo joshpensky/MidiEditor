@@ -107,7 +107,7 @@ public class NoteTest {
   @Test
   public void hashCodeNormal() {
     Note n = new Note(2, 4);
-    assertEquals(40002, n.hashCode());
+    assertEquals(20004, n.hashCode());
   }
 
   @Test
