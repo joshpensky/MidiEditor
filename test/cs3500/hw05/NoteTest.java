@@ -14,46 +14,54 @@ import static org.junit.Assert.assertFalse;
  * Tests for the {@link Note} class.
  */
 public class NoteTest {
-  // Tests for the constructor
+  // Tests for the default constructor
   @Test(expected = IllegalArgumentException.class)
-  public void constructNegativeDuration() {
+  public void defaultConstructorNegativeDuration() {
     new Note(3, -1);
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void constructZeroDuration() {
+  public void defaultConstructorZeroDuration() {
     new Note(24, 0);
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void constructNegativePosition() {
+  public void defaultConstructorNegativePosition() {
     new Note(-1, 3);
   }
 
+  @Test
+  public void defaultConstructorValid() {
+    Note n = new Note(5, 3);
+  }
+
+  // Tests for the copy constructor
   @Test(expected = IllegalArgumentException.class)
-  public void constructNullNote() {
+  public void copyConstructorNullNote() {
     new Note(null);
   }
 
   @Test
-  public void constructNew() {
-    Note n = new Note(5, 3);
-    assertEquals("Duration: 3\nPosition: 5", n.toString());
-  }
-
-  @Test
-  public void constructDuplicateSameData() {
+  public void copyConstructorSameData() {
     Note n = new Note(5, 3);
     Note n2 = new Note(n);
     assertEquals(n2.toString(), n.toString());
   }
 
   @Test
-  public void constructDuplicateDifferentReferences() {
+  public void copyConstructorDifferentPositionReference() {
     Note n = new Note(5, 3);
     Note n2 = new Note(n);
     n.setPosition(4);
-    assertNotEquals(n2.toString(), n.toString());
+    assertNotEquals(n.getPosition(), n2.getPosition());
+  }
+
+  @Test
+  public void copyConstructorDifferentDurationReference() {
+    Note n = new Note(5, 3);
+    Note n2 = new Note(n);
+    n.setDuration(4);
+    assertNotEquals(n.getEndPoint(), n2.getEndPoint());
   }
 
   // Tests for the equals method
@@ -97,7 +105,7 @@ public class NoteTest {
   }
 
   @Test
-  public void equalsDuplicate() {
+  public void equalsCopy() {
     Note n = new Note(2, 4);
     Note n2 = new Note(n);
     assertTrue(n.equals(n2));
@@ -107,36 +115,13 @@ public class NoteTest {
   @Test
   public void hashCodeNormal() {
     Note n = new Note(2, 4);
-    assertEquals(20004, n.hashCode());
+    assertEquals(200004, n.hashCode());
   }
 
   @Test
   public void hashCodeHighEnd() {
-    Note n = new Note(9999, 9999);
-    assertEquals(99999999, n.hashCode());
-  }
-
-  // Tests for the toString method
-  @Test
-  public void toStringNoChange() {
-    Note n = new Note(23, 15);
-    assertEquals("Duration: 15\nPosition: 23", n.toString());
-  }
-
-  @Test
-  public void toStringChangeDuration() {
-    Note n = new Note(23, 15);
-    String toString = n.toString();
-    n.setDuration(82);
-    assertNotEquals(n.toString(), toString);
-  }
-
-  @Test
-  public void toStringChangePosition() {
-    Note n = new Note(23, 15);
-    String toString = n.toString();
-    n.setPosition(82);
-    assertNotEquals(n.toString(), toString);
+    Note n = new Note(9999, 99999);
+    assertEquals(999999999, n.hashCode());
   }
 
   // Tests for the setDuration method
@@ -156,7 +141,7 @@ public class NoteTest {
   public void setDurationValid() {
     Note n = new Note(24, 3);
     n.setDuration(52);
-    assertEquals("Duration: 52\nPosition: 24", n.toString());
+    assertEquals(75, n.getEndPoint());
   }
 
   // Tests for the setDuration method
@@ -170,6 +155,6 @@ public class NoteTest {
   public void setPositionValid() {
     Note n = new Note(24, 3);
     n.setPosition(52);
-    assertEquals("Duration: 3\nPosition: 52", n.toString());
+    assertEquals(52, n.getPosition());
   }
 }

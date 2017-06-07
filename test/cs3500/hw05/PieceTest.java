@@ -39,8 +39,8 @@ public class PieceTest {
   public void duplicateConstructorNullPiece() {
     new Piece("hey", null);
   }
-*/
-  /*@Test
+
+  @Test
   public void duplicateConstructorValid() {
     Piece dup = new Piece("boom", 3);
     dup.addNote(OctaveType.NINE, Pitch.ASHARP, 1, 5);
@@ -58,5 +58,6 @@ public class PieceTest {
     p.addNote(1, Pitch.E, 0, 3);
     p.addNote(4, Pitch.ASHARP, 2, 10);
     System.out.print(p.toString());
+    //System.out.print(new Piece("hey", 3).toString());
   }
 }

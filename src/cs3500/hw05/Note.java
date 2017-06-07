@@ -3,7 +3,7 @@ package cs3500.hw05;
 /**
  * Represents a note in a piece of music.
  */
-public final class Note {
+final class Note {
   private int position;
   private int duration;
   private int endPoint;
@@ -16,7 +16,7 @@ public final class Note {
    * @param duration    how long the note lasts (measured in beats)
    * @throws IllegalArgumentException if the duration or position are negative
    */
-  public Note(int position, int duration) throws IllegalArgumentException {
+  Note(int position, int duration) throws IllegalArgumentException {
     this.setPosition(position);
     this.setDuration(duration);
     this.setEndPoint();
@@ -29,7 +29,7 @@ public final class Note {
    * @param other       the note to be copied
    * @throws IllegalArgumentException if the given note is uninitialized
    */
-  public Note(Note other) throws IllegalArgumentException {
+  Note(Note other) throws IllegalArgumentException {
     if (other == null) {
       throw new IllegalArgumentException("Cannot make duplicate from uninitialized note.");
     }
@@ -52,14 +52,7 @@ public final class Note {
 
   @Override
   public int hashCode() {
-    return (this.position * 10000) + this.duration;
-  }
-
-  // TODO
-  @Override
-  public String toString() {
-    return "Duration: " + this.duration
-        + "\nPosition: " + this.position;
+    return (this.position * 100000) + this.duration;
   }
 
   /**

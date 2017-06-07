@@ -3,11 +3,11 @@ package cs3500.hw05;
 /**
  * Created by josh_jpeg on 6/7/17.
  */
-public final class Utils {
-  public enum Alignment { LEFT, CENTER, RIGHT }
+final class Utils {
+  enum Alignment { LEFT, CENTER, RIGHT }
 
-  public static String padString(String str, int length, Alignment align)
-      throws IllegalArgumentException {
+  static String padString(String str, int length, Alignment align)
+    throws IllegalArgumentException {
     if (str == null) {
       throw new IllegalArgumentException("Cannot pad uninitialized string.");
     } else if (align == null) {

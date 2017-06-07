@@ -74,20 +74,29 @@ public class Piece {
 
   @Override
   public String toString() {
-    // TODO
+    if (this.isEmpty()) {
+      return "";
+    }
     return this.stringBuilder();
   }
 
+  /**
+   * Helper to the toString method. Creates a String representation of this piece, but only
+   * with octaves being used.
+   *
+   * @return a String representation of this piece
+   */
   private String stringBuilder() {
-    List<List<String>> arr = this.getStringArray();
+    List<List<String>> arr = this.getPieceTable();
     int octaveLength = arr.get(0).size();
-    int padNumbers = Integer.toString(octaveLength).length();
+    int lineNumPadding = Integer.toString(octaveLength).length();
     StringBuilder builder = new StringBuilder();
     for (int i = 0; i < octaveLength; i++) {
-      if (i > 0) {
-        builder.append(Utils.padString(Integer.toString(i - 1), padNumbers, Utils.Alignment.RIGHT));
+      if (i == 0) {
+        builder.append(Utils.padString("", lineNumPadding, Utils.Alignment.RIGHT));
       } else {
-        builder.append(Utils.padString("", padNumbers, Utils.Alignment.RIGHT));
+        builder.append(Utils.padString(Integer.toString(i - 1), lineNumPadding,
+              Utils.Alignment.RIGHT));
       }
       builder.append("  ");
       for (List<String> pitchCol : arr) {
@@ -98,21 +107,26 @@ public class Piece {
     return builder.toString();
   }
 
-
-  private List<List<String>> getStringArray() {
+  /**
+   * Helper to the stringBuilder method. Forms a 2-dimensional list of Strings that represents the
+   * piece, with notes being represented as {@code X}'s for onsets and {@code I}'s for sustains.
+   *
+   * @return a 2-dimensional list of Strings representing this piece
+   */
+  private List<List<String>> getPieceTable() {
     List<List<List<String>>> builder = new ArrayList<>();
     String empty = Utils.padString("", 5, Utils.Alignment.CENTER);
     int maxLength = 0;
     for (int i = 1; i <= 10; i++) {
-      Octave o = this.octaves.get(i);
-      if (!o.isEmpty()) {
-        builder.add(o.getStringArray(i, 5));
+      Octave octave = this.octaves.get(i);
+      if (!octave.isEmpty()) {
+        builder.add(octave.getOctaveTable(i, 5));
+        maxLength = Math.max(maxLength, octave.size());
       }
-      maxLength = Math.max(maxLength, o.getLength());
     }
     List<List<String>> piece = new ArrayList<>();
-    for (List<List<String>> octave : builder) {
-      for (List<String> pitchCol : octave) {
+    for (List<List<String>> octaveList : builder) {
+      for (List<String> pitchCol : octaveList) {
         while (pitchCol.size() <= maxLength) {
           pitchCol.add(empty);
         }
@@ -123,18 +137,17 @@ public class Piece {
   }
 
   /**
-   * Gets the length of this piece.
+   * Checks if this piece is empty, or has no notes.
    *
-   * @return the length of this piece
+   * @return true if this piece is empty, false otherwise
    */
-  private int getLength() {
-    int longest = 0;
+  private boolean isEmpty() {
     for (Integer i : this.octaves.keySet()) {
-      Octave octave = this.octaves.get(i);
-      int length = octave.getLength();
-      longest = Math.max(longest, length);
+      if (!this.octaves.get(i).isEmpty()) {
+        return false;
+      }
     }
-    return longest;
+    return true;
   }
 
   /**

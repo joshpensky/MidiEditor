@@ -5,10 +5,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
+import static cs3500.hw05.Utils.padString;
+
 /**
  * Represents an octave in a piece.
  */
-public class Octave {
+final class Octave {
   private Map<Pitch, List<Note>> pitches;
 
   /**
@@ -64,65 +66,34 @@ public class Octave {
     return true;
   }
 
-  @Override
-  public String toString() {
-    if (this.isEmpty()) {
-      return "";
+  /**
+   * Creates copies of all of the notes from the given octave and adds them to this octave if a
+   * note does not already exist at the same position.
+   *
+   * @param other   the octave to be merged with
+   * @throws IllegalArgumentException if given octave is uninitialized
+   */
+  void merge(Octave other) throws IllegalArgumentException {
+    if (other == null) {
+      throw new IllegalArgumentException("Given octave is uninitialized.");
     }
-    // TODO
-    return "";
-  }
-
-  String stringBuilder(int octaveNum, int padding) {
-    List<List<String>> arr = getStringArray(octaveNum, padding);
-    int octaveLength = arr.get(0).size();
-    int padNumbers = Integer.toString(octaveLength).length();
-    StringBuilder builder = new StringBuilder();
-    for (int i = 0; i < octaveLength; i++) {
-      if (i > 0) {
-        builder.append(Utils.padString(Integer.toString(i - 1), padNumbers, Utils.Alignment.RIGHT));
-      } else {
-        builder.append(Utils.padString("", padNumbers, Utils.Alignment.RIGHT));
-      }
-      builder.append("  ");
-      for (List<String> pitchCol : arr) {
-        builder.append(pitchCol.get(i));
-      }
-      builder.append("\n");
-    }
-    return builder.toString();
-  }
-
-  List<List<String>> getStringArray(int octaveNum, int padding) {
-    String onset = Utils.padString("X", padding, Utils.Alignment.CENTER);
-    String sustain = Utils.padString("|", padding, Utils.Alignment.CENTER);
-    String empty = Utils.padString("", padding, Utils.Alignment.CENTER);
-    List<List<String>> builder = new ArrayList<>();
-    for (Pitch p : Pitch.values()) {
-      //System.out.println(p.toString());
-      List<Note> notes = this.pitches.get(p);
-      List<String> pitchCol = new ArrayList<>();
-      int length = 0;
-      if (notes.size() > 0) {
-        length = notes.get(notes.size() - 1).getEndPoint();
-      }
-      for (int i = 0; i <= length; i++) {
-        pitchCol.add(empty);
-      }
-      for (Note n : notes) {
-        int start = n.getPosition();
-        int end = n.getEndPoint();
-        pitchCol.set(start, onset);
-        for (int i = start + 1; i <= end; i++) {
-          pitchCol.set(i, sustain);
+    for (Pitch p : this.pitches.keySet()) {
+      for (Note n : other.pitches.get(p)) {
+        try {
+          this.addNoteInOrder(p, new Note(n));
+        } catch (IllegalArgumentException e) {
+          // Note already exists at same position in this octave, do not add it to merge
         }
       }
-      pitchCol.add(0, Utils.padString(p.toString() + octaveNum, padding, Utils.Alignment.CENTER));
-      builder.add(pitchCol);
     }
-    int maxLength = 0;
-    for (List<String> pitchCol : builder) {
-      maxLength = Math.max(maxLength, pitchCol.size());
+  }
+
+  List<List<String>> getOctaveTable(int octaveNum, int padding) {
+    String empty = padString("", padding, Utils.Alignment.CENTER);
+    List<List<String>> builder = new ArrayList<>();
+    int maxLength = this.size();
+    for (Pitch p : Pitch.values()) {
+      builder.add(getPitchColumn(p, octaveNum, padding, maxLength));
     }
     for (List<String> pitchCol : builder) {
       while (pitchCol.size() < maxLength) {
@@ -133,11 +104,43 @@ public class Octave {
   }
 
   /**
+   * Helper to the getOctaveTable method. Creates a list of Strings that represents a single
+   * pitch within this octave. Notes are represented with {@code X}'s for onsets and {@code |}'s
+   * for sustains. Rests are represented with empty spaces.
+   *
+   * @param pitch       the pitch being represented
+   * @param octaveNum   the number of this octane
+   * @param padding     the amount of spaced padding for each String in the list
+   * @param length      the length of the returned list
+   * @return a list of Strings representing the given pitch in this octane
+   */
+  private List<String> getPitchColumn(Pitch pitch, int octaveNum, int padding, int length) {
+    List<String> pitchCol = new ArrayList<>();
+    List<Note> notes = this.pitches.get(pitch);
+    String empty = padString("", padding, Utils.Alignment.CENTER);
+    for (int i = 0; i <= length; i++) {
+      pitchCol.add(empty);
+    }
+    String onset = padString("X", padding, Utils.Alignment.CENTER);
+    String sustain = padString("|", padding, Utils.Alignment.CENTER);
+    for (Note n : notes) {
+      int start = n.getPosition();
+      int end = n.getEndPoint();
+      pitchCol.set(start, onset);
+      for (int i = start + 1; i <= end; i++) {
+        pitchCol.set(i, sustain);
+      }
+    }
+    pitchCol.add(0, padString(pitch.toString() + octaveNum, padding, Utils.Alignment.CENTER));
+    return pitchCol;
+  }
+
+  /**
    * Checks if this octave is empty, or has no notes.
    *
    * @return true if this octave is empty, false otherwise
    */
-  public boolean isEmpty() {
+  boolean isEmpty() {
     for (List<Note> list : this.pitches.values()) {
       if (list.size() != 0) {
         return false;
@@ -151,7 +154,7 @@ public class Octave {
    *
    * @return the length of this octave
    */
-  int getLength() {
+  int size() {
     int longest = 0;
     for (Pitch p : this.pitches.keySet()) {
       List<Note> pitchList = this.pitches.get(p);
@@ -303,33 +306,11 @@ public class Octave {
       int comparison = Integer.compare(pitchList.get(i).getPosition(), note.getPosition());
       if (comparison == 0) {
         throw new IllegalArgumentException("Note already exists at this position.");
-      } else if (comparison < 0) {
-        addIndex = i;
+      } else if (comparison > 0) {
         break;
       }
+      addIndex++;
     }
     pitchList.add(addIndex, note);
-  }
-
-  /**
-   * Creates copies of all of the notes from the given octave and adds them to this octave if a
-   * note does not already exist at the same position.
-   *
-   * @param other   the octave to be merged with
-   * @throws IllegalArgumentException if given octave is uninitialized
-   */
-  void merge(Octave other) throws IllegalArgumentException {
-    if (other == null) {
-      throw new IllegalArgumentException("Given octave is uninitialized.");
-    }
-    for (Pitch p : this.pitches.keySet()) {
-      for (Note n : other.pitches.get(p)) {
-        try {
-          this.addNoteInOrder(p, new Note(n));
-        } catch (IllegalArgumentException e) {
-          // Note already exists at same position in this octave, do not add it to merge
-        }
-      }
-    }
   }
 }

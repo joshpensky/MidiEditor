@@ -25,7 +25,7 @@ public enum Pitch {
    *
    * @return the pitch id
    */
-  public int getId() {
+  int getId() {
     return this.id;
   }
 

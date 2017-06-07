@@ -14,6 +14,6 @@ public class OctaveTest {
     o.addNote(Pitch.CSHARP, 2, 1);
     o.addNote(Pitch.DSHARP, 1, 3);
     o.addNote(Pitch.E, 0, 3);
-    //System.out.print(o.stringBuilder(1, 5));
+    //System.out.print(o.getStringArray(1, 5));
   }
 }
