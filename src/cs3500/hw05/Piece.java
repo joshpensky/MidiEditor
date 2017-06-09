@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * Represents a musical piece that can be edited in the editor.
  */
-public class Piece {
+class Piece {
   private Map<Integer, Octave> octaves;
   private String title;
 
@@ -19,7 +19,7 @@ public class Piece {
    * @param title      the title of the piece
    * @throws IllegalArgumentException if the given title is uninitialized
    */
-  public Piece(String title) throws IllegalArgumentException {
+  Piece(String title) throws IllegalArgumentException {
     if (title == null) {
       throw new IllegalArgumentException("Cannot set piece to an uninitialized title.");
     }
@@ -37,7 +37,7 @@ public class Piece {
    * @param other      the piece to be copied
    * @throws IllegalArgumentException if the given piece is uninitialized
    */
-  public Piece(Piece other) throws IllegalArgumentException {
+  Piece(Piece other) throws IllegalArgumentException {
     if (other == null) {
       throw new IllegalArgumentException("Cannot duplicate uninitialized piece.");
     }
@@ -121,13 +121,13 @@ public class Piece {
       Octave octave = this.octaves.get(i);
       if (!octave.isEmpty()) {
         builder.add(octave.getOctaveTable(i, 5));
-        maxLength = Math.max(maxLength, octave.size());
+        maxLength = Math.max(maxLength, octave.length());
       }
     }
     List<List<String>> piece = new ArrayList<>();
     for (List<List<String>> octaveList : builder) {
       for (List<String> pitchCol : octaveList) {
-        while (pitchCol.size() <= maxLength) {
+        while (pitchCol.size() - 1 <= maxLength) {
           pitchCol.add(empty);
         }
         piece.add(pitchCol);
@@ -192,7 +192,7 @@ public class Piece {
    *
    * @throws IllegalArgumentException if the given note is uninitialized
    */
-  public void addNote(int octave, Pitch pitch, int position, int duration)
+  void addNote(int octave, Pitch pitch, int position, int duration)
       throws IllegalArgumentException {
     checkOctaveException(octave);
     this.octaves.get(octave).addNote(pitch, position, duration);
@@ -204,7 +204,7 @@ public class Piece {
    * @throws IllegalArgumentException if the given note is uninitialized, or if the note does not
    * exist in the piece
    */
-  public void removeNote(int octave, Pitch pitch, int position) throws IllegalArgumentException {
+  void removeNote(int octave, Pitch pitch, int position) throws IllegalArgumentException {
     checkOctaveException(octave);
     this.octaves.get(octave).removeNote(pitch, position);
   }
@@ -217,7 +217,7 @@ public class Piece {
    * @throws IllegalArgumentException if the given note or pitch are uninitialized, or if the note
    * does not exist in the piece
    */
-  public void editPitch(int octave, Pitch pitch, int position, Pitch newPitch)
+  void editPitch(int octave, Pitch pitch, int position, Pitch newPitch)
       throws IllegalArgumentException {
     checkOctaveException(octave);
     this.octaves.get(octave).editPitch(pitch, position, newPitch);
@@ -230,7 +230,7 @@ public class Piece {
    * @throws IllegalArgumentException if the given note is uninitialized, the position is
    * negative, or if the note does not exist in the piece
    */
-  public void editPosition(int octave, Pitch pitch, int position, int newPosition)
+  void editPosition(int octave, Pitch pitch, int position, int newPosition)
       throws IllegalArgumentException {
     checkOctaveException(octave);
     this.octaves.get(octave).editPosition(pitch, newPosition, position);
@@ -242,7 +242,7 @@ public class Piece {
    * @throws IllegalArgumentException if the given note is uninitialized, the duration is
    * negative, or if the note does not exist in the piece
    */
-  public void editDuration(int octave, Pitch pitch, int position, int newDuration)
+  void editDuration(int octave, Pitch pitch, int position, int newDuration)
       throws IllegalArgumentException {
     checkOctaveException(octave);
     this.octaves.get(octave).editDuration(pitch, position, newDuration);
@@ -261,21 +261,17 @@ public class Piece {
   }
 
   /**
-   * Merges this piece with the given one, without keeping the same references to the given piece.
+   * Overlays the given piece on this one, creating different references than the given piece.
    *
-   * @param title      the new title of the merged piece
-   * @param other      the piece to be merged with
-   * @throws IllegalArgumentException if the given title or piece are uninitialized
+   * @param other      the piece to be overlaid on top
+   * @throws IllegalArgumentException if the given piece is uninitialized
    */
-  void merge(String title, Piece other) throws IllegalArgumentException {
-    if (title == null) {
-      throw new IllegalArgumentException("Cannot set merged piece to uninitialized title.");
-    } else if (other == null) {
+  void overlay(Piece other) throws IllegalArgumentException {
+    if (other == null) {
       throw new IllegalArgumentException("Cannot merge with uninitialized piece.");
     }
-    this.title = title;
     for (Integer i : this.octaves.keySet()) {
-      this.octaves.get(i).merge(new Octave(other.octaves.get(i)));
+      this.octaves.get(i).overlay(new Octave(other.octaves.get(i)));
     }
   }
 

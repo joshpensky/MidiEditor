@@ -18,13 +18,9 @@ public class EditorModelTest {
 
   // Tests for the copy constructor
 
-  // Tests for the create(String) method
+  // Tests for the create method
 
-  // Tests for the create(String, Piece, Piece) method
-
-  // Tests for the open(String)
-
-  // Tests for the open(Piece) method
+  // Tests for the open method
 
   // Tests for the view method
 
@@ -39,4 +35,6 @@ public class EditorModelTest {
   // Tests for the editPosition method
 
   // Tests for the editDuration method
+
+  // Tests for the overlay method
 }

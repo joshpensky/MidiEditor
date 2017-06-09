@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Represents the model for a Midi Editor and an implementation of the EditorOperations interface.
  */
-public class EditorModel implements EditorOperations<Piece> {
+public class EditorModel implements EditorOperations {
   private List<Piece> pieces;
   private Piece opened;
 
@@ -16,26 +16,6 @@ public class EditorModel implements EditorOperations<Piece> {
   public EditorModel() {
     this.pieces = new ArrayList<>();
     this.opened = null;
-  }
-
-  /**
-   * Creates a new {@code EditorModel} with the given pieces in memory to be opened or edited.
-   *
-   * @param pieces   the pieces to be added to the model's memory
-   * @throws IllegalArgumentException if any of the given pieces are uninitialized or share the
-   * name of another
-   */
-  public EditorModel(Piece... pieces) throws IllegalArgumentException {
-    this();
-    for (Piece p : pieces) {
-      if (p == null) {
-        throw new IllegalArgumentException("A given piece was uninitialized.");
-      } else if (this.getPieceFromMemory(p.getTitle()) != null) {
-        throw new IllegalArgumentException("Trying to add two pieces with the same title, \""
-            + p.getTitle() + "\".");
-      }
-      this.pieces.add(new Piece(p));
-    }
   }
 
   @Override
@@ -49,19 +29,6 @@ public class EditorModel implements EditorOperations<Piece> {
   }
 
   @Override
-  public void create(String title, Piece piece1, Piece piece2)
-      throws IllegalArgumentException {
-    if (this.getPieceFromMemory(title) != null) {
-      throw new IllegalArgumentException("Piece already exists with the given title.");
-    } else if (piece1 == null || piece2 == null) {
-      throw new IllegalArgumentException("Given piece is uninitialized.");
-    }
-    Piece newPiece = new Piece(piece1);
-    newPiece.merge(title, new Piece(piece2));
-    this.opened = newPiece;
-  }
-
-  @Override
   public void open(String title) throws IllegalArgumentException {
     Piece piece = this.getPieceFromMemory(title);
     if (piece == null) {
@@ -69,18 +36,6 @@ public class EditorModel implements EditorOperations<Piece> {
           + title + "\".");
     }
     this.opened = piece;
-  }
-
-  @Override
-  public void open(Piece piece) throws IllegalArgumentException {
-    if (piece == null) {
-      throw new IllegalArgumentException("Cannot open an uninitialized piece.");
-    } else if (this.getPieceFromMemory(piece.getTitle()) != null) {
-      throw new IllegalArgumentException("Piece already exists with the given title.");
-    }
-    Piece newPiece = new Piece(piece);
-    this.pieces.add(0, newPiece);
-    this.opened = newPiece;
   }
 
   /**
@@ -151,9 +106,24 @@ public class EditorModel implements EditorOperations<Piece> {
     this.opened.editDuration(octave, pitch, position, newDuration);
   }
 
+  @Override
+  public void overlay(String overlayTitle) throws IllegalStateException,
+        IllegalArgumentException {
+    this.openedPieceException();
+    Piece toOverlay = this.getPieceFromMemory(overlayTitle);
+    if (toOverlay == null) {
+      throw new IllegalArgumentException("There is no piece with the given title, \""
+          + overlayTitle + "\".");
+    } else if (toOverlay.equals(this.opened)) {
+      throw new IllegalArgumentException("Cannot overlay piece with itself.");
+    }
+    this.opened.overlay(new Piece(toOverlay));
+  }
+
   /**
-   * Helper to the print, close, addNote, removeNote, editPitch, editPosition, and editDuration
-   * methods. Checks if there is currently a piece opened, and if not throws an exception.
+   * Helper to the print, close, addNote, removeNote, editPitch, editPosition, editDuration,
+   * and overlay methods. Checks if there is currently a piece opened, and if not throws an
+   * exception.
    *
    * @throws IllegalStateException if there is currently no piece opened
    */

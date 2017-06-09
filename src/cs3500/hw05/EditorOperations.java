@@ -3,7 +3,7 @@ package cs3500.hw05;
 /**
  * Represents all of the operations that the model of a Midi Editor should have.
  */
-public interface EditorOperations<K> {
+public interface EditorOperations {
   /**
    * Creates a new piece of music with the given title and measure, and opens it.
    *
@@ -14,20 +14,6 @@ public interface EditorOperations<K> {
   void create(String title) throws IllegalArgumentException;
 
   /**
-   * Creates a new piece of music of the given title by merging the two given pieces, and opens it.
-   *
-   * @param title    the new title of the merged piece
-   * @param piece1   the first piece to be merged
-   * @param piece2   the second piece to be merged
-   * @throws IllegalArgumentException if the given title or pieces are uninitialized, or if a piece
-   * already exists in memory with the given title
-   */
-  void create(String title, K piece1, K piece2) throws IllegalArgumentException;
-  // TODO
-  // CHANGE CREATE TO MERGE
-  // CHANGE PIECES TO TITLES
-
-  /**
    * Replaces the currently opened piece with the piece in memory with the given title.
    *
    * @param title   the title of the piece to be opened
@@ -35,15 +21,6 @@ public interface EditorOperations<K> {
    * piece with the given title in memory
    */
   void open(String title) throws IllegalArgumentException;
-
-  /**
-   * Adds a new piece to memory and opens it, replacing the currently opened piece.
-   *
-   * @param piece   the piece to be opened
-   * @throws IllegalArgumentException if the given piece is uninitialized, or a piece already
-   * exists in memory with the given name
-   */
-  void open(K piece) throws IllegalArgumentException;
 
   /**
    * Returns a String representation of the current state of the currently opened piece, or an
@@ -133,4 +110,15 @@ public interface EditorOperations<K> {
    */
   void editDuration(int octave, Pitch pitch, int position, int newDuration)
       throws IllegalStateException, IllegalArgumentException;
+
+  /**
+   * Overlays another piece of music in memory over the currently opened one.
+   *
+   * @param overlayTitle   the title of the piece to be overlaid
+   * @throws IllegalStateException if there is no currently opened piece
+   * @throws IllegalArgumentException if the given title is uninitialized, there is no
+   * piece in memory with the overlay's title, or the user is attempting to overlay the same
+   * piece on top of itself
+   */
+  void overlay(String overlayTitle) throws IllegalStateException, IllegalArgumentException;
 }

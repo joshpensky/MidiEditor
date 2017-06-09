@@ -72,28 +72,6 @@ final class Octave {
   }
 
   /**
-   * Creates copies of all of the notes from the given octave and adds them to this octave if a
-   * note does not already exist at the same position.
-   *
-   * @param other   the octave to be merged with
-   * @throws IllegalArgumentException if given octave is uninitialized
-   */
-  void merge(Octave other) throws IllegalArgumentException {
-    if (other == null) {
-      throw new IllegalArgumentException("Given octave is uninitialized.");
-    }
-    for (Pitch p : this.pitches.keySet()) {
-      for (Note n : other.pitches.get(p)) {
-        try {
-          this.addNoteInOrder(p, new Note(n));
-        } catch (IllegalArgumentException e) {
-          // Note already exists at same position in this octave, do not add it to merge
-        }
-      }
-    }
-  }
-
-  /**
    * Creates a 2-dimensional list of Strings, or table of Strings, representing an octave. The
    * inner lists (the columns) represent the different pitches, and the notes in those pitches.
    *
@@ -104,7 +82,7 @@ final class Octave {
   List<List<String>> getOctaveTable(int octaveNum, int padding) {
     String empty = padString("", padding, Utils.Alignment.CENTER);
     List<List<String>> builder = new ArrayList<>();
-    int maxLength = this.size();
+    int maxLength = this.length();
     for (Pitch p : Pitch.values()) {
       builder.add(getPitchColumn(p, octaveNum, padding, maxLength));
     }
@@ -167,13 +145,16 @@ final class Octave {
    *
    * @return the length of this octave
    */
-  int size() {
+  int length() {
+    if (this.isEmpty()) {
+      return 0;
+    }
     int longest = 0;
     for (Pitch p : this.pitches.keySet()) {
       List<Note> pitchList = this.pitches.get(p);
       int length = 0;
-      if (pitchList.size() > 0) {
-        length = pitchList.get(pitchList.size() - 1).getEndPoint();
+      for (Note note : pitchList) {
+        length = Math.max(length, note.getEndPoint());
       }
       longest = Math.max(longest, length);
     }
@@ -325,5 +306,27 @@ final class Octave {
       addIndex++;
     }
     pitchList.add(addIndex, note);
+  }
+
+  /**
+   * Creates copies of all of the notes from the given octave and adds them to this octave if a
+   * note does not already exist at the same position.
+   *
+   * @param other   the octave to be overlaid
+   * @throws IllegalArgumentException if given octave is uninitialized
+   */
+  void overlay(Octave other) throws IllegalArgumentException {
+    if (other == null) {
+      throw new IllegalArgumentException("Given octave is uninitialized.");
+    }
+    for (Pitch p : this.pitches.keySet()) {
+      for (Note n : other.pitches.get(p)) {
+        try {
+          this.addNoteInOrder(p, new Note(n));
+        } catch (IllegalArgumentException e) {
+          // Note already exists at same position in this octave, do not add it to merge
+        }
+      }
+    }
   }
 }
