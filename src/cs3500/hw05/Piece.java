@@ -1,6 +1,9 @@
 package cs3500.hw05;
 
-import java.util.*;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Represents a musical piece that can be edited in the editor.
@@ -8,25 +11,19 @@ import java.util.*;
 public class Piece {
   private Map<Integer, Octave> octaves;
   private String title;
-  private int measure;
 
   /**
    * Default constructor.
    * Constructs a new {@code Piece} object with a title and a measure.
    *
    * @param title      the title of the piece
-   * @param measure    the measure of the piece (usually 3 or 4 beats)
-   * @throws IllegalArgumentException if the given title is uninitialized, or if the measure is
-   * negative
+   * @throws IllegalArgumentException if the given title is uninitialized
    */
-  public Piece(String title, int measure) throws IllegalArgumentException {
+  public Piece(String title) throws IllegalArgumentException {
     if (title == null) {
       throw new IllegalArgumentException("Cannot set piece to an uninitialized title.");
-    } else if (measure < 0) {
-      throw new IllegalArgumentException("Cannot set piece's measure to negative value.");
     }
     this.title = title;
-    this.measure = measure;
     this.octaves = new HashMap<>();
     for (int i = 1; i <= 10; i++) {
       this.octaves.put(i, new Octave());
@@ -45,7 +42,6 @@ public class Piece {
       throw new IllegalArgumentException("Cannot duplicate uninitialized piece.");
     }
     this.title = other.title;
-    this.measure = other.measure;
     this.octaves = new HashMap<>();
     for (int i = 1; i <= 10; i++) {
       this.octaves.put(i, new Octave(other.octaves.get(i)));
@@ -65,15 +61,13 @@ public class Piece {
         return false;
       }
     }
-    return this.title.equals(other.title)
-        && this.measure == other.measure;
+    return this.title.equals(other.title);
   }
 
   @Override
   public int hashCode() {
     int result = this.octaves.hashCode();
     result = 31 * result + this.title.hashCode();
-    result = 31 * result + this.measure;
     return result;
   }
 
@@ -139,7 +133,7 @@ public class Piece {
         piece.add(pitchCol);
       }
     }
-    return this.removeEndEmptyColumns(piece, empty, true);
+    return this.removeEmptyEndColumns(piece, empty, true);
   }
 
   /**
@@ -153,7 +147,7 @@ public class Piece {
    *                      otherwise, this is the recursive call and will return the new list
    * @return
    */
-  private List<List<String>> removeEndEmptyColumns(List<List<String>> piece, String emptyString,
+  private List<List<String>> removeEmptyEndColumns(List<List<String>> piece, String emptyString,
                                                    boolean firstSearch) {
     int colsToRemove = -1;
     for (int p = 0; p < piece.size(); p++) {
@@ -173,7 +167,7 @@ public class Piece {
       colsToRemove -= 1;
     }
     if (firstSearch) {
-      return removeEndEmptyColumns(Utils.reverse(piece), emptyString, false);
+      return removeEmptyEndColumns(Utils.reverse(piece), emptyString, false);
     } else {
       return Utils.reverse(piece);
     }
@@ -271,16 +265,13 @@ public class Piece {
    *
    * @param title      the new title of the merged piece
    * @param other      the piece to be merged with
-   * @throws IllegalArgumentException if the given title or piece are uninitialized, or if the
-   * measures of this and the given pieces aren't the same
+   * @throws IllegalArgumentException if the given title or piece are uninitialized
    */
   void merge(String title, Piece other) throws IllegalArgumentException {
     if (title == null) {
       throw new IllegalArgumentException("Cannot set merged piece to uninitialized title.");
     } else if (other == null) {
       throw new IllegalArgumentException("Cannot merge with uninitialized piece.");
-    } else if (other.measure != this.measure) {
-      throw new IllegalArgumentException("The measures of both pieces do not match.");
     }
     this.title = title;
     for (Integer i : this.octaves.keySet()) {

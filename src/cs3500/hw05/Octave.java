@@ -93,6 +93,14 @@ final class Octave {
     }
   }
 
+  /**
+   * Creates a 2-dimensional list of Strings, or table of Strings, representing an octave. The
+   * inner lists (the columns) represent the different pitches, and the notes in those pitches.
+   *
+   * @param octaveNum   the number of this octane
+   * @param padding     the amount of spaced padding for each String in the list
+   * @return a 2-dimensional list of Strings representing this octane
+   */
   List<List<String>> getOctaveTable(int octaveNum, int padding) {
     String empty = padString("", padding, Utils.Alignment.CENTER);
     List<List<String>> builder = new ArrayList<>();

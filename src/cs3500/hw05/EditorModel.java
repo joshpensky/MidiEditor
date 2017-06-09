@@ -39,11 +39,11 @@ public class EditorModel implements EditorOperations<Piece> {
   }
 
   @Override
-  public void create(String title, int measure) throws IllegalArgumentException {
+  public void create(String title) throws IllegalArgumentException {
     if (this.getPieceFromMemory(title) != null) {
       throw new IllegalArgumentException("Piece already exists with given title.");
     }
-    Piece next = new Piece(title, measure);
+    Piece next = new Piece(title);
     this.pieces.add(0, next);
     this.opened = next;
   }

@@ -8,11 +8,10 @@ public interface EditorOperations<K> {
    * Creates a new piece of music with the given title and measure, and opens it.
    *
    * @param title     the title of the new piece
-   * @param measure   the measure of the new piece (usually 3 or 4 beats)
-   * @throws IllegalArgumentException if the given title is uninitialized, the measure is
-   * negative, or if a piece already exists in memory with the given title
+   * @throws IllegalArgumentException if the given title is uninitialized, or if a piece already
+   * exists in memory with the given title
    */
-  void create(String title, int measure) throws IllegalArgumentException;
+  void create(String title) throws IllegalArgumentException;
 
   /**
    * Creates a new piece of music of the given title by merging the two given pieces, and opens it.
@@ -20,8 +19,8 @@ public interface EditorOperations<K> {
    * @param title    the new title of the merged piece
    * @param piece1   the first piece to be merged
    * @param piece2   the second piece to be merged
-   * @throws IllegalArgumentException if the given title or pieces are uninitialized, the pieces
-   * have different measures, or if a piece already exists in memory with the given title
+   * @throws IllegalArgumentException if the given title or pieces are uninitialized, or if a piece
+   * already exists in memory with the given title
    */
   void create(String title, K piece1, K piece2) throws IllegalArgumentException;
   // TODO

@@ -4,11 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by josh_jpeg on 6/7/17.
+ * A utilities class containing static methods for use throughout the project.
  */
 final class Utils {
   enum Alignment { LEFT, CENTER, RIGHT }
 
+  /**
+   * Pads the given String with spaces, until the length of the given String matches or is
+   * greater than the given length. The alignment property directs where the padding goes.
+   *
+   * @param str      the string to be padded
+   * @param length   the max length of the new String
+   * @param align    LEFT to add padding to the right, RIGHT to add padding to the left, or
+   *                 CENTER to add padding on both sides of the string
+   * @return the new space-padded String
+   * @throws IllegalArgumentException if the given string or Alignment are null
+   */
   static String padString(String str, int length, Alignment align)
     throws IllegalArgumentException {
     if (str == null) {
@@ -41,7 +52,7 @@ final class Utils {
    * @return the last element
    * @throws IllegalArgumentException if the given {@code List} is or contains null
    */
-  public static <T> List<T> reverse(List<T> list) throws IllegalArgumentException {
+  static <T> List<T> reverse(List<T> list) throws IllegalArgumentException {
     if (list == null || list.contains(null)) {
       throw new IllegalArgumentException("Cannot give a list that is or contains null.");
     } else if (list.size() > 1) {

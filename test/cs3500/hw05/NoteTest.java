@@ -124,6 +124,20 @@ public class NoteTest {
     assertEquals(999999999, n.hashCode());
   }
 
+  // Tests for the setPosition method
+  @Test(expected = IllegalArgumentException.class)
+  public void setPositionNegative() {
+    Note n = new Note(24, 3);
+    n.setPosition(-32);
+  }
+
+  @Test
+  public void setPositionValid() {
+    Note n = new Note(24, 3);
+    n.setPosition(52);
+    assertEquals(52, n.getPosition());
+  }
+
   // Tests for the setDuration method
   @Test(expected = IllegalArgumentException.class)
   public void setDurationNegative() {
@@ -144,17 +158,44 @@ public class NoteTest {
     assertEquals(75, n.getEndPoint());
   }
 
-  // Tests for the setDuration method
-  @Test(expected = IllegalArgumentException.class)
-  public void setPositionNegative() {
-    Note n = new Note(24, 3);
-    n.setPosition(-32);
+  // Tests for the getPosition method
+  @Test
+  public void getPositionValid() {
+    Note n = new Note(13, 2);
+    assertEquals(13, n.getPosition());
   }
 
   @Test
-  public void setPositionValid() {
-    Note n = new Note(24, 3);
-    n.setPosition(52);
-    assertEquals(52, n.getPosition());
+  public void getPositionAfterSet() {
+    Note n = new Note(13, 2);
+    n.setPosition(15);
+    assertEquals(15, n.getPosition());
+  }
+
+  // Tests for the getEndPoint method
+  @Test
+  public void getEndPointCalculationValid() {
+    Note n = new Note(4, 5);
+    int endPoint = (4 + 5) - 1;
+    assertEquals(8, endPoint);
+    assertEquals(endPoint, n.getEndPoint());
+  }
+
+  @Test
+  public void getEndPointAfterSetPosition() {
+    Note n = new Note(4, 5);
+    n.setPosition(2);
+    int endPoint = (2 + 5) - 1;
+    assertEquals(6, endPoint);
+    assertEquals(endPoint, n.getEndPoint());
+  }
+
+  @Test
+  public void getEndPointAfterSetDuration() {
+    Note n = new Note(4, 5);
+    n.setDuration(10);
+    int endPoint = (4 + 10) - 1;
+    assertEquals(13, endPoint);
+    assertEquals(endPoint, n.getEndPoint());
   }
 }
