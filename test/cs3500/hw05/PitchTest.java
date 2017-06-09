@@ -8,67 +8,6 @@ import static org.junit.Assert.assertEquals;
  * Tests for the {@link Pitch} enumeration.
  */
 public class PitchTest {
-  // Tests for the getId method
-  @Test
-  public void getIdC() {
-    assertEquals(0, Pitch.C.getId());
-  }
-
-  @Test
-  public void getIdCSharp() {
-    assertEquals(1, Pitch.CSHARP.getId());
-  }
-
-  @Test
-  public void getIdD() {
-    assertEquals(2, Pitch.D.getId());
-  }
-
-  @Test
-  public void getIdDSharp() {
-    assertEquals(3, Pitch.DSHARP.getId());
-  }
-
-  @Test
-  public void getIdE() {
-    assertEquals(4, Pitch.E.getId());
-  }
-
-  @Test
-  public void getIdF() {
-    assertEquals(5, Pitch.F.getId());
-  }
-
-  @Test
-  public void getIdFSharp() {
-    assertEquals(6, Pitch.FSHARP.getId());
-  }
-
-  @Test
-  public void getIdG() {
-    assertEquals(7, Pitch.G.getId());
-  }
-
-  @Test
-  public void getIdGSharp() {
-    assertEquals(8, Pitch.GSHARP.getId());
-  }
-
-  @Test
-  public void getIdA() {
-    assertEquals(9, Pitch.A.getId());
-  }
-
-  @Test
-  public void getIdASharp() {
-    assertEquals(10, Pitch.ASHARP.getId());
-  }
-
-  @Test
-  public void getIdB() {
-    assertEquals(11, Pitch.B.getId());
-  }
-
   // Tests for the toString method
   @Test
   public void toStringC() {

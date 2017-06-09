@@ -66,6 +66,11 @@ final class Octave {
     return true;
   }
 
+  @Override
+  public int hashCode() {
+    return this.pitches.hashCode();
+  }
+
   /**
    * Creates copies of all of the notes from the given octave and adds them to this octave if a
    * note does not already exist at the same position.

@@ -58,6 +58,5 @@ public class PieceTest {
     p.addNote(1, Pitch.E, 0, 3);
     p.addNote(4, Pitch.ASHARP, 2, 10);
     System.out.print(p.toString());
-    //System.out.print(new Piece("hey", 3).toString());
   }
 }

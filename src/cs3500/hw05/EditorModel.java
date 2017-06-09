@@ -22,13 +22,17 @@ public class EditorModel implements EditorOperations<Piece> {
    * Creates a new {@code EditorModel} with the given pieces in memory to be opened or edited.
    *
    * @param pieces   the pieces to be added to the model's memory
-   * @throws IllegalArgumentException if any of the given pieces are uninitialized
+   * @throws IllegalArgumentException if any of the given pieces are uninitialized or share the
+   * name of another
    */
   public EditorModel(Piece... pieces) throws IllegalArgumentException {
     this();
     for (Piece p : pieces) {
       if (p == null) {
         throw new IllegalArgumentException("A given piece was uninitialized.");
+      } else if (this.getPieceFromMemory(p.getTitle()) != null) {
+        throw new IllegalArgumentException("Trying to add two pieces with the same title, \""
+            + p.getTitle() + "\".");
       }
       this.pieces.add(new Piece(p));
     }
@@ -36,7 +40,7 @@ public class EditorModel implements EditorOperations<Piece> {
 
   @Override
   public void create(String title, int measure) throws IllegalArgumentException {
-    if (getPieceFromTitle(title) != null) {
+    if (this.getPieceFromMemory(title) != null) {
       throw new IllegalArgumentException("Piece already exists with given title.");
     }
     Piece next = new Piece(title, measure);
@@ -47,13 +51,35 @@ public class EditorModel implements EditorOperations<Piece> {
   @Override
   public void create(String title, Piece piece1, Piece piece2)
       throws IllegalArgumentException {
-    if (getPieceFromTitle(title) != null) {
+    if (this.getPieceFromMemory(title) != null) {
       throw new IllegalArgumentException("Piece already exists with the given title.");
     } else if (piece1 == null || piece2 == null) {
       throw new IllegalArgumentException("Given piece is uninitialized.");
     }
     Piece newPiece = new Piece(piece1);
     newPiece.merge(title, new Piece(piece2));
+    this.opened = newPiece;
+  }
+
+  @Override
+  public void open(String title) throws IllegalArgumentException {
+    Piece piece = this.getPieceFromMemory(title);
+    if (piece == null) {
+      throw new IllegalArgumentException("There is no piece that exists with the given title, \""
+          + title + "\".");
+    }
+    this.opened = piece;
+  }
+
+  @Override
+  public void open(Piece piece) throws IllegalArgumentException {
+    if (piece == null) {
+      throw new IllegalArgumentException("Cannot open an uninitialized piece.");
+    } else if (this.getPieceFromMemory(piece.getTitle()) != null) {
+      throw new IllegalArgumentException("Piece already exists with the given title.");
+    }
+    Piece newPiece = new Piece(piece);
+    this.pieces.add(0, newPiece);
     this.opened = newPiece;
   }
 
@@ -65,9 +91,9 @@ public class EditorModel implements EditorOperations<Piece> {
    * @return the piece with the matching title, or null if no piece has the given title
    * @throws IllegalArgumentException if the given title is uninitialized
    */
-  private Piece getPieceFromTitle(String title) throws IllegalArgumentException {
+  private Piece getPieceFromMemory(String title) throws IllegalArgumentException {
     for (Piece p : this.pieces) {
-      if (p.sameTitle(title)) {
+      if (p.getTitle().equals(title)) {
         return p;
       }
     }
@@ -75,17 +101,7 @@ public class EditorModel implements EditorOperations<Piece> {
   }
 
   @Override
-  public void open(String title) throws IllegalArgumentException {
-    Piece piece = this.getPieceFromTitle(title);
-    if (piece == null) {
-      throw new IllegalArgumentException("There is no piece that exists with the given title, \""
-          + title + "\".");
-    }
-    this.opened = piece;
-  }
-
-  @Override
-  public String print() {
+  public String view() {
     try {
       this.openedPieceException();
     } catch (IllegalStateException e) {

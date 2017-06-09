@@ -4,29 +4,18 @@ package cs3500.hw05;
  * Represents the different types of pitches of a note.
  */
 public enum Pitch {
-  C(0, "C"), CSHARP(1, "C#"), D(2, "D"), DSHARP(3, "D#"), E(4, "E"), F(5, "F"), FSHARP(6, "F#"),
-  G(7, "G"), GSHARP(8, "G#"), A(9, "A"), ASHARP(10, "A#"), B(11, "B");
+  C("C"), CSHARP("C#"), D("D"), DSHARP("D#"), E("E"), F("F"), FSHARP("F#"),
+  G("G"), GSHARP("G#"), A("A"), ASHARP("A#"), B("B");
 
-  private final int id;
   private final String toString;
 
   /**
    * Constructs a new Pitch.
    *
-   * @param id      a unique identification number
+   * @param toString   the String representation of the pitch
    */
-  Pitch(int id, String toString) {
-    this.id = id;
+  Pitch(String toString) {
     this.toString = toString;
-  }
-
-  /**
-   * Gets the unique identification number for the pitch type.
-   *
-   * @return the pitch id
-   */
-  int getId() {
-    return this.id;
   }
 
   /**
