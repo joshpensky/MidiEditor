@@ -38,9 +38,24 @@ public class EditorModel implements EditorOperations {
     this.opened = piece;
   }
 
+  @Override
+  public void copy(String toCopy, String newTitle) throws IllegalArgumentException {
+    Piece piece = this.getPieceFromMemory(toCopy);
+    if (piece == null) {
+      throw new IllegalArgumentException("There is no piece that exists with the given title, \""
+        + toCopy + "\".");
+    } else if (this.getPieceFromMemory(newTitle) != null) {
+      throw new IllegalArgumentException("Piece already exists with given new title.");
+    }
+    Piece copy = new Piece(newTitle);
+    copy.overlay(piece);
+    this.pieces.add(0, copy);
+    this.opened = copy;
+  }
+
   /**
-   * Helper to the create and open methods. Gets the piece from the list of pieces in the model,
-   * or null if no such piece exists.
+   * Helper to the create, open, and copy methods. Gets the piece from the list of pieces in the
+   * model, or null if no such piece exists.
    *
    * @param title   the title of the desired piece
    * @return the piece with the matching title, or null if no piece has the given title

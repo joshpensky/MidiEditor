@@ -324,7 +324,7 @@ final class Octave {
         try {
           this.addNoteInOrder(p, new Note(n));
         } catch (IllegalArgumentException e) {
-          // Note already exists at same position in this octave, do not add it to merge
+          // Note already exists at same position in this octave, do not add it to overlay
         }
       }
     }

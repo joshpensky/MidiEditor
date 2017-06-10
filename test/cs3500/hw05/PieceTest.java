@@ -172,6 +172,79 @@ public class PieceTest {
     assertEquals(toString, piece.toString());
   }
 
+  @Test
+  public void toStringSpanMultipleOctavesNoneInMiddle() {
+    Piece piece = new Piece("title");
+    piece.addNote(4, Pitch.D, 2, 4);
+    piece.addNote(2, Pitch.B, 4, 5);
+    piece.addNote(2, Pitch.B, 2, 4);
+    String toString = ""
+        + "     B2   C3  C#3   D3  D#3   E3   F3  F#3   G3  G#3   A3  A#3   B3   C4  C#4   D4 \n"
+        + "0                                                                                  \n"
+        + "1                                                                                  \n"
+        + "2    X                                                                          X  \n"
+        + "3    |                                                                          |  \n"
+        + "4    X                                                                          |  \n"
+        + "5    |                                                                          |  \n"
+        + "6    |                                                                             \n"
+        + "7    |                                                                             \n"
+        + "8    |                                                                             \n";
+    assertEquals(toString, piece.toString());
+  }
+
+  @Test
+  public void toStringOverlaidPieces() {
+    Piece top = new Piece("top");
+    top.addNote(3, Pitch.D, 1, 3);
+    top.addNote(3, Pitch.DSHARP, 4, 6);
+    top.addNote(3, Pitch.DSHARP, 8, 4);
+    String topStr = "      D3  D#3 \n"
+                  + " 0            \n"
+                  + " 1    X       \n"
+                  + " 2    |       \n"
+                  + " 3    |       \n"
+                  + " 4         X  \n"
+                  + " 5         |  \n"
+                  + " 6         |  \n"
+                  + " 7         |  \n"
+                  + " 8         X  \n"
+                  + " 9         |  \n"
+                  + "10         |  \n"
+                  + "11         |  \n";
+    assertEquals(topStr, top.toString());
+    Piece bot = new Piece("bot");
+    bot.addNote(3, Pitch.DSHARP, 6, 4);
+    bot.addNote(3, Pitch.C, 2, 4);
+    String botStr = "     C3  C#3   D3  D#3 \n"
+                  + "0                      \n"
+                  + "1                      \n"
+                  + "2    X                 \n"
+                  + "3    |                 \n"
+                  + "4    |                 \n"
+                  + "5    |                 \n"
+                  + "6                   X  \n"
+                  + "7                   |  \n"
+                  + "8                   |  \n"
+                  + "9                   |  \n";
+    assertEquals(botStr, bot.toString());
+    bot.overlay(top);
+    String overlay = "      C3  C#3   D3  D#3 \n"
+                   + " 0                      \n"
+                   + " 1              X       \n"
+                   + " 2    X         |       \n"
+                   + " 3    |         |       \n"
+                   + " 4    |              X  \n"
+                   + " 5    |              |  \n"
+                   + " 6                   X  \n"
+                   + " 7                   |  \n"
+                   + " 8                   X  \n"
+                   + " 9                   |  \n"
+                   + "10                   |  \n"
+                   + "11                   |  \n";
+    assertEquals(overlay, bot.toString());
+    assertEquals(topStr, top.toString());
+  }
+
   // Tests for the addNote method
   @Test(expected = IllegalArgumentException.class)
   public void addNoteInvalidOctane() {
@@ -402,6 +475,233 @@ public class PieceTest {
   }
 
   // Tests for the overlay method
+  @Test(expected = IllegalArgumentException.class)
+  public void overlayNullPiece() {
+    new Piece("hey").overlay(null);
+  }
+
+  @Test
+  public void overlayOntoEmptyPiece() {
+    Piece p = new Piece("hey");
+    p.addNote(1, Pitch.A, 3, 4);
+    p.addNote(1, Pitch.DSHARP, 6, 8);
+    p.addNote(1, Pitch.E, 15, 12);
+    p.addNote(1, Pitch.E, 20, 3);
+    p.addNote(1, Pitch.B, 8, 4);
+    Piece empty = new Piece("hey");
+    empty.overlay(p);
+    assertTrue(p.equals(empty));
+  }
+
+  @Test
+  public void overlayEmptyPieceOnto() {
+    Piece p = new Piece("hey");
+    p.addNote(1, Pitch.A, 3, 4);
+    p.addNote(1, Pitch.DSHARP, 6, 8);
+    p.addNote(1, Pitch.E, 15, 12);
+    p.addNote(1, Pitch.E, 20, 3);
+    p.addNote(1, Pitch.B, 8, 4);
+    Piece empty = new Piece("hey");
+    Piece overlaid = new Piece(p);
+    overlaid.overlay(empty);
+    assertFalse(overlaid.equals(empty));
+    assertTrue(overlaid.equals(p));
+  }
+
+  @Test
+  public void overlayNoConflictingAdds() {
+    Piece top = new Piece("title");
+    top.addNote(3, Pitch.A, 3, 4);
+    top.addNote(3, Pitch.E, 0, 3);
+    top.addNote(3, Pitch.GSHARP, 2, 2);
+    top.addNote(3, Pitch.D, 1, 1);
+    top.addNote(4, Pitch.CSHARP, 10, 6);
+    String tops = "      D3  D#3   E3   F3  F#3   G3  G#3   A3  A#3   B3   C4  C#4 \n"
+                + " 0              X                                               \n"
+                + " 1    X         |                                               \n"
+                + " 2              |                   X                           \n"
+                + " 3                                  |    X                      \n"
+                + " 4                                       |                      \n"
+                + " 5                                       |                      \n"
+                + " 6                                       |                      \n"
+                + " 7                                                              \n"
+                + " 8                                                              \n"
+                + " 9                                                              \n"
+                + "10                                                           X  \n"
+                + "11                                                           |  \n"
+                + "12                                                           |  \n"
+                + "13                                                           |  \n"
+                + "14                                                           |  \n"
+                + "15                                                           |  \n";
+    assertEquals(tops, top.toString());
+    Piece bot = new Piece("title");
+    bot.addNote(3, Pitch.A, 0, 2);
+    bot.addNote(4, Pitch.CSHARP, 2, 3);
+    bot.addNote(4, Pitch.E, 5, 6);
+    bot.addNote(3, Pitch.FSHARP, 3, 2);
+    bot.addNote(3, Pitch.E, 4, 1);
+    String bots = "      E3   F3  F#3   G3  G#3   A3  A#3   B3   C4  C#4   D4  D#4   E4 \n"
+                + " 0                             X                                     \n"
+                + " 1                             |                                     \n"
+                + " 2                                                 X                 \n"
+                + " 3              X                                  |                 \n"
+                + " 4    X         |                                  |                 \n"
+                + " 5                                                                X  \n"
+                + " 6                                                                |  \n"
+                + " 7                                                                |  \n"
+                + " 8                                                                |  \n"
+                + " 9                                                                |  \n"
+                + "10                                                                |  \n";
+    assertEquals(bots, bot.toString());
+    top.overlay(bot);
+    String overlay = ""
+        + "      D3  D#3   E3   F3  F#3   G3  G#3   A3  A#3   B3   C4  C#4   D4  D#4   E4 \n"
+        + " 0              X                        X                                     \n"
+        + " 1    X         |                        |                                     \n"
+        + " 2              |                   X                        X                 \n"
+        + " 3                        X         |    X                   |                 \n"
+        + " 4              X         |              |                   |                 \n"
+        + " 5                                       |                                  X  \n"
+        + " 6                                       |                                  |  \n"
+        + " 7                                                                          |  \n"
+        + " 8                                                                          |  \n"
+        + " 9                                                                          |  \n"
+        + "10                                                           X              |  \n"
+        + "11                                                           |                 \n"
+        + "12                                                           |                 \n"
+        + "13                                                           |                 \n"
+        + "14                                                           |                 \n"
+        + "15                                                           |                 \n";
+    assertEquals(overlay, top.toString());
+  }
+
+  @Test
+  public void overlayNoConflictsEqualsBothWays() {
+    Piece top = new Piece("title");
+    top.addNote(3, Pitch.A, 3, 4);
+    top.addNote(3, Pitch.E, 0, 3);
+    top.addNote(3, Pitch.GSHARP, 2, 2);
+    top.addNote(3, Pitch.D, 1, 1);
+    top.addNote(4, Pitch.CSHARP, 10, 6);
+    Piece bot = new Piece("title");
+    bot.addNote(3, Pitch.A, 0, 2);
+    bot.addNote(4, Pitch.CSHARP, 2, 3);
+    bot.addNote(4, Pitch.E, 5, 6);
+    bot.addNote(3, Pitch.FSHARP, 3, 2);
+    bot.addNote(3, Pitch.E, 4, 1);
+    Piece botOverlay = new Piece(top);
+    botOverlay.overlay(bot);
+    Piece topOverlay = new Piece(bot);
+    topOverlay.overlay(top);
+    assertTrue(topOverlay.equals(botOverlay));
+  }
+
+  @Test
+  public void overlayConflictingAdds() {
+    Piece top = new Piece("title");
+    top.addNote(3, Pitch.A, 3, 4);
+    top.addNote(3, Pitch.E, 0, 3);
+    top.addNote(3, Pitch.GSHARP, 2, 2);
+    top.addNote(3, Pitch.D, 1, 1);
+    top.addNote(4, Pitch.CSHARP, 10, 6);
+    String tops = "      D3  D#3   E3   F3  F#3   G3  G#3   A3  A#3   B3   C4  C#4 \n"
+                + " 0              X                                               \n"
+                + " 1    X         |                                               \n"
+                + " 2              |                   X                           \n"
+                + " 3                                  |    X                      \n"
+                + " 4                                       |                      \n"
+                + " 5                                       |                      \n"
+                + " 6                                       |                      \n"
+                + " 7                                                              \n"
+                + " 8                                                              \n"
+                + " 9                                                              \n"
+                + "10                                                           X  \n"
+                + "11                                                           |  \n"
+                + "12                                                           |  \n"
+                + "13                                                           |  \n"
+                + "14                                                           |  \n"
+                + "15                                                           |  \n";
+    assertEquals(tops, top.toString());
+    Piece bot = new Piece("title");
+    bot.addNote(3, Pitch.A, 5, 3);
+    bot.addNote(4, Pitch.CSHARP, 2, 3);
+    bot.addNote(4, Pitch.CSHARP, 10, 12);
+    bot.addNote(4, Pitch.CSHARP, 8, 4);
+    bot.addNote(4, Pitch.E, 5, 6);
+    bot.addNote(3, Pitch.FSHARP, 3, 2);
+    bot.addNote(3, Pitch.E, 4, 1);
+    bot.addNote(3, Pitch.GSHARP, 2, 8);
+    bot.addNote(3, Pitch.GSHARP, 4, 2);
+    String bots = "      E3   F3  F#3   G3  G#3   A3  A#3   B3   C4  C#4   D4  D#4   E4 \n"
+                + " 0                                                                   \n"
+                + " 1                                                                   \n"
+                + " 2                        X                        X                 \n"
+                + " 3              X         |                        |                 \n"
+                + " 4    X         |         X                        |                 \n"
+                + " 5                        |    X                                  X  \n"
+                + " 6                        |    |                                  |  \n"
+                + " 7                        |    |                                  |  \n"
+                + " 8                        |                        X              |  \n"
+                + " 9                        |                        |              |  \n"
+                + "10                                                 X              |  \n"
+                + "11                                                 |                 \n"
+                + "12                                                 |                 \n"
+                + "13                                                 |                 \n"
+                + "14                                                 |                 \n"
+                + "15                                                 |                 \n"
+                + "16                                                 |                 \n"
+                + "17                                                 |                 \n"
+                + "18                                                 |                 \n"
+                + "19                                                 |                 \n"
+                + "20                                                 |                 \n"
+                + "21                                                 |                 \n";
+    assertEquals(bots, bot.toString());
+    top.overlay(bot);
+    String overlay = ""
+        + "      D3  D#3   E3   F3  F#3   G3  G#3   A3  A#3   B3   C4  C#4   D4  D#4   E4 \n"
+        + " 0              X                                                              \n"
+        + " 1    X         |                                                              \n"
+        + " 2              |                   X                        X                 \n"
+        + " 3                        X         |    X                   |                 \n"
+        + " 4              X         |         X    |                   |                 \n"
+        + " 5                                  |    X                                  X  \n"
+        + " 6                                       |                                  |  \n"
+        + " 7                                       |                                  |  \n"
+        + " 8                                                           X              |  \n"
+        + " 9                                                           |              |  \n"
+        + "10                                                           X              |  \n"
+        + "11                                                           |                 \n"
+        + "12                                                           |                 \n"
+        + "13                                                           |                 \n"
+        + "14                                                           |                 \n"
+        + "15                                                           |                 \n";
+    assertEquals(overlay, top.toString());
+  }
+
+  @Test
+  public void overlayConflictsNotEqualsBothWays() {
+    Piece top = new Piece("title");
+    top.addNote(3, Pitch.A, 3, 4);
+    top.addNote(3, Pitch.E, 0, 3);
+    top.addNote(3, Pitch.GSHARP, 2, 2);
+    top.addNote(3, Pitch.D, 1, 1);
+    top.addNote(4, Pitch.CSHARP, 10, 6);
+    Piece bot = new Piece("title");
+    bot.addNote(3, Pitch.A, 5, 3);
+    bot.addNote(4, Pitch.CSHARP, 2, 3);
+    bot.addNote(4, Pitch.CSHARP, 10, 12);
+    bot.addNote(4, Pitch.CSHARP, 8, 4);
+    bot.addNote(4, Pitch.E, 5, 6);
+    bot.addNote(3, Pitch.FSHARP, 3, 2);
+    bot.addNote(3, Pitch.E, 4, 1);
+    bot.addNote(3, Pitch.GSHARP, 2, 8);
+    bot.addNote(3, Pitch.GSHARP, 4, 2);
+    Piece botOverlay = new Piece(top);
+    botOverlay.overlay(bot);
+    Piece topOverlay = new Piece(bot);
+    topOverlay.overlay(top);
+    assertFalse(topOverlay.equals(botOverlay));
+  }
 
   // Tests for the getTitle method
   @Test

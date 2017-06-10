@@ -88,6 +88,65 @@ public class EditorModelTest {
     assertEquals(jack, model.view());
   }
 
+  // Tests for the copy method
+  @Test(expected = IllegalArgumentException.class)
+  public void copyNullCopyTitle() {
+    model.copy(null, "hello");
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void copyNullNewTitle() {
+    model.copy("hello", null);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void copyNoPieceExistsWithCopyTitle() {
+    model.copy("hello", "jack");
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void copyIncorrectCasing() {
+    model.create("hello");
+    model.copy("hElLo", "jack");
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void copyPieceAlreadyExistsWithNewTitle() {
+    model.create("hello");
+    model.create("jack");
+    model.copy("hello", "jack");
+  }
+
+  @Test
+  public void copyValidList() {
+    model.create("hello");
+    model.copy("hello", "jack");
+    assertEquals(">  jack\n"
+               + "   hello\n", model.list());
+  }
+
+  @Test
+  public void copyValidAllNotesCopied() {
+    model.create("hello");
+    model.addNote(3, Pitch.C, 10, 23);
+    model.addNote(2, Pitch.DSHARP, 4, 5);
+    String hello = model.view();
+    model.copy("hello", "jack");
+    assertEquals(hello, model.view());
+  }
+
+  @Test
+  public void copyDifferentReferences() {
+    model.create("hello");
+    model.addNote(3, Pitch.C, 10, 23);
+    model.addNote(2, Pitch.DSHARP, 4, 5);
+    model.copy("hello", "jack");
+    model.removeNote(2, Pitch.DSHARP, 4);
+    String copy = model.view();
+    model.open("hello");
+    assertNotEquals(copy, model.view());
+  }
+
   // Tests for the view method
   @Test(expected = IllegalStateException.class)
   public void viewNothingOpen() {
@@ -216,6 +275,80 @@ public class EditorModelTest {
         + "8    |                                            |                                \n"
         + "9                                                 |                                \n";
     assertEquals(view, model.view());
+  }
+
+  @Test
+  public void toStringSpanMultipleOctavesNoneInMiddle() {
+    model.create("hello");
+    model.addNote(4, Pitch.D, 2, 4);
+    model.addNote(2, Pitch.B, 4, 5);
+    model.addNote(2, Pitch.B, 2, 4);
+    String view = ""
+        + "     B2   C3  C#3   D3  D#3   E3   F3  F#3   G3  G#3   A3  A#3   B3   C4  C#4   D4 \n"
+        + "0                                                                                  \n"
+        + "1                                                                                  \n"
+        + "2    X                                                                          X  \n"
+        + "3    |                                                                          |  \n"
+        + "4    X                                                                          |  \n"
+        + "5    |                                                                          |  \n"
+        + "6    |                                                                             \n"
+        + "7    |                                                                             \n"
+        + "8    |                                                                             \n";
+    assertEquals(view, model.view());
+  }
+
+  @Test
+  public void viewOverlaidPieces() {
+    model.create("top");
+    model.addNote(3, Pitch.D, 1, 3);
+    model.addNote(3, Pitch.DSHARP, 4, 6);
+    model.addNote(3, Pitch.DSHARP, 8, 4);
+    String top = "      D3  D#3 \n"
+               + " 0            \n"
+               + " 1    X       \n"
+               + " 2    |       \n"
+               + " 3    |       \n"
+               + " 4         X  \n"
+               + " 5         |  \n"
+               + " 6         |  \n"
+               + " 7         |  \n"
+               + " 8         X  \n"
+               + " 9         |  \n"
+               + "10         |  \n"
+               + "11         |  \n";
+    assertEquals(top, model.view());
+    model.create("bot");
+    model.addNote(3, Pitch.DSHARP, 6, 4);
+    model.addNote(3, Pitch.C, 2, 4);
+    String bot = "     C3  C#3   D3  D#3 \n"
+               + "0                      \n"
+               + "1                      \n"
+               + "2    X                 \n"
+               + "3    |                 \n"
+               + "4    |                 \n"
+               + "5    |                 \n"
+               + "6                   X  \n"
+               + "7                   |  \n"
+               + "8                   |  \n"
+               + "9                   |  \n";
+    assertEquals(bot, model.view());
+    model.overlay("top");
+    String overlay = "      C3  C#3   D3  D#3 \n"
+                   + " 0                      \n"
+                   + " 1              X       \n"
+                   + " 2    X         |       \n"
+                   + " 3    |         |       \n"
+                   + " 4    |              X  \n"
+                   + " 5    |              |  \n"
+                   + " 6                   X  \n"
+                   + " 7                   |  \n"
+                   + " 8                   X  \n"
+                   + " 9                   |  \n"
+                   + "10                   |  \n"
+                   + "11                   |  \n";
+    assertEquals(overlay, model.view());
+    model.open("top");
+    assertEquals(top, model.view());
   }
 
   // Tests for the close method
@@ -561,4 +694,251 @@ public class EditorModelTest {
   }
 
   // Tests for the overlay method
+  @Test(expected = IllegalStateException.class)
+  public void overlayNothingOpened() {
+    model.overlay("top");
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void overlayNullTitle() {
+    model.create("top");
+    model.overlay(null);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void overlayPieceDoesNotExist() {
+    model.create("top");
+    model.overlay("bot");
+  }
+
+  @Test
+  public void overlayOntoEmptyPiece() {
+    model.create("top");
+    model.addNote(1, Pitch.A, 3, 4);
+    model.addNote(1, Pitch.DSHARP, 6, 8);
+    model.addNote(1, Pitch.E, 15, 12);
+    model.addNote(1, Pitch.E, 20, 3);
+    model.addNote(1, Pitch.B, 8, 4);
+    String top = model.view();
+    model.create("empty");
+    model.overlay("top");
+    assertEquals(top, model.view());
+  }
+
+  @Test
+  public void overlayEmptyPieceOnto() {
+    model.create("empty");
+    model.create("top");
+    model.addNote(1, Pitch.A, 3, 4);
+    model.addNote(1, Pitch.DSHARP, 6, 8);
+    model.addNote(1, Pitch.E, 15, 12);
+    model.addNote(1, Pitch.E, 20, 3);
+    model.addNote(1, Pitch.B, 8, 4);
+    String top = model.view();
+    model.overlay("empty");
+    assertEquals(top, model.view());
+    model.open("empty");
+    assertNotEquals(top, model.view());
+  }
+
+  @Test
+  public void overlayNoConflictingAdds() {
+    model.create("top");
+    model.addNote(3, Pitch.A, 3, 4);
+    model.addNote(3, Pitch.E, 0, 3);
+    model.addNote(3, Pitch.GSHARP, 2, 2);
+    model.addNote(3, Pitch.D, 1, 1);
+    model.addNote(4, Pitch.CSHARP, 10, 6);
+    String tops = "      D3  D#3   E3   F3  F#3   G3  G#3   A3  A#3   B3   C4  C#4 \n"
+                + " 0              X                                               \n"
+                + " 1    X         |                                               \n"
+                + " 2              |                   X                           \n"
+                + " 3                                  |    X                      \n"
+                + " 4                                       |                      \n"
+                + " 5                                       |                      \n"
+                + " 6                                       |                      \n"
+                + " 7                                                              \n"
+                + " 8                                                              \n"
+                + " 9                                                              \n"
+                + "10                                                           X  \n"
+                + "11                                                           |  \n"
+                + "12                                                           |  \n"
+                + "13                                                           |  \n"
+                + "14                                                           |  \n"
+                + "15                                                           |  \n";
+    assertEquals(tops, model.view());
+    model.create("bot");
+    model.addNote(3, Pitch.A, 0, 2);
+    model.addNote(4, Pitch.CSHARP, 2, 3);
+    model.addNote(4, Pitch.E, 5, 6);
+    model.addNote(3, Pitch.FSHARP, 3, 2);
+    model.addNote(3, Pitch.E, 4, 1);
+    String bots = "      E3   F3  F#3   G3  G#3   A3  A#3   B3   C4  C#4   D4  D#4   E4 \n"
+                + " 0                             X                                     \n"
+                + " 1                             |                                     \n"
+                + " 2                                                 X                 \n"
+                + " 3              X                                  |                 \n"
+                + " 4    X         |                                  |                 \n"
+                + " 5                                                                X  \n"
+                + " 6                                                                |  \n"
+                + " 7                                                                |  \n"
+                + " 8                                                                |  \n"
+                + " 9                                                                |  \n"
+                + "10                                                                |  \n";
+    assertEquals(bots, model.view());
+    model.open("top");
+    model.overlay("bot");
+    String overlay = ""
+        + "      D3  D#3   E3   F3  F#3   G3  G#3   A3  A#3   B3   C4  C#4   D4  D#4   E4 \n"
+        + " 0              X                        X                                     \n"
+        + " 1    X         |                        |                                     \n"
+        + " 2              |                   X                        X                 \n"
+        + " 3                        X         |    X                   |                 \n"
+        + " 4              X         |              |                   |                 \n"
+        + " 5                                       |                                  X  \n"
+        + " 6                                       |                                  |  \n"
+        + " 7                                                                          |  \n"
+        + " 8                                                                          |  \n"
+        + " 9                                                                          |  \n"
+        + "10                                                           X              |  \n"
+        + "11                                                           |                 \n"
+        + "12                                                           |                 \n"
+        + "13                                                           |                 \n"
+        + "14                                                           |                 \n"
+        + "15                                                           |                 \n";
+    assertEquals(overlay, model.view());
+  }
+
+  @Test
+  public void overlayNoConflictsEqualsBothWays() {
+    model.create("top");
+    model.addNote(3, Pitch.A, 3, 4);
+    model.addNote(3, Pitch.E, 0, 3);
+    model.addNote(3, Pitch.GSHARP, 2, 2);
+    model.addNote(3, Pitch.D, 1, 1);
+    model.addNote(4, Pitch.CSHARP, 10, 6);
+    model.create("bot");
+    model.addNote(3, Pitch.A, 0, 2);
+    model.addNote(4, Pitch.CSHARP, 2, 3);
+    model.addNote(4, Pitch.E, 5, 6);
+    model.addNote(3, Pitch.FSHARP, 3, 2);
+    model.addNote(3, Pitch.E, 4, 1);
+    model.copy("top", "botOverlay");
+    model.overlay("bot");
+    String botOverlay = model.view();
+    model.copy("bot", "topOverlay");
+    model.overlay("top");
+    String topOverlay = model.view();
+    assertEquals(topOverlay, botOverlay);
+  }
+
+  @Test
+  public void overlayConflictingAdds() {
+    model.create("top");
+    model.addNote(3, Pitch.A, 3, 4);
+    model.addNote(3, Pitch.E, 0, 3);
+    model.addNote(3, Pitch.GSHARP, 2, 2);
+    model.addNote(3, Pitch.D, 1, 1);
+    model.addNote(4, Pitch.CSHARP, 10, 6);
+    String tops = "      D3  D#3   E3   F3  F#3   G3  G#3   A3  A#3   B3   C4  C#4 \n"
+                + " 0              X                                               \n"
+                + " 1    X         |                                               \n"
+                + " 2              |                   X                           \n"
+                + " 3                                  |    X                      \n"
+                + " 4                                       |                      \n"
+                + " 5                                       |                      \n"
+                + " 6                                       |                      \n"
+                + " 7                                                              \n"
+                + " 8                                                              \n"
+                + " 9                                                              \n"
+                + "10                                                           X  \n"
+                + "11                                                           |  \n"
+                + "12                                                           |  \n"
+                + "13                                                           |  \n"
+                + "14                                                           |  \n"
+                + "15                                                           |  \n";
+    assertEquals(tops, model.view());
+    model.create("bot");
+    model.addNote(3, Pitch.A, 5, 3);
+    model.addNote(4, Pitch.CSHARP, 2, 3);
+    model.addNote(4, Pitch.CSHARP, 10, 12);
+    model.addNote(4, Pitch.CSHARP, 8, 4);
+    model.addNote(4, Pitch.E, 5, 6);
+    model.addNote(3, Pitch.FSHARP, 3, 2);
+    model.addNote(3, Pitch.E, 4, 1);
+    model.addNote(3, Pitch.GSHARP, 2, 8);
+    model.addNote(3, Pitch.GSHARP, 4, 2);
+    String bots = "      E3   F3  F#3   G3  G#3   A3  A#3   B3   C4  C#4   D4  D#4   E4 \n"
+                + " 0                                                                   \n"
+                + " 1                                                                   \n"
+                + " 2                        X                        X                 \n"
+                + " 3              X         |                        |                 \n"
+                + " 4    X         |         X                        |                 \n"
+                + " 5                        |    X                                  X  \n"
+                + " 6                        |    |                                  |  \n"
+                + " 7                        |    |                                  |  \n"
+                + " 8                        |                        X              |  \n"
+                + " 9                        |                        |              |  \n"
+                + "10                                                 X              |  \n"
+                + "11                                                 |                 \n"
+                + "12                                                 |                 \n"
+                + "13                                                 |                 \n"
+                + "14                                                 |                 \n"
+                + "15                                                 |                 \n"
+                + "16                                                 |                 \n"
+                + "17                                                 |                 \n"
+                + "18                                                 |                 \n"
+                + "19                                                 |                 \n"
+                + "20                                                 |                 \n"
+                + "21                                                 |                 \n";
+    assertEquals(bots, model.view());
+    model.open("top");
+    model.overlay("bot");
+    String overlay = ""
+        + "      D3  D#3   E3   F3  F#3   G3  G#3   A3  A#3   B3   C4  C#4   D4  D#4   E4 \n"
+        + " 0              X                                                              \n"
+        + " 1    X         |                                                              \n"
+        + " 2              |                   X                        X                 \n"
+        + " 3                        X         |    X                   |                 \n"
+        + " 4              X         |         X    |                   |                 \n"
+        + " 5                                  |    X                                  X  \n"
+        + " 6                                       |                                  |  \n"
+        + " 7                                       |                                  |  \n"
+        + " 8                                                           X              |  \n"
+        + " 9                                                           |              |  \n"
+        + "10                                                           X              |  \n"
+        + "11                                                           |                 \n"
+        + "12                                                           |                 \n"
+        + "13                                                           |                 \n"
+        + "14                                                           |                 \n"
+        + "15                                                           |                 \n";
+    assertEquals(overlay, model.view());
+  }
+
+  @Test
+  public void overlayConflictsNotEqualsBothWays() {
+    model.create("top");
+    model.addNote(3, Pitch.A, 3, 4);
+    model.addNote(3, Pitch.E, 0, 3);
+    model.addNote(3, Pitch.GSHARP, 2, 2);
+    model.addNote(3, Pitch.D, 1, 1);
+    model.addNote(4, Pitch.CSHARP, 10, 6);
+    model.create("bot");
+    model.addNote(3, Pitch.A, 5, 3);
+    model.addNote(4, Pitch.CSHARP, 2, 3);
+    model.addNote(4, Pitch.CSHARP, 10, 12);
+    model.addNote(4, Pitch.CSHARP, 8, 4);
+    model.addNote(4, Pitch.E, 5, 6);
+    model.addNote(3, Pitch.FSHARP, 3, 2);
+    model.addNote(3, Pitch.E, 4, 1);
+    model.addNote(3, Pitch.GSHARP, 2, 8);
+    model.addNote(3, Pitch.GSHARP, 4, 2);
+    model.copy("top", "botOverlay");
+    model.overlay("bot");
+    String botOverlay = model.view();
+    model.copy("bot", "topOverlay");
+    model.overlay("top");
+    String topOverlay = model.view();
+    assertNotEquals(topOverlay, botOverlay);
+  }
 }

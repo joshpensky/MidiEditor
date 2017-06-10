@@ -5,7 +5,7 @@ package cs3500.hw05;
  */
 public interface EditorOperations {
   /**
-   * Creates a new piece of music with the given title and measure, and opens it.
+   * Creates a new piece of music with the given title, and opens it.
    *
    * @param title     the title of the new piece
    * @throws IllegalArgumentException if the given title is uninitialized, or if a piece already
@@ -21,6 +21,17 @@ public interface EditorOperations {
    * piece with the given title in memory
    */
   void open(String title) throws IllegalArgumentException;
+
+  /**
+   * Creates a copy of an existing piece in memory with a new title, and opens it.
+   *
+   * @param toCopy      the title of the piece to be copied
+   * @param newTitle   the new title of the copied piece
+   * @throws IllegalArgumentException if either of the given titles are uninitialized, if there
+   * is no piece with the given title in memory, or if a piece already exists in memory with the
+   * given new title
+   */
+  void copy(String toCopy, String newTitle) throws IllegalArgumentException;
 
   /**
    * Returns a String representation of the current state of the currently opened piece, or an

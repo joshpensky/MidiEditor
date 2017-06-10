@@ -89,13 +89,17 @@ class Piece {
   private String stringBuilder() {
     List<List<String>> arr = this.getPieceTable();
     int octaveLength = arr.get(0).size();
-    int lineNumPadding = Integer.toString(octaveLength - 2).length();
+    int lineNumPadding = octaveLength - 2;
+    if (lineNumPadding < 0) {
+      lineNumPadding = 0;
+    }
+    int lineNumPaddingString = Integer.toString(lineNumPadding).length();
     StringBuilder builder = new StringBuilder();
     for (int i = 0; i < octaveLength; i++) {
       if (i == 0) {
-        builder.append(Utils.padString("", lineNumPadding, Utils.Alignment.RIGHT));
+        builder.append(Utils.padString("", lineNumPaddingString, Utils.Alignment.RIGHT));
       } else {
-        builder.append(Utils.padString(Integer.toString(i - 1), lineNumPadding,
+        builder.append(Utils.padString(Integer.toString(i - 1), lineNumPaddingString,
               Utils.Alignment.RIGHT));
       }
       builder.append("  ");
@@ -119,10 +123,8 @@ class Piece {
     int maxLength = 0;
     for (int i = 1; i <= 10; i++) {
       Octave octave = this.octaves.get(i);
-      if (!octave.isEmpty()) {
-        builder.add(octave.getOctaveTable(i, 5));
-        maxLength = Math.max(maxLength, octave.length());
-      }
+      builder.add(octave.getOctaveTable(i, 5));
+      maxLength = Math.max(maxLength, octave.length());
     }
     List<List<String>> piece = new ArrayList<>();
     for (List<List<String>> octaveList : builder) {

@@ -123,6 +123,87 @@ public class OctaveTest {
   }
 
   // Tests for the getOctaveTable method
+  @Test
+  public void getOctaveTableEmpty() {
+    List<List<String>> table = new ArrayList<>();
+    table.add(new ArrayList<>(Arrays.asList(" C10 ", "     ")));
+    table.add(new ArrayList<>(Arrays.asList(" C#10", "     ")));
+    table.add(new ArrayList<>(Arrays.asList(" D10 ", "     ")));
+    table.add(new ArrayList<>(Arrays.asList(" D#10", "     ")));
+    table.add(new ArrayList<>(Arrays.asList(" E10 ", "     ")));
+    table.add(new ArrayList<>(Arrays.asList(" F10 ", "     ")));
+    table.add(new ArrayList<>(Arrays.asList(" F#10", "     ")));
+    table.add(new ArrayList<>(Arrays.asList(" G10 ", "     ")));
+    table.add(new ArrayList<>(Arrays.asList(" G#10", "     ")));
+    table.add(new ArrayList<>(Arrays.asList(" A10 ", "     ")));
+    table.add(new ArrayList<>(Arrays.asList(" A#10", "     ")));
+    table.add(new ArrayList<>(Arrays.asList(" B10 ", "     ")));
+    assertEquals(table, new Octave().getOctaveTable(10, 5));
+  }
+
+  @Test
+  public void getOctaveTableOneNote() {
+    Octave o = new Octave();
+    o.addNote(Pitch.G, 2, 3);
+    List<List<String>> table = new ArrayList<>();
+    table.add(new ArrayList<>(Arrays.asList("  C3 ", "     ", "     ", "     ", "     ", "     ")));
+    table.add(new ArrayList<>(Arrays.asList(" C#3 ", "     ", "     ", "     ", "     ", "     ")));
+    table.add(new ArrayList<>(Arrays.asList("  D3 ", "     ", "     ", "     ", "     ", "     ")));
+    table.add(new ArrayList<>(Arrays.asList(" D#3 ", "     ", "     ", "     ", "     ", "     ")));
+    table.add(new ArrayList<>(Arrays.asList("  E3 ", "     ", "     ", "     ", "     ", "     ")));
+    table.add(new ArrayList<>(Arrays.asList("  F3 ", "     ", "     ", "     ", "     ", "     ")));
+    table.add(new ArrayList<>(Arrays.asList(" F#3 ", "     ", "     ", "     ", "     ", "     ")));
+    table.add(new ArrayList<>(Arrays.asList("  G3 ", "     ", "     ", "  X  ", "  |  ", "  |  ")));
+    table.add(new ArrayList<>(Arrays.asList(" G#3 ", "     ", "     ", "     ", "     ", "     ")));
+    table.add(new ArrayList<>(Arrays.asList("  A3 ", "     ", "     ", "     ", "     ", "     ")));
+    table.add(new ArrayList<>(Arrays.asList(" A#3 ", "     ", "     ", "     ", "     ", "     ")));
+    table.add(new ArrayList<>(Arrays.asList("  B3 ", "     ", "     ", "     ", "     ", "     ")));
+    assertEquals(table, o.getOctaveTable(3, 5));
+  }
+
+  @Test
+  public void getOctaveTableMultipleNotes() {
+    Octave o = new Octave();
+    o.addNote(Pitch.G, 2, 3);
+    o.addNote(Pitch.G, 1, 2);
+    o.addNote(Pitch.CSHARP, 1, 4);
+    o.addNote(Pitch.A, 0, 1);
+    o.addNote(Pitch.A, 2, 2);
+    List<List<String>> table = new ArrayList<>();
+    table.add(new ArrayList<>(Arrays.asList("  C6 ", "     ", "     ", "     ", "     ", "     ")));
+    table.add(new ArrayList<>(Arrays.asList(" C#6 ", "     ", "  X  ", "  |  ", "  |  ", "  |  ")));
+    table.add(new ArrayList<>(Arrays.asList("  D6 ", "     ", "     ", "     ", "     ", "     ")));
+    table.add(new ArrayList<>(Arrays.asList(" D#6 ", "     ", "     ", "     ", "     ", "     ")));
+    table.add(new ArrayList<>(Arrays.asList("  E6 ", "     ", "     ", "     ", "     ", "     ")));
+    table.add(new ArrayList<>(Arrays.asList("  F6 ", "     ", "     ", "     ", "     ", "     ")));
+    table.add(new ArrayList<>(Arrays.asList(" F#6 ", "     ", "     ", "     ", "     ", "     ")));
+    table.add(new ArrayList<>(Arrays.asList("  G6 ", "     ", "  X  ", "  X  ", "  |  ", "  |  ")));
+    table.add(new ArrayList<>(Arrays.asList(" G#6 ", "     ", "     ", "     ", "     ", "     ")));
+    table.add(new ArrayList<>(Arrays.asList("  A6 ", "  X  ", "     ", "  X  ", "  |  ", "     ")));
+    table.add(new ArrayList<>(Arrays.asList(" A#6 ", "     ", "     ", "     ", "     ", "     ")));
+    table.add(new ArrayList<>(Arrays.asList("  B6 ", "     ", "     ", "     ", "     ", "     ")));
+    assertEquals(table, o.getOctaveTable(6, 5));
+  }
+
+  @Test
+  public void getOctaveTableDifferentSpacing() {
+    Octave o = new Octave();
+    o.addNote(Pitch.G, 2, 3);
+    List<List<String>> table = new ArrayList<>();
+    table.add(new ArrayList<>(Arrays.asList("C4", " ", " ", " ", " ", " ")));
+    table.add(new ArrayList<>(Arrays.asList("C#4", " ", " ", " ", " ", " ")));
+    table.add(new ArrayList<>(Arrays.asList("D4", " ", " ", " ", " ", " ")));
+    table.add(new ArrayList<>(Arrays.asList("D#4", " ", " ", " ", " ", " ")));
+    table.add(new ArrayList<>(Arrays.asList("E4", " ", " ", " ", " ", " ")));
+    table.add(new ArrayList<>(Arrays.asList("F4", " ", " ", " ", " ", " ")));
+    table.add(new ArrayList<>(Arrays.asList("F#4", " ", " ", " ", " ", " ")));
+    table.add(new ArrayList<>(Arrays.asList("G4", " ", " ", "X", "|", "|")));
+    table.add(new ArrayList<>(Arrays.asList("G#4", " ", " ", " ", " ", " ")));
+    table.add(new ArrayList<>(Arrays.asList("A4", " ", " ", " ", " ", " ")));
+    table.add(new ArrayList<>(Arrays.asList("A#4", " ", " ", " ", " ", " ")));
+    table.add(new ArrayList<>(Arrays.asList("B4", " ", " ", " ", " ", " ")));
+    assertEquals(table, o.getOctaveTable(4, 1));
+  }
 
   // Tests for the isEmpty method
   @Test
@@ -389,4 +470,248 @@ public class OctaveTest {
   }
 
   // Tests for the overlay method
+  @Test(expected = IllegalArgumentException.class)
+  public void overlayNullOctave() {
+    new Octave().overlay(null);
+  }
+
+  @Test
+  public void overlayOntoEmptyOctave() {
+    Octave o = new Octave();
+    o.addNote(Pitch.A, 3, 4);
+    o.addNote(Pitch.DSHARP, 6, 8);
+    o.addNote(Pitch.E, 15, 12);
+    o.addNote(Pitch.E, 20, 3);
+    o.addNote(Pitch.B, 8, 4);
+    Octave empty = new Octave();
+    empty.overlay(o);
+    assertTrue(o.equals(empty));
+  }
+
+  @Test
+  public void overlayEmptyOctaveOnto() {
+    Octave o = new Octave();
+    o.addNote(Pitch.A, 3, 4);
+    o.addNote(Pitch.DSHARP, 6, 8);
+    o.addNote(Pitch.E, 15, 12);
+    o.addNote(Pitch.E, 20, 3);
+    o.addNote(Pitch.B, 8, 4);
+    Octave empty = new Octave();
+    Octave overlaid = new Octave(o);
+    overlaid.overlay(empty);
+    assertFalse(overlaid.equals(empty));
+    assertTrue(overlaid.equals(o));
+  }
+
+  @Test
+  public void overlayNoConflictingAdds() {
+    Octave o = new Octave();
+    o.addNote(Pitch.A, 3, 4);
+    o.addNote(Pitch.E, 0, 3);
+    o.addNote(Pitch.GSHARP, 2, 2);
+    o.addNote(Pitch.C, 1, 1);
+    List<List<String>> oTab = new ArrayList<>();
+    oTab.add(new ArrayList<>(Arrays.asList("  C3 ", "     ", "  X  ", "     ", "     ", "     ",
+        "     ", "     ")));
+    oTab.add(new ArrayList<>(Arrays.asList(" C#3 ", "     ", "     ", "     ", "     ", "     ",
+        "     ", "     ")));
+    oTab.add(new ArrayList<>(Arrays.asList("  D3 ", "     ", "     ", "     ", "     ", "     ",
+        "     ", "     ")));
+    oTab.add(new ArrayList<>(Arrays.asList(" D#3 ", "     ", "     ", "     ", "     ", "     ",
+        "     ", "     ")));
+    oTab.add(new ArrayList<>(Arrays.asList("  E3 ", "  X  ", "  |  ", "  |  ", "     ", "     ",
+        "     ", "     ")));
+    oTab.add(new ArrayList<>(Arrays.asList("  F3 ", "     ", "     ", "     ", "     ", "     ",
+        "     ", "     ")));
+    oTab.add(new ArrayList<>(Arrays.asList(" F#3 ", "     ", "     ", "     ", "     ", "     ",
+        "     ", "     ")));
+    oTab.add(new ArrayList<>(Arrays.asList("  G3 ", "     ", "     ", "     ", "     ", "     ",
+        "     ", "     ")));
+    oTab.add(new ArrayList<>(Arrays.asList(" G#3 ", "     ", "     ", "  X  ", "  |  ", "     ",
+        "     ", "     ")));
+    oTab.add(new ArrayList<>(Arrays.asList("  A3 ", "     ", "     ", "     ", "  X  ", "  |  ",
+        "  |  ", "  |  ")));
+    oTab.add(new ArrayList<>(Arrays.asList(" A#3 ", "     ", "     ", "     ", "     ", "     ",
+        "     ", "     ")));
+    oTab.add(new ArrayList<>(Arrays.asList("  B3 ", "     ", "     ", "     ", "     ", "     ",
+        "     ", "     ")));
+    assertEquals(oTab, o.getOctaveTable(3, 5));
+    Octave o2 = new Octave();
+    o2.addNote(Pitch.A, 0, 2);
+    o2.addNote(Pitch.CSHARP, 2, 3);
+    o2.addNote(Pitch.FSHARP, 3, 2);
+    o2.addNote(Pitch.E, 4, 1);
+    List<List<String>> o2Tab = new ArrayList<>();
+    o2Tab.add(new ArrayList<>(Arrays.asList("  C3 ", "     ", "     ", "     ", "     ", "     ")));
+    o2Tab.add(new ArrayList<>(Arrays.asList(" C#3 ", "     ", "     ", "  X  ", "  |  ", "  |  ")));
+    o2Tab.add(new ArrayList<>(Arrays.asList("  D3 ", "     ", "     ", "     ", "     ", "     ")));
+    o2Tab.add(new ArrayList<>(Arrays.asList(" D#3 ", "     ", "     ", "     ", "     ", "     ")));
+    o2Tab.add(new ArrayList<>(Arrays.asList("  E3 ", "     ", "     ", "     ", "     ", "  X  ")));
+    o2Tab.add(new ArrayList<>(Arrays.asList("  F3 ", "     ", "     ", "     ", "     ", "     ")));
+    o2Tab.add(new ArrayList<>(Arrays.asList(" F#3 ", "     ", "     ", "     ", "  X  ", "  |  ")));
+    o2Tab.add(new ArrayList<>(Arrays.asList("  G3 ", "     ", "     ", "     ", "     ", "     ")));
+    o2Tab.add(new ArrayList<>(Arrays.asList(" G#3 ", "     ", "     ", "     ", "     ", "     ")));
+    o2Tab.add(new ArrayList<>(Arrays.asList("  A3 ", "  X  ", "  |  ", "     ", "     ", "     ")));
+    o2Tab.add(new ArrayList<>(Arrays.asList(" A#3 ", "     ", "     ", "     ", "     ", "     ")));
+    o2Tab.add(new ArrayList<>(Arrays.asList("  B3 ", "     ", "     ", "     ", "     ", "     ")));
+    assertEquals(o2Tab, o2.getOctaveTable(3, 5));
+    o.overlay(o2);
+    List<List<String>> fTab = new ArrayList<>();
+    fTab.add(new ArrayList<>(Arrays.asList("  C3 ", "     ", "  X  ", "     ", "     ", "     ",
+      "     ", "     ")));
+    fTab.add(new ArrayList<>(Arrays.asList(" C#3 ", "     ", "     ", "  X  ", "  |  ", "  |  ",
+      "     ", "     ")));
+    fTab.add(new ArrayList<>(Arrays.asList("  D3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ", "     ")));
+    fTab.add(new ArrayList<>(Arrays.asList(" D#3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ", "     ")));
+    fTab.add(new ArrayList<>(Arrays.asList("  E3 ", "  X  ", "  |  ", "  |  ", "     ", "  X  ",
+      "     ", "     ")));
+    fTab.add(new ArrayList<>(Arrays.asList("  F3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ", "     ")));
+    fTab.add(new ArrayList<>(Arrays.asList(" F#3 ", "     ", "     ", "     ", "  X  ", "  |  ",
+      "     ", "     ")));
+    fTab.add(new ArrayList<>(Arrays.asList("  G3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ", "     ")));
+    fTab.add(new ArrayList<>(Arrays.asList(" G#3 ", "     ", "     ", "  X  ", "  |  ", "     ",
+      "     ", "     ")));
+    fTab.add(new ArrayList<>(Arrays.asList("  A3 ", "  X  ", "  |  ", "     ", "  X  ", "  |  ",
+      "  |  ", "  |  ")));
+    fTab.add(new ArrayList<>(Arrays.asList(" A#3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ", "     ")));
+    fTab.add(new ArrayList<>(Arrays.asList("  B3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ", "     ")));
+    assertEquals(fTab, o.getOctaveTable(3, 5));
+  }
+
+  @Test
+  public void overlayNoConflictsEqualsBothWays() {
+    Octave o = new Octave();
+    o.addNote(Pitch.A, 3, 4);
+    o.addNote(Pitch.E, 0, 3);
+    o.addNote(Pitch.GSHARP, 2, 2);
+    o.addNote(Pitch.C, 1, 1);
+    Octave o2 = new Octave();
+    o2.addNote(Pitch.A, 0, 2);
+    o2.addNote(Pitch.CSHARP, 2, 3);
+    o2.addNote(Pitch.FSHARP, 3, 2);
+    o2.addNote(Pitch.E, 4, 1);
+    Octave o2Overlay = new Octave(o);
+    o2Overlay.overlay(o2);
+    Octave oOverlay = new Octave(o2);
+    oOverlay.overlay(o);
+    assertTrue(oOverlay.equals(o2Overlay));
+  }
+
+  @Test
+  public void overlayConflictingAdds() {
+    Octave o = new Octave();
+    o.addNote(Pitch.A, 3, 4);
+    o.addNote(Pitch.E, 0, 3);
+    o.addNote(Pitch.GSHARP, 2, 2);
+    o.addNote(Pitch.C, 1, 1);
+    List<List<String>> oTab = new ArrayList<>();
+    oTab.add(new ArrayList<>(Arrays.asList("  C3 ", "     ", "  X  ", "     ", "     ", "     ",
+      "     ", "     ")));
+    oTab.add(new ArrayList<>(Arrays.asList(" C#3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ", "     ")));
+    oTab.add(new ArrayList<>(Arrays.asList("  D3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ", "     ")));
+    oTab.add(new ArrayList<>(Arrays.asList(" D#3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ", "     ")));
+    oTab.add(new ArrayList<>(Arrays.asList("  E3 ", "  X  ", "  |  ", "  |  ", "     ", "     ",
+      "     ", "     ")));
+    oTab.add(new ArrayList<>(Arrays.asList("  F3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ", "     ")));
+    oTab.add(new ArrayList<>(Arrays.asList(" F#3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ", "     ")));
+    oTab.add(new ArrayList<>(Arrays.asList("  G3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ", "     ")));
+    oTab.add(new ArrayList<>(Arrays.asList(" G#3 ", "     ", "     ", "  X  ", "  |  ", "     ",
+      "     ", "     ")));
+    oTab.add(new ArrayList<>(Arrays.asList("  A3 ", "     ", "     ", "     ", "  X  ", "  |  ",
+      "  |  ", "  |  ")));
+    oTab.add(new ArrayList<>(Arrays.asList(" A#3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ", "     ")));
+    oTab.add(new ArrayList<>(Arrays.asList("  B3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ", "     ")));
+    assertEquals(oTab, o.getOctaveTable(3, 5));
+    Octave o2 = new Octave();
+    o2.addNote(Pitch.A, 5, 3);
+    o2.addNote(Pitch.CSHARP, 2, 3);
+    o2.addNote(Pitch.FSHARP, 3, 2);
+    o2.addNote(Pitch.GSHARP, 2, 8);
+    List<List<String>> o2Tab = new ArrayList<>();
+    o2Tab.add(new ArrayList<>(Arrays.asList("  C3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ", "     ", "     ", "     ", "     ")));
+    o2Tab.add(new ArrayList<>(Arrays.asList(" C#3 ", "     ", "     ", "  X  ", "  |  ", "  |  ",
+      "     ", "     ", "     ", "     ", "     ")));
+    o2Tab.add(new ArrayList<>(Arrays.asList("  D3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ", "     ", "     ", "     ", "     ")));
+    o2Tab.add(new ArrayList<>(Arrays.asList(" D#3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ", "     ", "     ", "     ", "     ")));
+    o2Tab.add(new ArrayList<>(Arrays.asList("  E3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ", "     ", "     ", "     ", "     ")));
+    o2Tab.add(new ArrayList<>(Arrays.asList("  F3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ", "     ", "     ", "     ", "     ")));
+    o2Tab.add(new ArrayList<>(Arrays.asList(" F#3 ", "     ", "     ", "     ", "  X  ", "  |  ",
+      "     ", "     ", "     ", "     ", "     ")));
+    o2Tab.add(new ArrayList<>(Arrays.asList("  G3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ", "     ", "     ", "     ", "     ")));
+    o2Tab.add(new ArrayList<>(Arrays.asList(" G#3 ", "     ", "     ", "  X  ", "  |  ", "  |  ",
+      "  |  ", "  |  ", "  |  ", "  |  ", "  |  ")));
+    o2Tab.add(new ArrayList<>(Arrays.asList("  A3 ", "     ", "     ", "     ", "     ", "     ",
+      "  X  ", "  |  ", "  |  ", "     ", "     ")));
+    o2Tab.add(new ArrayList<>(Arrays.asList(" A#3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ", "     ", "     ", "     ", "     ")));
+    o2Tab.add(new ArrayList<>(Arrays.asList("  B3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ", "     ", "     ", "     ", "     ")));
+    assertEquals(o2Tab, o2.getOctaveTable(3, 5));
+    o.overlay(o2);
+    List<List<String>> fTab = new ArrayList<>();
+    fTab.add(new ArrayList<>(Arrays.asList("  C3 ", "     ", "  X  ", "     ", "     ", "     ",
+      "     ", "     ", "     ")));
+    fTab.add(new ArrayList<>(Arrays.asList(" C#3 ", "     ", "     ", "  X  ", "  |  ", "  |  ",
+      "     ", "     ", "     ")));
+    fTab.add(new ArrayList<>(Arrays.asList("  D3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ", "     ", "     ")));
+    fTab.add(new ArrayList<>(Arrays.asList(" D#3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ", "     ", "     ")));
+    fTab.add(new ArrayList<>(Arrays.asList("  E3 ", "  X  ", "  |  ", "  |  ", "     ", "     ",
+      "     ", "     ", "     ")));
+    fTab.add(new ArrayList<>(Arrays.asList("  F3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ", "     ", "     ")));
+    fTab.add(new ArrayList<>(Arrays.asList(" F#3 ", "     ", "     ", "     ", "  X  ", "  |  ",
+      "     ", "     ", "     ")));
+    fTab.add(new ArrayList<>(Arrays.asList("  G3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ", "     ", "     ")));
+    fTab.add(new ArrayList<>(Arrays.asList(" G#3 ", "     ", "     ", "  X  ", "  |  ", "     ",
+      "     ", "     ", "     ")));
+    fTab.add(new ArrayList<>(Arrays.asList("  A3 ", "     ", "     ", "     ", "  X  ", "  |  ",
+      "  X  ", "  |  ", "  |  ")));
+    fTab.add(new ArrayList<>(Arrays.asList(" A#3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ", "     ", "     ")));
+    fTab.add(new ArrayList<>(Arrays.asList("  B3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ", "     ", "     ")));
+    assertEquals(fTab, o.getOctaveTable(3, 5));
+  }
+
+  @Test
+  public void overlayConflictsNotEqualsBothWays() {
+    Octave o = new Octave();
+    o.addNote(Pitch.A, 3, 4);
+    o.addNote(Pitch.E, 0, 3);
+    o.addNote(Pitch.GSHARP, 2, 2);
+    o.addNote(Pitch.C, 1, 1);
+    Octave o2 = new Octave();
+    o2.addNote(Pitch.A, 5, 3);
+    o2.addNote(Pitch.CSHARP, 2, 3);
+    o2.addNote(Pitch.FSHARP, 3, 2);
+    o2.addNote(Pitch.GSHARP, 2, 8);
+    Octave o2Overlay = new Octave(o);
+    o2Overlay.overlay(o2);
+    Octave oOverlay = new Octave(o2);
+    oOverlay.overlay(o);
+    assertFalse(oOverlay.equals(o2Overlay));
+  }
 }
