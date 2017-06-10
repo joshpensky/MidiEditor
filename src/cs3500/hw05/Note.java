@@ -84,20 +84,20 @@ final class Note {
   }
 
   /**
+   * Sets the end point of the note, using the duration and position of this note.
+   * This is used for checking where a note lies in between another note.
+   */
+  private void setEndPoint() {
+    this.endPoint = (this.position + this.duration) - 1;
+  }
+
+  /**
    * Gets the starting position of this note.
    *
    * @return the starting position of this note
    */
   int getPosition() {
     return this.position;
-  }
-
-  /**
-   * Sets the end point of the note, using the duration and position of this note.
-   * This is used for checking where a note lies in between another note.
-   */
-  private void setEndPoint() {
-    this.endPoint = (this.position + this.duration) - 1;
   }
 
   /**

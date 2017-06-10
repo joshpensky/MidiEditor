@@ -190,6 +190,19 @@ final class Piece {
   }
 
   /**
+   * Gets the length of this piece (the length of the longest octave).
+   *
+   * @return the length of this piece (measured in beats)
+   */
+  int length() {
+    int length = 0;
+    for (Integer i : this.octaves.keySet()) {
+      length = Math.max(length, this.octaves.get(i).length());
+    }
+    return length;
+  }
+
+  /**
    * Adds a new note to the piece.
    *
    * @throws IllegalArgumentException if the given note is uninitialized
@@ -300,18 +313,5 @@ final class Piece {
    */
   String getTitle() {
     return this.title;
-  }
-
-  /**
-   * Gets the length of this piece (the length of the longest octave).
-   *
-   * @return the length of this piece (measured in beats)
-   */
-  int length() {
-    int length = 0;
-    for (Integer i : this.octaves.keySet()) {
-      length = Math.max(length, this.octaves.get(i).length());
-    }
-    return length;
   }
 }

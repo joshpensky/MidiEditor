@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2f9d9684-0384-4b52-83cd-9a89e5900319" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/cs3500/hw05/Octave.java" afterPath="$PROJECT_DIR$/src/cs3500/hw05/Octave.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/uml.png" afterPath="$PROJECT_DIR$/uml.png" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/cs3500/hw05/Note.java" afterPath="$PROJECT_DIR$/src/cs3500/hw05/Note.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/cs3500/hw05/Piece.java" afterPath="$PROJECT_DIR$/src/cs3500/hw05/Piece.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -206,14 +209,14 @@
           <file leaf-file-name="Note.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/cs3500/hw05/Note.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1854">
-                  <caret line="103" column="11" lean-forward="false" selection-start-line="103" selection-start-column="11" selection-end-line="103" selection-end-column="11" />
+                <state relative-caret-position="514">
+                  <caret line="91" column="3" lean-forward="false" selection-start-line="91" selection-start-column="3" selection-end-line="91" selection-end-column="3" />
                   <folding>
                     <element signature="e#1495#1496#0" expanded="true" />
                     <element signature="e#1552#1553#0" expanded="true" />
-                    <element signature="e#2571#2572#0" expanded="true" />
-                    <element signature="e#2601#2602#0" expanded="true" />
-                    <element signature="e#2802#2803#0" expanded="true" />
+                    <element signature="e#2638#2639#0" expanded="true" />
+                    <element signature="e#2699#2700#0" expanded="true" />
+                    <element signature="e#2833#2834#0" expanded="true" />
                     <element signature="e#2863#2864#0" expanded="true" />
                     <element signature="e#2993#2994#0" expanded="true" />
                     <element signature="e#3023#3024#0" expanded="true" />
@@ -222,10 +225,10 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="Octave.java" pinned="false" current-in-tab="true">
+          <file leaf-file-name="Octave.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/cs3500/hw05/Octave.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="3096">
+                <state relative-caret-position="-918">
                   <caret line="172" column="66" lean-forward="false" selection-start-line="172" selection-start-column="66" selection-end-line="172" selection-end-column="66" />
                   <folding>
                     <element signature="imports" expanded="true" />
@@ -239,21 +242,21 @@
           <file leaf-file-name="Piece.java" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/cs3500/hw05/Piece.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="3708">
-                  <caret line="206" column="38" lean-forward="false" selection-start-line="206" selection-start-column="38" selection-end-line="206" selection-end-column="38" />
+                <state relative-caret-position="-1178">
+                  <caret line="202" column="3" lean-forward="false" selection-start-line="202" selection-start-column="3" selection-end-line="202" selection-end-column="3" />
                   <folding>
                     <element signature="imports" expanded="true" />
-                    <element signature="e#9891#9892#0" expanded="true" />
-                    <element signature="e#9918#9919#0" expanded="true" />
+                    <element signature="e#10213#10214#0" expanded="true" />
+                    <element signature="e#10240#10241#0" expanded="true" />
                   </folding>
                 </state>
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="EditorModel.java" pinned="false" current-in-tab="false">
+          <file leaf-file-name="EditorModel.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/cs3500/hw05/EditorModel.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="2304">
+                <state relative-caret-position="64">
                   <caret line="128" column="6" lean-forward="false" selection-start-line="128" selection-start-column="6" selection-end-line="128" selection-end-column="6" />
                   <folding>
                     <element signature="imports" expanded="true" />
@@ -366,7 +369,6 @@
         <option value="$PROJECT_DIR$/src/cs3500/hw05/OctaveType.java" />
         <option value="$PROJECT_DIR$/src/cs3500/hw05/IEditorModel.java" />
         <option value="$PROJECT_DIR$/src/cs3500/hw05/PieceStringBuilder.java" />
-        <option value="$PROJECT_DIR$/src/cs3500/hw05/Note.java" />
         <option value="$PROJECT_DIR$/src/cs3500/hw05/Pitch.java" />
         <option value="$PROJECT_DIR$/test/cs3500/hw05/PitchTest.java" />
         <option value="$PROJECT_DIR$/src/cs3500/hw05/MusicPiece.java" />
@@ -379,8 +381,9 @@
         <option value="$PROJECT_DIR$/test/cs3500/hw05/OctaveTest.java" />
         <option value="$PROJECT_DIR$/test/cs3500/hw05/PieceTest.java" />
         <option value="$PROJECT_DIR$/src/cs3500/hw05/EditorOperations.java" />
-        <option value="$PROJECT_DIR$/src/cs3500/hw05/Piece.java" />
         <option value="$PROJECT_DIR$/src/cs3500/hw05/Octave.java" />
+        <option value="$PROJECT_DIR$/src/cs3500/hw05/Note.java" />
+        <option value="$PROJECT_DIR$/src/cs3500/hw05/Piece.java" />
       </list>
     </option>
   </component>
@@ -930,9 +933,9 @@
           <folding>
             <element signature="e#1495#1496#0" expanded="true" />
             <element signature="e#1552#1553#0" expanded="true" />
-            <element signature="e#2571#2572#0" expanded="true" />
-            <element signature="e#2601#2602#0" expanded="true" />
-            <element signature="e#2802#2803#0" expanded="true" />
+            <element signature="e#2638#2639#0" expanded="true" />
+            <element signature="e#2699#2700#0" expanded="true" />
+            <element signature="e#2833#2834#0" expanded="true" />
             <element signature="e#2863#2864#0" expanded="true" />
             <element signature="e#2993#2994#0" expanded="true" />
             <element signature="e#3023#3024#0" expanded="true" />
@@ -958,8 +961,8 @@
           <caret line="8" column="20" lean-forward="true" selection-start-line="8" selection-start-column="20" selection-end-line="8" selection-end-column="20" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#9891#9892#0" expanded="true" />
-            <element signature="e#9918#9919#0" expanded="true" />
+            <element signature="e#10213#10214#0" expanded="true" />
+            <element signature="e#10240#10241#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1021,19 +1024,6 @@
         <state relative-caret-position="162">
           <caret line="9" column="2" lean-forward="false" selection-start-line="9" selection-start-column="2" selection-end-line="9" selection-end-column="19" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cs3500/hw05/Pitch.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="5" column="12" lean-forward="false" selection-start-line="5" selection-start-column="12" selection-end-line="5" selection-end-column="12" />
-          <folding>
-            <element signature="e#404#405#0" expanded="true" />
-            <element signature="e#438#439#0" expanded="true" />
-            <element signature="e#599#600#0" expanded="true" />
-            <element signature="e#629#630#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1141,23 +1131,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/cs3500/hw05/Note.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1854">
-          <caret line="103" column="11" lean-forward="false" selection-start-line="103" selection-start-column="11" selection-end-line="103" selection-end-column="11" />
-          <folding>
-            <element signature="e#1495#1496#0" expanded="true" />
-            <element signature="e#1552#1553#0" expanded="true" />
-            <element signature="e#2571#2572#0" expanded="true" />
-            <element signature="e#2601#2602#0" expanded="true" />
-            <element signature="e#2802#2803#0" expanded="true" />
-            <element signature="e#2863#2864#0" expanded="true" />
-            <element signature="e#2993#2994#0" expanded="true" />
-            <element signature="e#3023#3024#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test/cs3500/hw05/NoteTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="342">
@@ -1224,36 +1197,66 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/cs3500/hw05/EditorModel.java">
+    <entry file="file://$PROJECT_DIR$/src/cs3500/hw05/Pitch.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2304">
-          <caret line="128" column="6" lean-forward="false" selection-start-line="128" selection-start-column="6" selection-end-line="128" selection-end-column="6" />
+        <state relative-caret-position="90">
+          <caret line="5" column="12" lean-forward="false" selection-start-line="5" selection-start-column="12" selection-end-line="5" selection-end-column="12" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="e#404#405#0" expanded="true" />
+            <element signature="e#438#439#0" expanded="true" />
+            <element signature="e#599#600#0" expanded="true" />
+            <element signature="e#629#630#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/cs3500/hw05/Piece.java">
+    <entry file="file://$PROJECT_DIR$/src/cs3500/hw05/Note.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3708">
-          <caret line="206" column="38" lean-forward="false" selection-start-line="206" selection-start-column="38" selection-end-line="206" selection-end-column="38" />
+        <state relative-caret-position="514">
+          <caret line="91" column="3" lean-forward="false" selection-start-line="91" selection-start-column="3" selection-end-line="91" selection-end-column="3" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#9891#9892#0" expanded="true" />
-            <element signature="e#9918#9919#0" expanded="true" />
+            <element signature="e#1495#1496#0" expanded="true" />
+            <element signature="e#1552#1553#0" expanded="true" />
+            <element signature="e#2638#2639#0" expanded="true" />
+            <element signature="e#2699#2700#0" expanded="true" />
+            <element signature="e#2833#2834#0" expanded="true" />
+            <element signature="e#2863#2864#0" expanded="true" />
+            <element signature="e#2993#2994#0" expanded="true" />
+            <element signature="e#3023#3024#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/cs3500/hw05/Octave.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3096">
+        <state relative-caret-position="-918">
           <caret line="172" column="66" lean-forward="false" selection-start-line="172" selection-start-column="66" selection-end-line="172" selection-end-column="66" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1682#1683#0" expanded="true" />
             <element signature="e#1722#1723#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cs3500/hw05/Piece.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1178">
+          <caret line="202" column="3" lean-forward="false" selection-start-line="202" selection-start-column="3" selection-end-line="202" selection-end-column="3" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#10213#10214#0" expanded="true" />
+            <element signature="e#10240#10241#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cs3500/hw05/EditorModel.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="64">
+          <caret line="128" column="6" lean-forward="false" selection-start-line="128" selection-start-column="6" selection-end-line="128" selection-end-column="6" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
