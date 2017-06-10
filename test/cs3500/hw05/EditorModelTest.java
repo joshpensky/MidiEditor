@@ -1,13 +1,10 @@
 package cs3500.hw05;
 
-import com.sun.corba.se.internal.Interceptors.PIORB;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 import static org.junit.Assert.assertNotEquals;
-
-import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for the {@link EditorModel} class.

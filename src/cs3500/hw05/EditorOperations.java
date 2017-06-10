@@ -142,10 +142,10 @@ public interface EditorOperations {
    * Adds a piece of music in memory with the given title, to the end of the currently opened one.
    * This only should modify the currently opened piece, NOT the one being added.
    *
-   * @param title   the title of the piece to be added to the end
+   * @param addTitle   the title of the piece to be added to the end
    * @throws IllegalStateException if there is no currently opened piece
    * @throws IllegalArgumentException if the given title is uninitialized, or there is no
    * piece in memory with the given title
    */
-  void addToEnd(String title) throws IllegalStateException, IllegalArgumentException;
+  void addToEnd(String addTitle) throws IllegalStateException, IllegalArgumentException;
 }

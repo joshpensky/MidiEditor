@@ -33,7 +33,7 @@ public class EditorModel implements EditorOperations {
     Piece piece = this.getPieceFromMemory(title);
     if (piece == null) {
       throw new IllegalArgumentException("There is no piece that exists with the given title, \""
-          + title + "\".");
+        + title + "\".");
     }
     this.opened = piece;
   }
@@ -98,21 +98,21 @@ public class EditorModel implements EditorOperations {
 
   @Override
   public void addNote(int octave, Pitch pitch, int position, int duration)
-      throws IllegalStateException, IllegalArgumentException {
+    throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
     this.opened.addNote(octave, pitch, position, duration);
   }
 
   @Override
   public void removeNote(int octave, Pitch pitch, int position)
-      throws IllegalStateException, IllegalArgumentException {
+    throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
     this.opened.removeNote(octave, pitch, position);
   }
 
   @Override
   public void editNotePitch(int octave, Pitch pitch, int position, Pitch newPitch)
-      throws IllegalStateException, IllegalArgumentException {
+    throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
     this.opened.editPitch(octave, pitch, position, newPitch);
   }
@@ -126,7 +126,7 @@ public class EditorModel implements EditorOperations {
 
   @Override
   public void editNoteDuration(int octave, Pitch pitch, int position, int newDuration)
-      throws IllegalStateException, IllegalArgumentException {
+    throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
     this.opened.editDuration(octave, pitch, position, newDuration);
   }
@@ -137,7 +137,7 @@ public class EditorModel implements EditorOperations {
     Piece toOverlay = this.getPieceFromMemory(overlayTitle);
     if (toOverlay == null) {
       throw new IllegalArgumentException("There is no piece with the given title, \""
-          + overlayTitle + "\".");
+        + overlayTitle + "\".");
     }
     this.opened.overlay(new Piece(toOverlay));
   }
