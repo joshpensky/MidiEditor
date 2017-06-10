@@ -1,10 +1,13 @@
 package cs3500.hw05;
 
+import com.sun.corba.se.internal.Interceptors.PIORB;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 import static org.junit.Assert.assertNotEquals;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for the {@link EditorModel} class.
@@ -708,6 +711,33 @@ public class EditorModelTest {
   }
 
   @Test
+  public void overlayPieceOntoSelf() {
+    model.create("top");
+    model.addNote(1, Pitch.A, 3, 4);
+    model.addNote(1, Pitch.DSHARP, 6, 8);
+    model.addNote(1, Pitch.E, 15, 12);
+    model.addNote(1, Pitch.E, 20, 3);
+    model.addNote(1, Pitch.B, 8, 4);
+    String view = model.view();
+    model.overlay("top");
+    assertEquals(view, model.view());
+  }
+
+  @Test
+  public void overlayPieceOntoCopyOfSelf() {
+    model.create("top");
+    model.addNote(1, Pitch.A, 3, 4);
+    model.addNote(1, Pitch.DSHARP, 6, 8);
+    model.addNote(1, Pitch.E, 15, 12);
+    model.addNote(1, Pitch.E, 20, 3);
+    model.addNote(1, Pitch.B, 8, 4);
+    String view = model.view();
+    model.copy("top", "topCopy");
+    model.overlay("top");
+    assertEquals(view, model.view());
+  }
+
+  @Test
   public void overlayOntoEmptyPiece() {
     model.create("top");
     model.addNote(1, Pitch.A, 3, 4);
@@ -944,5 +974,265 @@ public class EditorModelTest {
     model.overlay("top");
     String topOverlay = model.view();
     assertNotEquals(topOverlay, botOverlay);
+  }
+
+  // Tests for the addToEnd method
+  @Test(expected = IllegalStateException.class)
+  public void addToEndNothingOpened() {
+    model.addToEnd("top");
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void addToEndNullTitle() {
+    model.create("top");
+    model.addToEnd(null);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void addToEndPieceDoesNotExist() {
+    model.create("top");
+    model.addToEnd("bot");
+  }
+
+  @Test
+  public void addToEndEmptyToEmpty() {
+    model.create("first");
+    model.create("empty");
+    String view = model.view();
+    model.addToEnd("first");
+    assertEquals(view, model.view());
+  }
+
+  @Test
+  public void addToEndPieceToEmpty() {
+    model.create("first");
+    model.addNote(3, Pitch.ASHARP, 5, 3);
+    model.addNote(5, Pitch.C, 10, 23);
+    String view = model.view();
+    model.create("empty");
+    model.addToEnd("first");
+    assertEquals(view, model.view());
+  }
+
+  @Test
+  public void addToEndEmptyToPiece() {
+    model.create("empty");
+    model.create("first");
+    model.addNote(3, Pitch.ASHARP, 5, 3);
+    model.addNote(5, Pitch.C, 10, 23);
+    String view = model.view();
+    model.addToEnd("empty");
+    assertEquals(view, model.view());
+  }
+
+  @Test
+  public void addToEndSelf() {
+    model.create("first");
+    model.addNote(3, Pitch.ASHARP, 5, 3);
+    model.addNote(5, Pitch.C, 10, 10);
+    String view = ""
+        + "     A#3   B3   C4  C#4   D4  D#4   E4   F4  F#4   G4  G#4   A4  A#4   B4   C5 \n"
+        + " 0                                                                             \n"
+        + " 1                                                                             \n"
+        + " 2                                                                             \n"
+        + " 3                                                                             \n"
+        + " 4                                                                             \n"
+        + " 5    X                                                                        \n"
+        + " 6    |                                                                        \n"
+        + " 7    |                                                                        \n"
+        + " 8                                                                             \n"
+        + " 9                                                                             \n"
+        + "10                                                                          X  \n"
+        + "11                                                                          |  \n"
+        + "12                                                                          |  \n"
+        + "13                                                                          |  \n"
+        + "14                                                                          |  \n"
+        + "15                                                                          |  \n"
+        + "16                                                                          |  \n"
+        + "17                                                                          |  \n"
+        + "18                                                                          |  \n"
+        + "19                                                                          |  \n";
+    assertEquals(view, model.view());
+    model.copy("first", "copyFirst");
+    model.addToEnd("first");
+    String result = ""
+        + "     A#3   B3   C4  C#4   D4  D#4   E4   F4  F#4   G4  G#4   A4  A#4   B4   C5 \n"
+        + " 0                                                                             \n"
+        + " 1                                                                             \n"
+        + " 2                                                                             \n"
+        + " 3                                                                             \n"
+        + " 4                                                                             \n"
+        + " 5    X                                                                        \n"
+        + " 6    |                                                                        \n"
+        + " 7    |                                                                        \n"
+        + " 8                                                                             \n"
+        + " 9                                                                             \n"
+        + "10                                                                          X  \n"
+        + "11                                                                          |  \n"
+        + "12                                                                          |  \n"
+        + "13                                                                          |  \n"
+        + "14                                                                          |  \n"
+        + "15                                                                          |  \n"
+        + "16                                                                          |  \n"
+        + "17                                                                          |  \n"
+        + "18                                                                          |  \n"
+        + "19                                                                          |  \n"
+        + "20                                                                             \n"
+        + "21                                                                             \n"
+        + "22                                                                             \n"
+        + "23                                                                             \n"
+        + "24    X                                                                        \n"
+        + "25    |                                                                        \n"
+        + "26    |                                                                        \n"
+        + "27                                                                             \n"
+        + "28                                                                             \n"
+        + "29                                                                          X  \n"
+        + "30                                                                          |  \n"
+        + "31                                                                          |  \n"
+        + "32                                                                          |  \n"
+        + "33                                                                          |  \n"
+        + "34                                                                          |  \n"
+        + "35                                                                          |  \n"
+        + "36                                                                          |  \n"
+        + "37                                                                          |  \n"
+        + "38                                                                          |  \n";
+    assertEquals(result, model.view());
+  }
+
+  @Test
+  public void addToEndSelfEqualsReverse() {
+    model.create("first");
+    model.addNote(3, Pitch.ASHARP, 5, 3);
+    model.addNote(5, Pitch.C, 10, 10);
+    model.copy("first", "copy");
+
+    model.copy("first", "newFirst");
+    model.addToEnd("copy");
+    String copyToFirst = model.view();
+
+    model.copy("copy", "newCopy");
+    model.addToEnd("first");
+    String firstToCopy = model.view();
+
+    assertEquals(copyToFirst, firstToCopy);
+  }
+
+
+  @Test
+  public void addToEndPieceToPiece() {
+    model.create("first");
+    model.addNote(4, Pitch.ASHARP, 5, 3);
+    model.addNote(5, Pitch.C, 10, 10);
+    String first = ""
+        + "     A#4   B4   C5 \n"
+        + " 0                 \n"
+        + " 1                 \n"
+        + " 2                 \n"
+        + " 3                 \n"
+        + " 4                 \n"
+        + " 5    X            \n"
+        + " 6    |            \n"
+        + " 7    |            \n"
+        + " 8                 \n"
+        + " 9                 \n"
+        + "10              X  \n"
+        + "11              |  \n"
+        + "12              |  \n"
+        + "13              |  \n"
+        + "14              |  \n"
+        + "15              |  \n"
+        + "16              |  \n"
+        + "17              |  \n"
+        + "18              |  \n"
+        + "19              |  \n";
+    assertEquals(first, model.view());
+
+    model.create("second");
+    model.addNote(4, Pitch.F, 0, 4);
+    model.addNote(5, Pitch.DSHARP, 3, 5);
+    model.addNote(5, Pitch.G, 2, 6);
+    model.addNote(4, Pitch.E, 1, 15);
+    String second = ""
+        + "      E4   F4  F#4   G4  G#4   A4  A#4   B4   C5  C#5   D5  D#5   E5   F5  F#5   G5 \n"
+        + " 0         X                                                                        \n"
+        + " 1    X    |                                                                        \n"
+        + " 2    |    |                                                                     X  \n"
+        + " 3    |    |                                                 X                   |  \n"
+        + " 4    |                                                      |                   |  \n"
+        + " 5    |                                                      |                   |  \n"
+        + " 6    |                                                      |                   |  \n"
+        + " 7    |                                                      |                   |  \n"
+        + " 8    |                                                                             \n"
+        + " 9    |                                                                             \n"
+        + "10    |                                                                             \n"
+        + "11    |                                                                             \n"
+        + "12    |                                                                             \n"
+        + "13    |                                                                             \n"
+        + "14    |                                                                             \n"
+        + "15    |                                                                             \n";
+    assertEquals(second, model.view());
+
+    model.addToEnd("first");
+    String result = ""
+      + "      E4   F4  F#4   G4  G#4   A4  A#4   B4   C5  C#5   D5  D#5   E5   F5  F#5   G5 \n"
+      + " 0         X                                                                        \n"
+      + " 1    X    |                                                                        \n"
+      + " 2    |    |                                                                     X  \n"
+      + " 3    |    |                                                 X                   |  \n"
+      + " 4    |                                                      |                   |  \n"
+      + " 5    |                                                      |                   |  \n"
+      + " 6    |                                                      |                   |  \n"
+      + " 7    |                                                      |                   |  \n"
+      + " 8    |                                                                             \n"
+      + " 9    |                                                                             \n"
+      + "10    |                                                                             \n"
+      + "11    |                                                                             \n"
+      + "12    |                                                                             \n"
+      + "13    |                                                                             \n"
+      + "14    |                                                                             \n"
+      + "15    |                                                                             \n"
+      + "16                                                                                  \n"
+      + "17                                                                                  \n"
+      + "18                                                                                  \n"
+      + "19                                                                                  \n"
+      + "20                                  X                                               \n"
+      + "21                                  |                                               \n"
+      + "22                                  |                                               \n"
+      + "23                                                                                  \n"
+      + "24                                                                                  \n"
+      + "25                                            X                                     \n"
+      + "26                                            |                                     \n"
+      + "27                                            |                                     \n"
+      + "28                                            |                                     \n"
+      + "29                                            |                                     \n"
+      + "30                                            |                                     \n"
+      + "31                                            |                                     \n"
+      + "32                                            |                                     \n"
+      + "33                                            |                                     \n"
+      + "34                                            |                                     \n";
+    assertEquals(result, model.view());
+  }
+
+  @Test
+  public void addToEndPieceToPieceNotEqualsReverse() {
+    model.create("first");
+    model.addNote(3, Pitch.ASHARP, 5, 3);
+    model.addNote(5, Pitch.C, 10, 10);
+
+    model.create("second");
+    model.addNote(2, Pitch.F, 0, 4);
+    model.addNote(5, Pitch.DSHARP, 3, 5);
+    model.addNote(5, Pitch.G, 2, 6);
+    model.addNote(4, Pitch.C, 1, 15);
+
+    model.copy("first", "newFirst");
+    model.addToEnd("second");
+    String secondToFirst = model.view();
+
+    model.copy("second", "newSecond");
+    model.addToEnd("first");
+    String firstToSecond = model.view();
+
+    assertNotEquals(secondToFirst, firstToSecond);
   }
 }

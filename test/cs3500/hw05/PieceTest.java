@@ -4,6 +4,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+import static org.junit.Assert.assertNotEquals;
+
 import static org.junit.Assert.assertTrue;
 
 import static org.junit.Assert.assertFalse;
@@ -709,6 +711,117 @@ public class PieceTest {
     assertFalse(topOverlay.equals(botOverlay));
   }
 
+  // Tests for the move method
+  @Test(expected = IllegalArgumentException.class)
+  public void moveToNegativePosition() {
+    Piece p = new Piece("hey");
+    p.addNote(3, Pitch.DSHARP, 0, 3);
+    p.move(-1);
+  }
+
+  @Test
+  public void moveEmpty() {
+    Piece p = new Piece("hey");
+    p.move(23);
+    assertTrue(p.equals(new Piece("hey")));
+    p.move(-50);
+    assertTrue(p.equals(new Piece("hey")));
+  }
+
+  @Test
+  public void moveZeroDistance() {
+    Piece p = new Piece("hey");
+    p.addNote(3, Pitch.DSHARP, 0, 3);
+    p.addNote(6, Pitch.F, 4, 8);
+    Piece moved = new Piece(p);
+    moved.move(0);
+    assertTrue(p.equals(moved));
+  }
+
+  @Test
+  public void movePositiveDistance() {
+    Piece p = new Piece("hey");
+    p.addNote(3, Pitch.DSHARP, 0, 3);
+    p.addNote(2, Pitch.G, 2, 1);
+    p.addNote(2, Pitch.FSHARP, 10, 4);
+    p.addNote(2, Pitch.G, 1, 2);
+    String toString = "     F#2   G2  G#2   A2  A#2   B2   C3  C#3   D3  D#3 \n"
+                    + " 0                                                 X  \n"
+                    + " 1         X                                       |  \n"
+                    + " 2         X                                       |  \n"
+                    + " 3                                                    \n"
+                    + " 4                                                    \n"
+                    + " 5                                                    \n"
+                    + " 6                                                    \n"
+                    + " 7                                                    \n"
+                    + " 8                                                    \n"
+                    + " 9                                                    \n"
+                    + "10    X                                               \n"
+                    + "11    |                                               \n"
+                    + "12    |                                               \n"
+                    + "13    |                                               \n";
+    assertEquals(toString, p.toString());
+    p.move(2);
+    String moveToString = "     F#2   G2  G#2   A2  A#2   B2   C3  C#3   D3  D#3 \n"
+                        + " 0                                                    \n"
+                        + " 1                                                    \n"
+                        + " 2                                                 X  \n"
+                        + " 3         X                                       |  \n"
+                        + " 4         X                                       |  \n"
+                        + " 5                                                    \n"
+                        + " 6                                                    \n"
+                        + " 7                                                    \n"
+                        + " 8                                                    \n"
+                        + " 9                                                    \n"
+                        + "10                                                    \n"
+                        + "11                                                    \n"
+                        + "12    X                                               \n"
+                        + "13    |                                               \n"
+                        + "14    |                                               \n"
+                        + "15    |                                               \n";
+    assertEquals(moveToString, p.toString());
+  }
+
+  @Test
+  public void moveNegativeDistance() {
+    Piece p = new Piece("hey");
+    p.addNote(3, Pitch.DSHARP, 6, 3);
+    p.addNote(2, Pitch.G, 4, 1);
+    p.addNote(2, Pitch.FSHARP, 10, 4);
+    p.addNote(2, Pitch.G, 3, 2);
+    String toString = "     F#2   G2  G#2   A2  A#2   B2   C3  C#3   D3  D#3 \n"
+                    + " 0                                                    \n"
+                    + " 1                                                    \n"
+                    + " 2                                                    \n"
+                    + " 3         X                                          \n"
+                    + " 4         X                                          \n"
+                    + " 5                                                    \n"
+                    + " 6                                                 X  \n"
+                    + " 7                                                 |  \n"
+                    + " 8                                                 |  \n"
+                    + " 9                                                    \n"
+                    + "10    X                                               \n"
+                    + "11    |                                               \n"
+                    + "12    |                                               \n"
+                    + "13    |                                               \n";
+    assertEquals(toString, p.toString());
+    p.move(-2);
+    String moveToString = "     F#2   G2  G#2   A2  A#2   B2   C3  C#3   D3  D#3 \n"
+                        + " 0                                                    \n"
+                        + " 1         X                                          \n"
+                        + " 2         X                                          \n"
+                        + " 3                                                    \n"
+                        + " 4                                                 X  \n"
+                        + " 5                                                 |  \n"
+                        + " 6                                                 |  \n"
+                        + " 7                                                    \n"
+                        + " 8    X                                               \n"
+                        + " 9    |                                               \n"
+                        + "10    |                                               \n"
+                        + "11    |                                               \n";
+    assertEquals(moveToString, p.toString());
+  }
+
   // Tests for the getTitle method
   @Test
   public void getTitleValid() {
@@ -719,5 +832,48 @@ public class PieceTest {
   public void getTitleOfCopy() {
     Piece p = new Piece("heyya");
     assertEquals("heyya", new Piece(p).getTitle());
+  }
+
+  // Tests for the length method
+  @Test
+  public void lengthEmpty() {
+    assertEquals(0, new Piece("hey").length());
+  }
+
+  @Test
+  public void lengthEqualsCopy() {
+    Piece p = new Piece("hey");
+    p.addNote(3, Pitch.ASHARP, 5, 10);
+    assertEquals(p.length(), new Piece(p).length());
+  }
+
+  @Test
+  public void lengthOverlayPiece() {
+    Piece p = new Piece("hey");
+    p.addNote(3, Pitch.ASHARP, 5, 10);
+    Piece p2 = new Piece("hey");
+    p2.addNote(5, Pitch.C, 8, 5);
+
+    Piece p2Overlay = new Piece(p);
+    p2Overlay.overlay(p2);
+    Piece pOverlay = new Piece(p2);
+    pOverlay.overlay(p);
+
+    assertTrue(p.length() > p2.length());
+    assertEquals(pOverlay.length(), p2Overlay.length());
+    assertEquals(pOverlay.length(), p.length());
+    assertNotEquals(p2Overlay.length(), p2.length());
+  }
+
+  @Test
+  public void lengthMovedPieced() {
+    Piece p = new Piece("hey");
+    p.addNote(3, Pitch.ASHARP, 5, 10);
+    int length = p.length();
+
+    p.move(-5);
+    assertEquals(length - 5, p.length());
+    p.move(10);
+    assertEquals(length + 5, p.length());
   }
 }

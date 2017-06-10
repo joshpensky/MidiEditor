@@ -119,12 +119,12 @@ final class Piece {
    */
   private List<List<String>> getPieceTable() {
     List<List<List<String>>> builder = new ArrayList<>();
-    String empty = Utils.padString("", 5, Utils.Alignment.CENTER);
-    int maxLength = 0;
+    int columnWidth = 5;
+    String empty = Utils.padString("", columnWidth, Utils.Alignment.CENTER);
+    int maxLength = this.length();
     for (int i = 1; i <= 10; i++) {
       Octave octave = this.octaves.get(i);
-      builder.add(octave.getOctaveTable(i, 5));
-      maxLength = Math.max(maxLength, octave.length());
+      builder.add(octave.getOctaveTable(i, columnWidth));
     }
     List<List<String>> piece = new ArrayList<>();
     for (List<List<String>> octaveList : builder) {
@@ -278,11 +278,40 @@ final class Piece {
   }
 
   /**
+   * Moves all octaves in this piece a given distance, either positive or negative. If the
+   * distance is 0, it does not move anything.
+   *
+   * @param distance   the distance (measured in beats) to move all notes in the octave
+   * @throws IllegalArgumentException if moving a note the given distance results in a negative
+   * position
+   */
+  void move(int distance) {
+    if (distance != 0) {
+      for (Integer i : this.octaves.keySet()) {
+        this.octaves.get(i).move(distance);
+      }
+    }
+  }
+
+  /**
    * Gets the title of this piece.
    *
    * @return the title of this piece
    */
   String getTitle() {
     return this.title;
+  }
+
+  /**
+   * Gets the length of this piece (the length of the longest octave).
+   *
+   * @return the length of this piece (measured in beats)
+   */
+  int length() {
+    int length = 0;
+    for (Integer i : this.octaves.keySet()) {
+      length = Math.max(length, this.octaves.get(i).length());
+    }
+    return length;
   }
 }

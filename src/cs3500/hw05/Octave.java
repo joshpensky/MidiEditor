@@ -329,4 +329,28 @@ final class Octave {
       }
     }
   }
+
+  /**
+   * Moves all notes in this octave a given distance, either positive or negative. If the
+   * distance is 0, it does not move anything.
+   *
+   * @param distance   the distance (measured in beats) to move all notes in the octave
+   * @throws IllegalArgumentException if moving a note the given distance results in a negative
+   * position
+   */
+  void move(int distance) {
+    if (distance != 0) {
+      for (Pitch p : this.pitches.keySet()) {
+        List<Note> pitchList;
+        if (distance < 0) {
+          pitchList = this.pitches.get(p);
+        } else {
+          pitchList = Utils.reverse(this.pitches.get(p));
+        }
+        for (Note n : pitchList) {
+          n.setPosition(n.getPosition() + distance);
+        }
+      }
+    }
+  }
 }

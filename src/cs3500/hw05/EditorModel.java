@@ -132,17 +132,27 @@ public class EditorModel implements EditorOperations {
   }
 
   @Override
-  public void overlay(String overlayTitle) throws IllegalStateException,
-        IllegalArgumentException {
+  public void overlay(String overlayTitle) throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
     Piece toOverlay = this.getPieceFromMemory(overlayTitle);
     if (toOverlay == null) {
       throw new IllegalArgumentException("There is no piece with the given title, \""
           + overlayTitle + "\".");
-    } else if (toOverlay.equals(this.opened)) {
-      throw new IllegalArgumentException("Cannot overlay piece with itself.");
     }
     this.opened.overlay(new Piece(toOverlay));
+  }
+
+  @Override
+  public void addToEnd(String title) throws IllegalStateException, IllegalArgumentException {
+    this.openedPieceException();
+    Piece toAdd = this.getPieceFromMemory(title);
+    if (toAdd == null) {
+      throw new IllegalArgumentException("There is no piece with the given title, \""
+        + title + "\".");
+    }
+    toAdd = new Piece(toAdd);
+    toAdd.move(this.opened.length());
+    this.opened.overlay(toAdd);
   }
 
   /**

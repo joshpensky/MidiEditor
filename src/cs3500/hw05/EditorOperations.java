@@ -25,7 +25,7 @@ public interface EditorOperations {
   /**
    * Creates a copy of an existing piece in memory with a new title, and opens it.
    *
-   * @param toCopy      the title of the piece to be copied
+   * @param toCopy     the title of the piece to be copied
    * @param newTitle   the new title of the copied piece
    * @throws IllegalArgumentException if either of the given titles are uninitialized, if there
    * is no piece with the given title in memory, or if a piece already exists in memory with the
@@ -69,8 +69,7 @@ public interface EditorOperations {
       throws IllegalStateException, IllegalArgumentException;
 
   /**
-   * Removes a note from the currently opened piece in the given octave at the given pitch at the
-   * given starting position.
+   * Removes a note from the currently opened piece at the given location details.
    *
    * @param octave     the octave of the pitch
    * @param pitch      the pitch at which the note is played
@@ -84,7 +83,7 @@ public interface EditorOperations {
       throws IllegalStateException, IllegalArgumentException;
 
   /**
-   * Changes the pitch of a note from the currently opened piece at the given location.
+   * Changes the pitch of a note from the currently opened piece at the given location details.
    *
    * @param octave     the octave of the pitch the note is in
    * @param pitch      the pitch at which the note is played
@@ -99,7 +98,7 @@ public interface EditorOperations {
       throws IllegalStateException, IllegalArgumentException;
 
   /**
-   * Changes the position of a note from the currently opened piece at the given location.
+   * Changes the position of a note from the currently opened piece at the given location details.
    *
    * @param octave        the octave of the pitch the note is in
    * @param pitch         the pitch at which the note is played
@@ -114,7 +113,7 @@ public interface EditorOperations {
       throws IllegalStateException, IllegalArgumentException;
 
   /**
-   * Changes the position of a note from the currently opened piece at the given location.
+   * Changes the position of a note from the currently opened piece at the given location details.
    *
    * @param octave        the octave of the pitch the note is in
    * @param pitch         the pitch at which the note is played
@@ -129,13 +128,24 @@ public interface EditorOperations {
       throws IllegalStateException, IllegalArgumentException;
 
   /**
-   * Overlays another piece of music in memory over the currently opened one.
+   * Overlays a piece of music in memory with the given title over the currently opened one.
+   * This only should modify the currently opened piece, NOT the overlaying piece.
    *
    * @param overlayTitle   the title of the piece to be overlaid
    * @throws IllegalStateException if there is no currently opened piece
-   * @throws IllegalArgumentException if the given title is uninitialized, there is no
-   * piece in memory with the overlay's title, or the user is attempting to overlay the same
-   * piece on top of itself
+   * @throws IllegalArgumentException if the given title is uninitialized, or there is no
+   * piece in memory with the overlay's title
    */
   void overlay(String overlayTitle) throws IllegalStateException, IllegalArgumentException;
+
+  /**
+   * Adds a piece of music in memory with the given title, to the end of the currently opened one.
+   * This only should modify the currently opened piece, NOT the one being added.
+   *
+   * @param title   the title of the piece to be added to the end
+   * @throws IllegalStateException if there is no currently opened piece
+   * @throws IllegalArgumentException if the given title is uninitialized, or there is no
+   * piece in memory with the given title
+   */
+  void addToEnd(String title) throws IllegalStateException, IllegalArgumentException;
 }

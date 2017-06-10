@@ -722,4 +722,118 @@ public class OctaveTest {
     oOverlay.overlay(o);
     assertFalse(oOverlay.equals(o2Overlay));
   }
+
+  // Tests for the move method
+  @Test(expected = IllegalArgumentException.class)
+  public void moveToNegativePosition() {
+    Octave o = new Octave();
+    o.addNote(Pitch.DSHARP, 0, 3);
+    o.move(-1);
+  }
+
+  @Test
+  public void moveEmpty() {
+    Octave o = new Octave();
+    o.move(23);
+    assertTrue(o.equals(new Octave()));
+    o.move(-50);
+    assertTrue(o.equals(new Octave()));
+  }
+
+  @Test
+  public void moveZeroDistance() {
+    Octave o = new Octave();
+    o.addNote(Pitch.DSHARP, 0, 3);
+    Octave moved = new Octave(o);
+    moved.move(0);
+    assertTrue(o.equals(moved));
+  }
+
+  @Test
+  public void movePositiveDistance() {
+    Octave o = new Octave();
+    o.addNote(Pitch.DSHARP, 0, 3);
+    o.addNote(Pitch.G, 2, 1);
+    o.addNote(Pitch.G, 1, 2);
+    List<List<String>> tab = new ArrayList<>();
+    tab.add(new ArrayList<>(Arrays.asList("  C3 ", "     ", "     ", "     ")));
+    tab.add(new ArrayList<>(Arrays.asList(" C#3 ", "     ", "     ", "     ")));
+    tab.add(new ArrayList<>(Arrays.asList("  D3 ", "     ", "     ", "     ")));
+    tab.add(new ArrayList<>(Arrays.asList(" D#3 ", "  X  ", "  |  ", "  |  ")));
+    tab.add(new ArrayList<>(Arrays.asList("  E3 ", "     ", "     ", "     ")));
+    tab.add(new ArrayList<>(Arrays.asList("  F3 ", "     ", "     ", "     ")));
+    tab.add(new ArrayList<>(Arrays.asList(" F#3 ", "     ", "     ", "     ")));
+    tab.add(new ArrayList<>(Arrays.asList("  G3 ", "     ", "  X  ", "  X  ")));
+    tab.add(new ArrayList<>(Arrays.asList(" G#3 ", "     ", "     ", "     ")));
+    tab.add(new ArrayList<>(Arrays.asList("  A3 ", "     ", "     ", "     ")));
+    tab.add(new ArrayList<>(Arrays.asList(" A#3 ", "     ", "     ", "     ")));
+    tab.add(new ArrayList<>(Arrays.asList("  B3 ", "     ", "     ", "     ")));
+    assertEquals(tab, o.getOctaveTable(3, 5));
+    Octave moved = new Octave(o);
+    moved.move(2);
+    List<List<String>> mTab = new ArrayList<>();
+    mTab.add(new ArrayList<>(Arrays.asList("  C3 ", "     ", "     ", "     ", "     ", "     ")));
+    mTab.add(new ArrayList<>(Arrays.asList(" C#3 ", "     ", "     ", "     ", "     ", "     ")));
+    mTab.add(new ArrayList<>(Arrays.asList("  D3 ", "     ", "     ", "     ", "     ", "     ")));
+    mTab.add(new ArrayList<>(Arrays.asList(" D#3 ", "     ", "     ", "  X  ", "  |  ", "  |  ")));
+    mTab.add(new ArrayList<>(Arrays.asList("  E3 ", "     ", "     ", "     ", "     ", "     ")));
+    mTab.add(new ArrayList<>(Arrays.asList("  F3 ", "     ", "     ", "     ", "     ", "     ")));
+    mTab.add(new ArrayList<>(Arrays.asList(" F#3 ", "     ", "     ", "     ", "     ", "     ")));
+    mTab.add(new ArrayList<>(Arrays.asList("  G3 ", "     ", "     ", "     ", "  X  ", "  X  ")));
+    mTab.add(new ArrayList<>(Arrays.asList(" G#3 ", "     ", "     ", "     ", "     ", "     ")));
+    mTab.add(new ArrayList<>(Arrays.asList("  A3 ", "     ", "     ", "     ", "     ", "     ")));
+    mTab.add(new ArrayList<>(Arrays.asList(" A#3 ", "     ", "     ", "     ", "     ", "     ")));
+    mTab.add(new ArrayList<>(Arrays.asList("  B3 ", "     ", "     ", "     ", "     ", "     ")));
+    assertEquals(mTab, moved.getOctaveTable(3, 5));
+  }
+
+  @Test
+  public void moveNegativeDistance() {
+    Octave o = new Octave();
+    o.addNote(Pitch.DSHARP, 3, 3);
+    o.addNote(Pitch.G, 3, 1);
+    o.addNote(Pitch.G, 2, 2);
+    List<List<String>> tab = new ArrayList<>();
+    tab.add(new ArrayList<>(Arrays.asList("  C3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ")));
+    tab.add(new ArrayList<>(Arrays.asList(" C#3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ")));
+    tab.add(new ArrayList<>(Arrays.asList("  D3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ")));
+    tab.add(new ArrayList<>(Arrays.asList(" D#3 ", "     ", "     ", "     ", "  X  ", "  |  ",
+      "  |  ")));
+    tab.add(new ArrayList<>(Arrays.asList("  E3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ")));
+    tab.add(new ArrayList<>(Arrays.asList("  F3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ")));
+    tab.add(new ArrayList<>(Arrays.asList(" F#3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ")));
+    tab.add(new ArrayList<>(Arrays.asList("  G3 ", "     ", "     ", "  X  ", "  X  ", "     ",
+      "     ")));
+    tab.add(new ArrayList<>(Arrays.asList(" G#3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ")));
+    tab.add(new ArrayList<>(Arrays.asList("  A3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ")));
+    tab.add(new ArrayList<>(Arrays.asList(" A#3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ")));
+    tab.add(new ArrayList<>(Arrays.asList("  B3 ", "     ", "     ", "     ", "     ", "     ",
+      "     ")));
+    assertEquals(tab, o.getOctaveTable(3, 5));
+    Octave moved = new Octave(o);
+    moved.move(-2);
+    List<List<String>> mTab = new ArrayList<>();
+    mTab.add(new ArrayList<>(Arrays.asList("  C3 ", "     ", "     ", "     ", "     ")));
+    mTab.add(new ArrayList<>(Arrays.asList(" C#3 ", "     ", "     ", "     ", "     ")));
+    mTab.add(new ArrayList<>(Arrays.asList("  D3 ", "     ", "     ", "     ", "     ")));
+    mTab.add(new ArrayList<>(Arrays.asList(" D#3 ", "     ", "  X  ", "  |  ", "  |  ")));
+    mTab.add(new ArrayList<>(Arrays.asList("  E3 ", "     ", "     ", "     ", "     ")));
+    mTab.add(new ArrayList<>(Arrays.asList("  F3 ", "     ", "     ", "     ", "     ")));
+    mTab.add(new ArrayList<>(Arrays.asList(" F#3 ", "     ", "     ", "     ", "     ")));
+    mTab.add(new ArrayList<>(Arrays.asList("  G3 ", "  X  ", "  X  ", "     ", "     ")));
+    mTab.add(new ArrayList<>(Arrays.asList(" G#3 ", "     ", "     ", "     ", "     ")));
+    mTab.add(new ArrayList<>(Arrays.asList("  A3 ", "     ", "     ", "     ", "     ")));
+    mTab.add(new ArrayList<>(Arrays.asList(" A#3 ", "     ", "     ", "     ", "     ")));
+    mTab.add(new ArrayList<>(Arrays.asList("  B3 ", "     ", "     ", "     ", "     ")));
+    assertEquals(mTab, moved.getOctaveTable(3, 5));
+  }
 }
