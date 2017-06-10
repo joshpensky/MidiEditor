@@ -21,7 +21,7 @@ final class Utils {
    * @throws IllegalArgumentException if the given string or Alignment are null
    */
   static String padString(String str, int length, Alignment align)
-    throws IllegalArgumentException {
+      throws IllegalArgumentException {
     if (str == null) {
       throw new IllegalArgumentException("Cannot pad uninitialized string.");
     } else if (align == null) {

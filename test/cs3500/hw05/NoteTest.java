@@ -33,6 +33,8 @@ public class NoteTest {
   @Test
   public void defaultConstructorValid() {
     Note n = new Note(5, 3);
+    assertEquals(5, n.getPosition());
+    assertEquals(7, n.getEndPoint());
   }
 
   // Tests for the copy constructor
@@ -45,7 +47,7 @@ public class NoteTest {
   public void copyConstructorSameData() {
     Note n = new Note(5, 3);
     Note n2 = new Note(n);
-    assertEquals(n2.toString(), n.toString());
+    assertTrue(n.equals(n2));
   }
 
   @Test
@@ -74,7 +76,8 @@ public class NoteTest {
   @Test
   public void equalsNull() {
     Note n = new Note(2, 4);
-    assertFalse(n.equals(null));
+    Note other = null;
+    assertFalse(n.equals(other));
   }
 
   @Test

@@ -42,8 +42,8 @@ public class EditorModel implements EditorOperations {
   public void copy(String toCopy, String newTitle) throws IllegalArgumentException {
     Piece piece = this.getPieceFromMemory(toCopy);
     if (piece == null) {
-      throw new IllegalArgumentException("There is no piece to copy that exists with the given " +
-        "title, \"" + toCopy + "\".");
+      throw new IllegalArgumentException("There is no piece to copy that exists with the given "
+        + "title, \"" + toCopy + "\".");
     } else if (this.getPieceFromMemory(newTitle) != null) {
       throw new IllegalArgumentException("Piece already exists with given new title.");
     }
@@ -98,35 +98,35 @@ public class EditorModel implements EditorOperations {
 
   @Override
   public void addNote(int octave, Pitch pitch, int position, int duration)
-    throws IllegalStateException, IllegalArgumentException {
+      throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
     this.opened.addNote(octave, pitch, position, duration);
   }
 
   @Override
   public void removeNote(int octave, Pitch pitch, int position)
-    throws IllegalStateException, IllegalArgumentException {
+      throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
     this.opened.removeNote(octave, pitch, position);
   }
 
   @Override
   public void editNotePitch(int octave, Pitch pitch, int position, Pitch newPitch)
-    throws IllegalStateException, IllegalArgumentException {
+      throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
     this.opened.editPitch(octave, pitch, position, newPitch);
   }
 
   @Override
   public void editNotePosition(int octave, Pitch pitch, int position, int newPosition)
-    throws IllegalStateException, IllegalArgumentException {
+      throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
     this.opened.editPosition(octave, pitch, position, newPosition);
   }
 
   @Override
   public void editNoteDuration(int octave, Pitch pitch, int position, int newDuration)
-    throws IllegalStateException, IllegalArgumentException {
+      throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
     this.opened.editDuration(octave, pitch, position, newDuration);
   }

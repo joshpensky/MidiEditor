@@ -23,7 +23,9 @@ public class PieceTest {
 
   @Test
   public void defaultConstructorValid() {
-    new Piece("My Piece");
+    Piece p = new Piece("My Piece");
+    assertEquals("My Piece", p.getTitle());
+    assertEquals("", p.toString());
   }
 
   // Tests for the copy constructor
@@ -48,6 +50,83 @@ public class PieceTest {
   }
 
   // Tests for the equals method
+  @Test
+  public void equalsSameObjectEmpty() {
+    Piece p = new Piece("title");
+    assertTrue(p.equals(p));
+  }
+
+  @Test
+  public void equalsSameObjectWithData() {
+    Piece p = new Piece("title");
+    p.addNote(3, Pitch.ASHARP, 3, 4);
+    p.addNote(8, Pitch.B, 2, 6);
+    assertTrue(p.equals(p));
+  }
+
+  @Test
+  public void equalsNull() {
+    Piece p = new Piece("title");
+    p.addNote(3, Pitch.ASHARP, 3, 4);
+    p.addNote(8, Pitch.B, 2, 6);
+    Piece other = null;
+    assertFalse(p.equals(other));
+  }
+
+  @Test
+  public void equalsDifferentObjectType() {
+    Piece p = new Piece("title");
+    p.addNote(3, Pitch.ASHARP, 3, 4);
+    p.addNote(8, Pitch.B, 2, 6);
+    assertFalse(p.equals(3));
+  }
+
+  @Test
+  public void equalsDifferentTitle() {
+    Piece p = new Piece("title");
+    p.addNote(3, Pitch.ASHARP, 3, 4);
+    p.addNote(8, Pitch.B, 2, 6);
+    Piece p2 = new Piece("bleh");
+    p2.addNote(3, Pitch.ASHARP, 3, 4);
+    p2.addNote(8, Pitch.B, 2, 6);
+    assertFalse(p.equals(p2));
+  }
+
+  @Test
+  public void equalsDifferentNotesSameTitle() {
+    Piece p = new Piece("title");
+    p.addNote(3, Pitch.ASHARP, 4, 3);
+    p.addNote(8, Pitch.B, 6, 2);
+    Piece p2 = new Piece("title");
+    p2.addNote(3, Pitch.ASHARP, 3, 4);
+    p2.addNote(8, Pitch.B, 2, 6);
+    assertFalse(p.equals(p2));
+  }
+
+  @Test
+  public void equalsSameNotesSameTitle() {
+    Piece p = new Piece("title");
+    p.addNote(3, Pitch.ASHARP, 3, 4);
+    p.addNote(8, Pitch.B, 2, 6);
+    Piece p2 = new Piece("title");
+    p2.addNote(3, Pitch.ASHARP, 3, 4);
+    p2.addNote(8, Pitch.B, 2, 6);
+    assertTrue(p.equals(p2));
+  }
+
+  @Test
+  public void equalsCopy() {
+    Piece p = new Piece("title");
+    p.addNote(3, Pitch.ASHARP, 3, 4);
+    p.addNote(8, Pitch.B, 2, 6);
+    Piece p2 = new Piece(p);
+    assertTrue(p.equals(p2));
+  }
+
+  @Test
+  public void equalsNewObject() {
+    assertTrue(new Piece("title").equals(new Piece("title")));
+  }
 
   // Tests for the toString method
   @Test
@@ -87,6 +166,7 @@ public class PieceTest {
                     + "9                   |  \n";
     assertEquals(toString, piece.toString());
   }
+
   @Test
   public void toStringLineNumbersRightAligned() {
     Piece piece = new Piece("title");

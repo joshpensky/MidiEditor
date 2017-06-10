@@ -147,7 +147,7 @@ final class Piece {
    * @param emptyString   the String representing a rest, or empty
    * @param firstSearch   true if this is the first call to the function;
    *                      otherwise, this is the recursive call and will return the new list
-   * @return
+   * @return the given list of list of strings without the empty columns on both ends
    */
   private List<List<String>> removeEmptyEndColumns(List<List<String>> piece, String emptyString,
                                                    boolean firstSearch) {
@@ -204,7 +204,7 @@ final class Piece {
    * Removes the given note from the piece, if possible.
    *
    * @throws IllegalArgumentException if the given note is uninitialized, or if the note does not
-   * exist in the piece
+   *    exist in the piece
    */
   void removeNote(int octave, Pitch pitch, int position) throws IllegalArgumentException {
     checkOctaveException(octave);
@@ -217,7 +217,7 @@ final class Piece {
    * @param pitch   the new pitch of the note
    * @param octave  the octave of the new pitch
    * @throws IllegalArgumentException if the given note or pitch are uninitialized, or if the note
-   * does not exist in the piece
+   *    does not exist in the piece
    */
   void editPitch(int octave, Pitch pitch, int position, Pitch newPitch)
       throws IllegalArgumentException {
@@ -230,7 +230,7 @@ final class Piece {
    *
    * @param position   the new position of the note
    * @throws IllegalArgumentException if the given note is uninitialized, the position is
-   * negative, or if the note does not exist in the piece
+   *    negative, or if the note does not exist in the piece
    */
   void editPosition(int octave, Pitch pitch, int position, int newPosition)
       throws IllegalArgumentException {
@@ -242,7 +242,7 @@ final class Piece {
    * Edits the duration of a given note from the piece, if possible.
    *
    * @throws IllegalArgumentException if the given note is uninitialized, the duration is
-   * negative, or if the note does not exist in the piece
+   *    negative, or if the note does not exist in the piece
    */
   void editDuration(int octave, Pitch pitch, int position, int newDuration)
       throws IllegalArgumentException {
@@ -251,8 +251,8 @@ final class Piece {
   }
 
   /**
-   * Helper to the addNote, removeNote, editNotePitch, editNotePosition, and editNoteDuration methods.
-   * Checks if the given octave exists in a piece.
+   * Helper to the addNote, removeNote, editNotePitch, editNotePosition, and editNoteDuration
+   * methods. Checks if the given octave exists in a piece.
    *
    * @param octave   the octave to be checked
    */
@@ -283,7 +283,7 @@ final class Piece {
    *
    * @param distance   the distance (measured in beats) to move all notes in the octave
    * @throws IllegalArgumentException if moving a note the given distance results in a negative
-   * position
+   *    position
    */
   void move(int distance) {
     if (distance != 0) {
