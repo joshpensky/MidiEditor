@@ -27,8 +27,9 @@ public interface EditorOperations {
    * empty string if there is no piece opened.
    *
    * @return a String representation of the opened piece
+   * @throws IllegalStateException if there is no currently opened piece
    */
-  String view();
+  String view() throws IllegalStateException;
 
   /**
    * Closes out of the piece currently being worked on.
@@ -38,12 +39,17 @@ public interface EditorOperations {
   void close() throws IllegalStateException;
 
   /**
+   * Lists the titles of all pieces currently in memory of the model.
+   */
+  String list();
+
+  /**
    * Adds a new note to the currently opened piece in the given octave at the given pitch.
    *
    * @param octave     the octave of the pitch
    * @param pitch      the pitch at which the note is played
    * @param position   the starting position of the new note
-   * @param duration   the duration of the note (measured in beats)
+   * @param duration   the duration of the note (measured in beats), including the onset
    * @throws IllegalStateException if there is no currently opened piece
    * @throws IllegalArgumentException if the given octave isn't between 1 and 10 (inclusive), the
    * given pitch is uninitialized, the position or duration are negative, or the duration is zero
@@ -102,7 +108,7 @@ public interface EditorOperations {
    * @param octave        the octave of the pitch the note is in
    * @param pitch         the pitch at which the note is played
    * @param position      the starting position of the note
-   * @param newDuration   the new duration of the note (measured in beats)
+   * @param newDuration   the new duration of the note (measured in beats), including the onset
    * @throws IllegalStateException if there is no currently opened piece
    * @throws IllegalArgumentException if the given octave isn't between 1 and 10 (inclusive), the
    * given pitch is uninitialized, the position or new duration are negative, the new duration is

@@ -57,11 +57,7 @@ public class EditorModel implements EditorOperations {
 
   @Override
   public String view() {
-    try {
-      this.openedPieceException();
-    } catch (IllegalStateException e) {
-      return "";
-    }
+    this.openedPieceException();
     return this.opened.toString();
   }
 
@@ -72,10 +68,24 @@ public class EditorModel implements EditorOperations {
   }
 
   @Override
+  public String list() {
+    StringBuilder builder = new StringBuilder();
+    for (Piece p : this.pieces) {
+      if (p.equals(opened)) {
+        builder.append(">  ");
+      } else {
+        builder.append("   ");
+      }
+      builder.append(p.getTitle() + "\n");
+    }
+    return builder.toString();
+  }
+
+  @Override
   public void addNote(int octave, Pitch pitch, int position, int duration)
       throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
-    this.opened.addNote(octave, pitch, duration, position);
+    this.opened.addNote(octave, pitch, position, duration);
   }
 
   @Override

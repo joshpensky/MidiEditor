@@ -122,8 +122,6 @@ public class OctaveTest {
     assertTrue(new Octave().equals(new Octave()));
   }
 
-  // Tests for the overlay method
-
   // Tests for the getOctaveTable method
 
   // Tests for the isEmpty method
@@ -363,9 +361,15 @@ public class OctaveTest {
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void editDurationNullNegativeNewDuration() {
+  public void editDurationNegativeNewDuration() {
     Octave o = new Octave();
     o.editDuration(Pitch.D, 3, -6);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void editDurationZeroNewDuration() {
+    Octave o = new Octave();
+    o.editDuration(Pitch.D, 3, 0);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -383,4 +387,6 @@ public class OctaveTest {
     product.addNote(Pitch.D, 3, 6);
     assertTrue(o.equals(product));
   }
+
+  // Tests for the overlay method
 }

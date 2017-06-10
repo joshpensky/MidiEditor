@@ -89,7 +89,7 @@ class Piece {
   private String stringBuilder() {
     List<List<String>> arr = this.getPieceTable();
     int octaveLength = arr.get(0).size();
-    int lineNumPadding = Integer.toString(octaveLength).length();
+    int lineNumPadding = Integer.toString(octaveLength - 2).length();
     StringBuilder builder = new StringBuilder();
     for (int i = 0; i < octaveLength; i++) {
       if (i == 0) {
@@ -233,7 +233,7 @@ class Piece {
   void editPosition(int octave, Pitch pitch, int position, int newPosition)
       throws IllegalArgumentException {
     checkOctaveException(octave);
-    this.octaves.get(octave).editPosition(pitch, newPosition, position);
+    this.octaves.get(octave).editPosition(pitch, position, newPosition);
   }
 
   /**

@@ -8,17 +8,50 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-import static org.junit.Assert.assertNotEquals;
-
-import static org.junit.Assert.assertTrue;
-
-import static org.junit.Assert.assertFalse;
-
 /**
  * Tests for the {@link Utils} class.
  */
 public class UtilsTest {
   // Tests for the padString method
+  @Test(expected = IllegalArgumentException.class)
+  public void padStringNullString() {
+    Utils.padString(null, 12, Utils.Alignment.CENTER);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void padStringNullAlignment() {
+    Utils.padString("hey", 12, null);
+  }
+
+  @Test
+  public void padStringLengthLessThanStringLength() {
+    assertEquals("hey", Utils.padString("hey", 2, Utils.Alignment.LEFT));
+  }
+
+  @Test
+  public void padStringLengthEqualsStringLength() {
+    assertEquals("hey", Utils.padString("hey", 3, Utils.Alignment.LEFT));
+  }
+
+  @Test
+  public void padStringLeftAlignment() {
+    assertEquals("hey  ", Utils.padString("hey", 5, Utils.Alignment.LEFT));
+  }
+
+  @Test
+  public void padStringCenterAlignmentEvenSiding() {
+    assertEquals(" hey ", Utils.padString("hey", 5, Utils.Alignment.CENTER));
+  }
+
+  @Test
+  public void padStringCenterAlignmentOddSiding() {
+    assertEquals(" hey", Utils.padString("hey", 4, Utils.Alignment.CENTER));
+  }
+
+  @Test
+  public void padStringRightAlignment() {
+    assertEquals("  hey", Utils.padString("hey", 5, Utils.Alignment.RIGHT));
+  }
 
   // Tests for the reverse method
   @Test(expected = IllegalArgumentException.class)
