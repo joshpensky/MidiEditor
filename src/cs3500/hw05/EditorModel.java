@@ -42,8 +42,8 @@ public class EditorModel implements EditorOperations {
   public void copy(String toCopy, String newTitle) throws IllegalArgumentException {
     Piece piece = this.getPieceFromMemory(toCopy);
     if (piece == null) {
-      throw new IllegalArgumentException("There is no piece that exists with the given title, \""
-        + toCopy + "\".");
+      throw new IllegalArgumentException("There is no piece to copy that exists with the given " +
+        "title, \"" + toCopy + "\".");
     } else if (this.getPieceFromMemory(newTitle) != null) {
       throw new IllegalArgumentException("Piece already exists with given new title.");
     }
@@ -111,21 +111,21 @@ public class EditorModel implements EditorOperations {
   }
 
   @Override
-  public void editPitch(int octave, Pitch pitch, int position, Pitch newPitch)
+  public void editNotePitch(int octave, Pitch pitch, int position, Pitch newPitch)
       throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
     this.opened.editPitch(octave, pitch, position, newPitch);
   }
 
   @Override
-  public void editPosition(int octave, Pitch pitch, int position, int newPosition)
+  public void editNotePosition(int octave, Pitch pitch, int position, int newPosition)
     throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
     this.opened.editPosition(octave, pitch, position, newPosition);
   }
 
   @Override
-  public void editDuration(int octave, Pitch pitch, int position, int newDuration)
+  public void editNoteDuration(int octave, Pitch pitch, int position, int newDuration)
       throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
     this.opened.editDuration(octave, pitch, position, newDuration);
@@ -146,9 +146,9 @@ public class EditorModel implements EditorOperations {
   }
 
   /**
-   * Helper to the print, close, addNote, removeNote, editPitch, editPosition, editDuration,
-   * and overlay methods. Checks if there is currently a piece opened, and if not throws an
-   * exception.
+   * Helper to the print, close, addNote, removeNote, editNotePitch, editNotePosition,
+   * editNoteDuration, and overlay methods. Checks if there is currently a piece opened, and if
+   * not throws an exception.
    *
    * @throws IllegalStateException if there is currently no piece opened
    */

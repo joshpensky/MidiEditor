@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * Represents a musical piece that can be edited in the editor.
  */
-class Piece {
+final class Piece {
   private Map<Integer, Octave> octaves;
   private String title;
 
@@ -251,7 +251,7 @@ class Piece {
   }
 
   /**
-   * Helper to the addNote, removeNote, editPitch, editPosition, and editDuration methods.
+   * Helper to the addNote, removeNote, editNotePitch, editNotePosition, and editNoteDuration methods.
    * Checks if the given octave exists in a piece.
    *
    * @param octave   the octave to be checked

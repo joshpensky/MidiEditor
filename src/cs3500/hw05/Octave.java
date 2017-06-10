@@ -271,7 +271,7 @@ final class Octave {
   }
 
   /**
-   * Helper to the add, remove, editPitch, editPosition, and editDuration methods. Checks if
+   * Helper to the add, remove, editNotePitch, editNotePosition, and editNoteDuration methods. Checks if
    * the given pitch is uninitialized, and if so, throws an exception.
    *
    * @param pitch   the pitch to be checked
@@ -283,7 +283,7 @@ final class Octave {
   }
 
   /**
-   * Helper to the add and editPitch methods. Adds the given note at a given pitch in order
+   * Helper to the add and editNotePitch methods. Adds the given note at a given pitch in order
    * of starting times.
    *
    * @param pitch   the pitch the note is at

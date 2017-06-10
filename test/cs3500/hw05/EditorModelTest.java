@@ -6,10 +6,6 @@ import static org.junit.Assert.assertEquals;
 
 import static org.junit.Assert.assertNotEquals;
 
-import static org.junit.Assert.assertTrue;
-
-import static org.junit.Assert.assertFalse;
-
 /**
  * Tests for the {@link EditorModel} class.
  */
@@ -501,55 +497,55 @@ public class EditorModelTest {
     assertEquals("", model.view());
   }
 
-  // Tests for the editPitch method
+  // Tests for the editNotePitch method
   @Test(expected = IllegalStateException.class)
-  public void editPitchNothingOpened() {
-    model.editPitch(5, Pitch.D, 3, Pitch.E);
+  public void editNotePitchNothingOpened() {
+    model.editNotePitch(5, Pitch.D, 3, Pitch.E);
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void editPitchInvalidOctave() {
+  public void editNotePitchInvalidOctave() {
     model.create("hey");
-    model.editPitch(11, Pitch.D, 3, Pitch.E);
+    model.editNotePitch(11, Pitch.D, 3, Pitch.E);
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void editPitchNullPitch() {
+  public void editNotePitchNullPitch() {
     model.create("hey");
-    model.editPitch(10, null, 3, Pitch.E);
+    model.editNotePitch(10, null, 3, Pitch.E);
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void editPitchNegativePosition() {
+  public void editNotePitchNegativePosition() {
     model.create("hey");
-    model.editPitch(10, Pitch.D, -3, Pitch.E);
+    model.editNotePitch(10, Pitch.D, -3, Pitch.E);
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void editPitchNullNewPitch() {
+  public void editNotePitchNullNewPitch() {
     model.create("hey");
-    model.editPitch(10, Pitch.D, 3, null);
+    model.editNotePitch(10, Pitch.D, 3, null);
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void editPitchNoNoteAtPosition() {
+  public void editNotePitchNoNoteAtPosition() {
     model.create("hey");
-    model.editPitch(10, Pitch.D, 3, Pitch.E);
+    model.editNotePitch(10, Pitch.D, 3, Pitch.E);
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void editPitchNoteAtNewPosition() {
+  public void editNotePitchNoteAtNewPosition() {
     model.create("hey");
     model.addNote(10, Pitch.D, 3, 4);
     model.addNote(10, Pitch.E, 3, 2);
-    model.editPitch(10, Pitch.D, 3, Pitch.E);
+    model.editNotePitch(10, Pitch.D, 3, Pitch.E);
   }
 
   @Test
-  public void editPitchValid() {
+  public void editNotePitchValid() {
     model.create("hey");
     model.addNote(10, Pitch.D, 3, 4);
-    model.editPitch(10, Pitch.D, 3, Pitch.B);
+    model.editNotePitch(10, Pitch.D, 3, Pitch.B);
     String view = "    B10 \n"
                 + "0       \n"
                 + "1       \n"
@@ -564,40 +560,40 @@ public class EditorModelTest {
     assertEquals(view, model.view());
   }
 
-  // Tests for the editPosition method
+  // Tests for the editNotePosition method
   @Test(expected = IllegalStateException.class)
-  public void editPositionNothingOpened() {
-    model.editPosition(5, Pitch.D, 3, 6);
+  public void editNotePositionNothingOpened() {
+    model.editNotePosition(5, Pitch.D, 3, 6);
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void editPositionInvalidOctave() {
+  public void editNotePositionInvalidOctave() {
     model.create("hey");
-    model.editPosition(-4, null, 3, 6);
+    model.editNotePosition(-4, null, 3, 6);
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void editPositionNullPitch() {
+  public void editNotePositionNullPitch() {
     model.create("hey");
-    model.editPosition(1, null, 3, 6);
+    model.editNotePosition(1, null, 3, 6);
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void editPositionNegativePosition() {
+  public void editNotePositionNegativePosition() {
     model.create("hey");
-    model.editPosition(1, Pitch.D, -3, 6);
+    model.editNotePosition(1, Pitch.D, -3, 6);
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void editPositionNullNegativeNewPosition() {
+  public void editNotePositionNullNegativeNewPosition() {
     model.create("hey");
-    model.editPosition(1, Pitch.D, 3, -6);
+    model.editNotePosition(1, Pitch.D, 3, -6);
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void editPositionNoNoteAtPosition() {
+  public void editNotePositionNoNoteAtPosition() {
     model.create("hey");
-    model.editPosition(1, Pitch.D, 3, 6);
+    model.editNotePosition(1, Pitch.D, 3, 6);
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -605,14 +601,14 @@ public class EditorModelTest {
     model.create("hey");
     model.addNote(1, Pitch.D, 3, 4);
     model.addNote(1, Pitch.D, 6, 2);
-    model.editPosition(1, Pitch.D, 3, 6);
+    model.editNotePosition(1, Pitch.D, 3, 6);
   }
 
   @Test
-  public void editPositionValid() {
+  public void editNotePositionValid() {
     model.create("hey");
     model.addNote(1, Pitch.D, 3, 4);
-    model.editPosition(1, Pitch.D, 3, 6);
+    model.editNotePosition(1, Pitch.D, 3, 6);
     String view = "     D1 \n"
                 + "0       \n"
                 + "1       \n"
@@ -630,53 +626,53 @@ public class EditorModelTest {
     assertEquals(view, model.view());
   }
 
-  // Tests for the editDuration method
+  // Tests for the editNoteDuration method
   @Test(expected = IllegalStateException.class)
-  public void editDurationNothingOpened() {
-    model.editDuration(4, Pitch.D, 3, 6);
+  public void editNoteDurationNothingOpened() {
+    model.editNoteDuration(4, Pitch.D, 3, 6);
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void editDurationInvalidOctave() {
+  public void editNoteDurationInvalidOctave() {
     model.create("hey");
-    model.editDuration(23, Pitch.D, 3, 6);
+    model.editNoteDuration(23, Pitch.D, 3, 6);
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void editDurationNullPitch() {
+  public void editNoteDurationNullPitch() {
     model.create("hey");
-    model.editDuration(4, null, 3, 6);
+    model.editNoteDuration(4, null, 3, 6);
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void editDurationNegativePosition() {
+  public void editNoteDurationNegativePosition() {
     model.create("hey");
-    model.editDuration(4, Pitch.D, -3, 6);
+    model.editNoteDuration(4, Pitch.D, -3, 6);
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void editDurationNegativeNewDuration() {
+  public void editNoteDurationNegativeNewDuration() {
     model.create("hey");
-    model.editDuration(4, Pitch.D, 3, -6);
+    model.editNoteDuration(4, Pitch.D, 3, -6);
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void editDurationZeroNewDuration() {
+  public void editNoteDurationZeroNewDuration() {
     model.create("hey");
-    model.editDuration(4, Pitch.D, 3, 0);
+    model.editNoteDuration(4, Pitch.D, 3, 0);
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void editDurationNoNoteAtPosition() {
+  public void editNoteDurationNoNoteAtPosition() {
     model.create("hey");
-    model.editDuration(4, Pitch.D, 3, 6);
+    model.editNoteDuration(4, Pitch.D, 3, 6);
   }
 
   @Test
-  public void editDurationValid() {
+  public void editNoteDurationValid() {
     model.create("hey");
     model.addNote(4, Pitch.D, 3, 4);
-    model.editDuration(4, Pitch.D, 3, 6);
+    model.editNoteDuration(4, Pitch.D, 3, 6);
     String view = "     D4 \n"
                 + "0       \n"
                 + "1       \n"
@@ -767,6 +763,7 @@ public class EditorModelTest {
                 + "14                                                           |  \n"
                 + "15                                                           |  \n";
     assertEquals(tops, model.view());
+
     model.create("bot");
     model.addNote(3, Pitch.A, 0, 2);
     model.addNote(4, Pitch.CSHARP, 2, 3);
@@ -786,6 +783,7 @@ public class EditorModelTest {
                 + " 9                                                                |  \n"
                 + "10                                                                |  \n";
     assertEquals(bots, model.view());
+
     model.open("top");
     model.overlay("bot");
     String overlay = ""
@@ -817,12 +815,14 @@ public class EditorModelTest {
     model.addNote(3, Pitch.GSHARP, 2, 2);
     model.addNote(3, Pitch.D, 1, 1);
     model.addNote(4, Pitch.CSHARP, 10, 6);
+
     model.create("bot");
     model.addNote(3, Pitch.A, 0, 2);
     model.addNote(4, Pitch.CSHARP, 2, 3);
     model.addNote(4, Pitch.E, 5, 6);
     model.addNote(3, Pitch.FSHARP, 3, 2);
     model.addNote(3, Pitch.E, 4, 1);
+
     model.copy("top", "botOverlay");
     model.overlay("bot");
     String botOverlay = model.view();
@@ -858,6 +858,7 @@ public class EditorModelTest {
                 + "14                                                           |  \n"
                 + "15                                                           |  \n";
     assertEquals(tops, model.view());
+
     model.create("bot");
     model.addNote(3, Pitch.A, 5, 3);
     model.addNote(4, Pitch.CSHARP, 2, 3);
@@ -892,6 +893,7 @@ public class EditorModelTest {
                 + "20                                                 |                 \n"
                 + "21                                                 |                 \n";
     assertEquals(bots, model.view());
+
     model.open("top");
     model.overlay("bot");
     String overlay = ""
@@ -923,6 +925,7 @@ public class EditorModelTest {
     model.addNote(3, Pitch.GSHARP, 2, 2);
     model.addNote(3, Pitch.D, 1, 1);
     model.addNote(4, Pitch.CSHARP, 10, 6);
+
     model.create("bot");
     model.addNote(3, Pitch.A, 5, 3);
     model.addNote(4, Pitch.CSHARP, 2, 3);
@@ -933,6 +936,7 @@ public class EditorModelTest {
     model.addNote(3, Pitch.E, 4, 1);
     model.addNote(3, Pitch.GSHARP, 2, 8);
     model.addNote(3, Pitch.GSHARP, 4, 2);
+
     model.copy("top", "botOverlay");
     model.overlay("bot");
     String botOverlay = model.view();

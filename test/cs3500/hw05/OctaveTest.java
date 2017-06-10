@@ -342,7 +342,7 @@ public class OctaveTest {
     assertEquals(new Octave().getOctaveTable(3, 5), o.getOctaveTable(3, 5));
   }
 
-  // Tests for the editPitch method
+  // Tests for the editNotePitch method
   @Test(expected = IllegalArgumentException.class)
   public void editPitchNullPitch() {
     Octave o = new Octave();
@@ -385,7 +385,7 @@ public class OctaveTest {
     assertTrue(o.equals(product));
   }
 
-  // Tests for the editPosition method
+  // Tests for the editNotePosition method
   @Test(expected = IllegalArgumentException.class)
   public void editPositionNullPitch() {
     Octave o = new Octave();
@@ -428,7 +428,7 @@ public class OctaveTest {
     assertTrue(o.equals(product));
   }
 
-  // Tests for the editDuration method
+  // Tests for the editNoteDuration method
   @Test(expected = IllegalArgumentException.class)
   public void editDurationNullPitch() {
     Octave o = new Octave();
@@ -536,6 +536,7 @@ public class OctaveTest {
     oTab.add(new ArrayList<>(Arrays.asList("  B3 ", "     ", "     ", "     ", "     ", "     ",
         "     ", "     ")));
     assertEquals(oTab, o.getOctaveTable(3, 5));
+
     Octave o2 = new Octave();
     o2.addNote(Pitch.A, 0, 2);
     o2.addNote(Pitch.CSHARP, 2, 3);
@@ -555,6 +556,7 @@ public class OctaveTest {
     o2Tab.add(new ArrayList<>(Arrays.asList(" A#3 ", "     ", "     ", "     ", "     ", "     ")));
     o2Tab.add(new ArrayList<>(Arrays.asList("  B3 ", "     ", "     ", "     ", "     ", "     ")));
     assertEquals(o2Tab, o2.getOctaveTable(3, 5));
+
     o.overlay(o2);
     List<List<String>> fTab = new ArrayList<>();
     fTab.add(new ArrayList<>(Arrays.asList("  C3 ", "     ", "  X  ", "     ", "     ", "     ",
@@ -591,11 +593,13 @@ public class OctaveTest {
     o.addNote(Pitch.E, 0, 3);
     o.addNote(Pitch.GSHARP, 2, 2);
     o.addNote(Pitch.C, 1, 1);
+
     Octave o2 = new Octave();
     o2.addNote(Pitch.A, 0, 2);
     o2.addNote(Pitch.CSHARP, 2, 3);
     o2.addNote(Pitch.FSHARP, 3, 2);
     o2.addNote(Pitch.E, 4, 1);
+
     Octave o2Overlay = new Octave(o);
     o2Overlay.overlay(o2);
     Octave oOverlay = new Octave(o2);
@@ -636,6 +640,7 @@ public class OctaveTest {
     oTab.add(new ArrayList<>(Arrays.asList("  B3 ", "     ", "     ", "     ", "     ", "     ",
       "     ", "     ")));
     assertEquals(oTab, o.getOctaveTable(3, 5));
+
     Octave o2 = new Octave();
     o2.addNote(Pitch.A, 5, 3);
     o2.addNote(Pitch.CSHARP, 2, 3);
@@ -667,6 +672,7 @@ public class OctaveTest {
     o2Tab.add(new ArrayList<>(Arrays.asList("  B3 ", "     ", "     ", "     ", "     ", "     ",
       "     ", "     ", "     ", "     ", "     ")));
     assertEquals(o2Tab, o2.getOctaveTable(3, 5));
+
     o.overlay(o2);
     List<List<String>> fTab = new ArrayList<>();
     fTab.add(new ArrayList<>(Arrays.asList("  C3 ", "     ", "  X  ", "     ", "     ", "     ",
@@ -703,11 +709,13 @@ public class OctaveTest {
     o.addNote(Pitch.E, 0, 3);
     o.addNote(Pitch.GSHARP, 2, 2);
     o.addNote(Pitch.C, 1, 1);
+
     Octave o2 = new Octave();
     o2.addNote(Pitch.A, 5, 3);
     o2.addNote(Pitch.CSHARP, 2, 3);
     o2.addNote(Pitch.FSHARP, 3, 2);
     o2.addNote(Pitch.GSHARP, 2, 8);
+
     Octave o2Overlay = new Octave(o);
     o2Overlay.overlay(o2);
     Octave oOverlay = new Octave(o2);

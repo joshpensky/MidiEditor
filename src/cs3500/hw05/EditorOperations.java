@@ -95,7 +95,7 @@ public interface EditorOperations {
    * of the given pitches are uninitialized, the position is negative, or there is no note at the
    * given location
    */
-  void editPitch(int octave, Pitch pitch, int position, Pitch newPitch)
+  void editNotePitch(int octave, Pitch pitch, int position, Pitch newPitch)
       throws IllegalStateException, IllegalArgumentException;
 
   /**
@@ -110,7 +110,7 @@ public interface EditorOperations {
    * given pitch is uninitialized, either of the positions are negative, or there is no note at the
    * given location
    */
-  void editPosition(int octave, Pitch pitch, int position, int newPosition)
+  void editNotePosition(int octave, Pitch pitch, int position, int newPosition)
       throws IllegalStateException, IllegalArgumentException;
 
   /**
@@ -125,7 +125,7 @@ public interface EditorOperations {
    * given pitch is uninitialized, the position or new duration are negative, the new duration is
    * zero, or there is no note at the given location
    */
-  void editDuration(int octave, Pitch pitch, int position, int newDuration)
+  void editNoteDuration(int octave, Pitch pitch, int position, int newDuration)
       throws IllegalStateException, IllegalArgumentException;
 
   /**

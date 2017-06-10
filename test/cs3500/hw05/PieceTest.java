@@ -4,8 +4,6 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-import static org.junit.Assert.assertNotEquals;
-
 import static org.junit.Assert.assertTrue;
 
 import static org.junit.Assert.assertFalse;
@@ -329,7 +327,7 @@ public class PieceTest {
     assertEquals(new Piece("hey").toString(), p.toString());
   }
 
-  // Tests for the editPitch method
+  // Tests for the editNotePitch method
   @Test(expected = IllegalArgumentException.class)
   public void editPitchInvalidOctave() {
     Piece p = new Piece("hey");
@@ -378,7 +376,7 @@ public class PieceTest {
     assertTrue(p.equals(product));
   }
 
-  // Tests for the editPosition method
+  // Tests for the editNotePosition method
   @Test(expected = IllegalArgumentException.class)
   public void editPositionInvalidOctave() {
     Piece p = new Piece("hey");
@@ -427,7 +425,7 @@ public class PieceTest {
     assertTrue(p.equals(product));
   }
 
-  // Tests for the editDuration method
+  // Tests for the editNoteDuration method
   @Test(expected = IllegalArgumentException.class)
   public void editDurationInvalidOctave() {
     Piece p = new Piece("hey");
@@ -534,6 +532,7 @@ public class PieceTest {
                 + "14                                                           |  \n"
                 + "15                                                           |  \n";
     assertEquals(tops, top.toString());
+
     Piece bot = new Piece("title");
     bot.addNote(3, Pitch.A, 0, 2);
     bot.addNote(4, Pitch.CSHARP, 2, 3);
@@ -553,6 +552,7 @@ public class PieceTest {
                 + " 9                                                                |  \n"
                 + "10                                                                |  \n";
     assertEquals(bots, bot.toString());
+
     top.overlay(bot);
     String overlay = ""
         + "      D3  D#3   E3   F3  F#3   G3  G#3   A3  A#3   B3   C4  C#4   D4  D#4   E4 \n"
@@ -583,12 +583,14 @@ public class PieceTest {
     top.addNote(3, Pitch.GSHARP, 2, 2);
     top.addNote(3, Pitch.D, 1, 1);
     top.addNote(4, Pitch.CSHARP, 10, 6);
+
     Piece bot = new Piece("title");
     bot.addNote(3, Pitch.A, 0, 2);
     bot.addNote(4, Pitch.CSHARP, 2, 3);
     bot.addNote(4, Pitch.E, 5, 6);
     bot.addNote(3, Pitch.FSHARP, 3, 2);
     bot.addNote(3, Pitch.E, 4, 1);
+
     Piece botOverlay = new Piece(top);
     botOverlay.overlay(bot);
     Piece topOverlay = new Piece(bot);
@@ -622,6 +624,7 @@ public class PieceTest {
                 + "14                                                           |  \n"
                 + "15                                                           |  \n";
     assertEquals(tops, top.toString());
+
     Piece bot = new Piece("title");
     bot.addNote(3, Pitch.A, 5, 3);
     bot.addNote(4, Pitch.CSHARP, 2, 3);
@@ -656,6 +659,7 @@ public class PieceTest {
                 + "20                                                 |                 \n"
                 + "21                                                 |                 \n";
     assertEquals(bots, bot.toString());
+
     top.overlay(bot);
     String overlay = ""
         + "      D3  D#3   E3   F3  F#3   G3  G#3   A3  A#3   B3   C4  C#4   D4  D#4   E4 \n"
@@ -686,6 +690,7 @@ public class PieceTest {
     top.addNote(3, Pitch.GSHARP, 2, 2);
     top.addNote(3, Pitch.D, 1, 1);
     top.addNote(4, Pitch.CSHARP, 10, 6);
+
     Piece bot = new Piece("title");
     bot.addNote(3, Pitch.A, 5, 3);
     bot.addNote(4, Pitch.CSHARP, 2, 3);
@@ -696,6 +701,7 @@ public class PieceTest {
     bot.addNote(3, Pitch.E, 4, 1);
     bot.addNote(3, Pitch.GSHARP, 2, 8);
     bot.addNote(3, Pitch.GSHARP, 4, 2);
+
     Piece botOverlay = new Piece(top);
     botOverlay.overlay(bot);
     Piece topOverlay = new Piece(bot);
@@ -707,5 +713,11 @@ public class PieceTest {
   @Test
   public void getTitleValid() {
     assertEquals("heyya", new Piece("heyya").getTitle());
+  }
+
+  @Test
+  public void getTitleOfCopy() {
+    Piece p = new Piece("heyya");
+    assertEquals("heyya", new Piece(p).getTitle());
   }
 }
