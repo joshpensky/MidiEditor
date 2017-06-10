@@ -9,7 +9,7 @@ public interface EditorOperations {
    *
    * @param title     the title of the new piece
    * @throws IllegalArgumentException if the given title is uninitialized, or if a piece already
-   *    exists in memory with the given title
+   *                                  exists in memory with the given title
    */
   void create(String title) throws IllegalArgumentException;
 
@@ -18,7 +18,7 @@ public interface EditorOperations {
    *
    * @param title   the title of the piece to be opened
    * @throws IllegalArgumentException if the given title is uninitialized, or if there is no
-   *    piece with the given title in memory
+   *                                  piece with the given title in memory
    */
   void open(String title) throws IllegalArgumentException;
 
@@ -28,8 +28,8 @@ public interface EditorOperations {
    * @param toCopy     the title of the piece to be copied
    * @param newTitle   the new title of the copied piece
    * @throws IllegalArgumentException if either of the given titles are uninitialized, if there
-   *    is no piece with the given title in memory, or if a piece already exists in memory with the
-   *    given new title
+   *                                  is no piece with the given title in memory, or if a piece
+   *                                  already exists in memory with the given new title
    */
   void copy(String toCopy, String newTitle) throws IllegalArgumentException;
 
@@ -63,7 +63,8 @@ public interface EditorOperations {
    * @param duration   the duration of the note (measured in beats), including the onset
    * @throws IllegalStateException if there is no currently opened piece
    * @throws IllegalArgumentException if the given octave isn't between 1 and 10 (inclusive), the
-   *    given pitch is uninitialized, the position or duration are negative, or the duration is zero
+   *                                  given pitch is uninitialized, the position or duration are
+   *                                  negative, or the duration is zero
    */
   void addNote(int octave, Pitch pitch, int position, int duration)
       throws IllegalStateException, IllegalArgumentException;
@@ -76,8 +77,8 @@ public interface EditorOperations {
    * @param position   the starting position of the note to be removed
    * @throws IllegalStateException if there is no currently opened piece
    * @throws IllegalArgumentException if the given octave isn't between 1 and 10 (inclusive), the
-   *    given pitch is uninitialized, the position is negative, or if there is no note at the given
-   *    location
+   *                                  given pitch is uninitialized, the position is negative, or if
+   *                                  there is no note at the given location
    */
   void removeNote(int octave, Pitch pitch, int position)
       throws IllegalStateException, IllegalArgumentException;
@@ -91,8 +92,8 @@ public interface EditorOperations {
    * @param newPitch   the new pitch the note will be played at
    * @throws IllegalStateException if there is no currently opened piece
    * @throws IllegalArgumentException if the given octave isn't between 1 and 10 (inclusive), either
-   *    of the given pitches are uninitialized, the position is negative, or there is no note at the
-   *    given location
+   *                                  of the given pitches are uninitialized, the position is
+   *                                  negative, or there is no note at the given location
    */
   void editNotePitch(int octave, Pitch pitch, int position, Pitch newPitch)
       throws IllegalStateException, IllegalArgumentException;
@@ -106,8 +107,8 @@ public interface EditorOperations {
    * @param newPosition   the new starting position of the note
    * @throws IllegalStateException if there is no currently opened piece
    * @throws IllegalArgumentException if the given octave isn't between 1 and 10 (inclusive), the
-   *    given pitch is uninitialized, either of the positions are negative, or there is no note at the
-   *    given location
+   *                                  given pitch is uninitialized, either of the positions are
+   *                                  negative, or there is no note at the given location
    */
   void editNotePosition(int octave, Pitch pitch, int position, int newPosition)
       throws IllegalStateException, IllegalArgumentException;
@@ -121,8 +122,9 @@ public interface EditorOperations {
    * @param newDuration   the new duration of the note (measured in beats), including the onset
    * @throws IllegalStateException if there is no currently opened piece
    * @throws IllegalArgumentException if the given octave isn't between 1 and 10 (inclusive), the
-   *    given pitch is uninitialized, the position or new duration are negative, the new duration is
-   *    zero, or there is no note at the given location
+   *                                  given pitch is uninitialized, the position or new duration are
+   *                                  negative, the new duration is zero, or there is no note at
+   *                                  the given location
    */
   void editNoteDuration(int octave, Pitch pitch, int position, int newDuration)
       throws IllegalStateException, IllegalArgumentException;
@@ -134,7 +136,7 @@ public interface EditorOperations {
    * @param overlayTitle   the title of the piece to be overlaid
    * @throws IllegalStateException if there is no currently opened piece
    * @throws IllegalArgumentException if the given title is uninitialized, or there is no
-   *    piece in memory with the overlay's title
+   *                                  piece in memory with the overlay's title
    */
   void overlay(String overlayTitle) throws IllegalStateException, IllegalArgumentException;
 
@@ -145,7 +147,7 @@ public interface EditorOperations {
    * @param addTitle   the title of the piece to be added to the end
    * @throws IllegalStateException if there is no currently opened piece
    * @throws IllegalArgumentException if the given title is uninitialized, or there is no
-   *    piece in memory with the given title
+   *                                  piece in memory with the given title
    */
   void addToEnd(String addTitle) throws IllegalStateException, IllegalArgumentException;
 }

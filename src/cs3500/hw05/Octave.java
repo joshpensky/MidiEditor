@@ -256,7 +256,7 @@ final class Octave {
    * @param position      the starting position of the note to be edited
    * @param newDuration   the new duration of the edited note
    * @throws IllegalArgumentException if the given pitch is uninitialized, if there is no note at
-   *    the given position, or if the new duration is negative or zero
+   *                                  the given position, or if the new duration is negative or zero
    */
   void editDuration(Pitch pitch, int position, int newDuration) throws IllegalArgumentException {
     this.checkPitchException(pitch);
@@ -336,7 +336,7 @@ final class Octave {
    *
    * @param distance   the distance (measured in beats) to move all notes in the octave
    * @throws IllegalArgumentException if moving a note the given distance results in a negative
-   *    position
+   *                                  position
    */
   void move(int distance) {
     if (distance != 0) {
