@@ -169,8 +169,8 @@ final class Octave {
    * @param position   the starting position of the note
    * @param duration   the duration of the note (measured in beats)
    * @throws IllegalArgumentException if the given pitch is uninitialized, if the duration or
-   *    position are negative, if the duration is zero, or if a note already exists at the given
-   *    position
+   *                                  position are negative, if the duration is zero, or if a note
+   *                                  already exists at the given position
    */
   void addNote(Pitch pitch, int position, int duration) throws IllegalArgumentException {
     this.checkPitchException(pitch);
@@ -183,7 +183,7 @@ final class Octave {
    * @param pitch      the pitch of the note to be removed
    * @param position   the starting position of the note to be removed
    * @throws IllegalArgumentException if the given pitch is uninitialized, or if there is no note
-   *    at the given position
+   *                                  at the given position
    */
   void removeNote(Pitch pitch, int position) throws IllegalArgumentException {
     this.checkPitchException(pitch);
@@ -204,7 +204,7 @@ final class Octave {
    * @param position   the starting position of the note to be edited
    * @param newPitch   the new pitch of the edited note
    * @throws IllegalArgumentException if either of the given pitches are uninitialized, or if
-   *    there is no note at the given position
+   *                                  there is no note at the given position
    */
   void editPitch(Pitch pitch, int position, Pitch newPitch) throws IllegalArgumentException {
     this.checkPitchException(pitch);
@@ -230,7 +230,7 @@ final class Octave {
    * @param position      the starting position of the note to be edited
    * @param newPosition   the new position of the edited note
    * @throws IllegalArgumentException if the given pitch is uninitialized, if there is no note at
-   *    the given position, or if the new position is negative
+   *                                  the given position, or if the new position is negative
    */
   void editPosition(Pitch pitch, int position, int newPosition) throws IllegalArgumentException {
     this.checkPitchException(pitch);

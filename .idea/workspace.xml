@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2f9d9684-0384-4b52-83cd-9a89e5900319" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/cs3500/hw05/EditorOperations.java" afterPath="$PROJECT_DIR$/src/cs3500/hw05/EditorOperations.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/cs3500/hw05/Octave.java" afterPath="$PROJECT_DIR$/src/cs3500/hw05/Octave.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/cs3500/hw05/Piece.java" afterPath="$PROJECT_DIR$/src/cs3500/hw05/Piece.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -227,8 +225,8 @@
           <file leaf-file-name="Octave.java" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/cs3500/hw05/Octave.java">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="478">
-                  <caret line="338" column="38" lean-forward="false" selection-start-line="338" selection-start-column="38" selection-end-line="338" selection-end-column="38" />
+                <state relative-caret-position="3096">
+                  <caret line="172" column="66" lean-forward="false" selection-start-line="172" selection-start-column="66" selection-end-line="172" selection-end-column="66" />
                   <folding>
                     <element signature="imports" expanded="true" />
                     <element signature="e#1682#1683#0" expanded="true" />
@@ -1250,8 +1248,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/cs3500/hw05/Octave.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="478">
-          <caret line="338" column="38" lean-forward="false" selection-start-line="338" selection-start-column="38" selection-end-line="338" selection-end-column="38" />
+        <state relative-caret-position="3096">
+          <caret line="172" column="66" lean-forward="false" selection-start-line="172" selection-start-column="66" selection-end-line="172" selection-end-column="66" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1682#1683#0" expanded="true" />
