@@ -1,4 +1,4 @@
-package cs3500.music.model;
+package cs3500.music.model.will;
 
 /**
  * Class representing a Note. Can have any pitch that is represented in the Pitches. The octave must

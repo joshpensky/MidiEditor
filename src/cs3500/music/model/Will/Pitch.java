@@ -1,4 +1,4 @@
-package cs3500.music.model;
+package cs3500.music.model.will;
 
 /**
  * The types of pitches that this music model can represent.
