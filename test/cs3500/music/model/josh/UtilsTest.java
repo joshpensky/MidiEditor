@@ -1,9 +1,10 @@
-package cs3500.music.model;
+package cs3500.music.model.josh;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import cs3500.music.model.josh.Utils;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

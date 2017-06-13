@@ -1,5 +1,6 @@
-package cs3500.music.model;
+package cs3500.music.model.josh;
 
+import cs3500.music.model.josh.Note;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

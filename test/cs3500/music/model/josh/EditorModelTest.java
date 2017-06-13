@@ -1,5 +1,8 @@
-package cs3500.music.model;
+package cs3500.music.model.josh;
 
+import cs3500.music.model.EditorOperations;
+import cs3500.music.model.josh.EditorModel;
+import cs3500.music.model.josh.Pitch;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

@@ -1,5 +1,7 @@
 package cs3500.music.model;
 
+import cs3500.music.model.josh.Pitch;
+
 /**
  * Represents all of the operations that the model of a Midi Editor should have.
  */

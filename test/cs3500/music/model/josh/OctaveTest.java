@@ -1,5 +1,8 @@
-package cs3500.music.model;
+package cs3500.music.model.josh;
 
+import cs3500.music.model.josh.Note;
+import cs3500.music.model.josh.Octave;
+import cs3500.music.model.josh.Pitch;
 import org.junit.Test;
 
 import java.util.ArrayList;

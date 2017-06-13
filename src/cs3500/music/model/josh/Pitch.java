@@ -1,4 +1,4 @@
-package cs3500.music.model;
+package cs3500.music.model.josh;
 
 /**
  * Represents the different types of pitches of a note.
