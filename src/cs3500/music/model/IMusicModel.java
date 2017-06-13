@@ -1,4 +1,4 @@
-package cs3500.music.model.will;
+package cs3500.music.model;
 
 import java.util.List;
 
@@ -6,7 +6,17 @@ import java.util.List;
  * This is the interface for the MusicModel.
  */
 
-public interface eIMusicModel {
+public interface IMusicModel {
+
+  /*
+  paramaterize interface over T (represents a track in this case)
+  void addNoe(int, int, int, int, int)
+  void removeNote(int, int,int, int,int)
+  T getState()
+  String stringState()
+  void addT(int startPos, T t)
+  void removeT(int startPOs, T t)
+  void setTempo (int)
 
   /**
    * Return a valid track that contains the values of all the notes that have been created.
