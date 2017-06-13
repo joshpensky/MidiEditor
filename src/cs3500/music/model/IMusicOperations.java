@@ -19,4 +19,6 @@ public interface IMusicOperations<T> {
 
     void setTempo (int tempo);
 
+    void setTitle(String title);
+
 }
