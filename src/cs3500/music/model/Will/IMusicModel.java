@@ -6,7 +6,7 @@ import java.util.List;
  * This is the interface for the MusicModel.
  */
 
-public interface IMusicModel {
+public interface eIMusicModel {
 
   /**
    * Return a valid track that contains the values of all the notes that have been created.
