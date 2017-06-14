@@ -1,5 +1,7 @@
 package cs3500.music.view;
 
+import cs3500.music.model.EditorOperations;
+
 import java.awt.*;
 import java.awt.event.MouseListener; // Possibly of interest for handling mouse events
 
@@ -15,11 +17,13 @@ public class GuiViewFrame extends javax.swing.JFrame implements ViewInterface {
   private final JPanel pianoPanel; // You may want to refine this to a subtype of JPanel
   private final JViewport editorPanel;
   private final JScrollPane editorContainer;
+  private EditorOperations model;
 
   /**
    * Creates new GuiView
    */
-  public GuiViewFrame() {
+  public GuiViewFrame(EditorOperations model) {
+    this.model = model;
     this.container = new JPanel(new BorderLayout(0, 0));//FlowLayout(FlowLayout.CENTER, 0, 0));
     this.editorPanel = new EditorPanel();
     this.editorContainer = new JScrollPane(this.editorPanel,
@@ -44,4 +48,9 @@ public class GuiViewFrame extends javax.swing.JFrame implements ViewInterface {
   public Dimension getPreferredSize(){
     return new Dimension(WIDTH, 750);
   }
+
+  protected EditorOperations getModel() {
+    return null;
+  }
 }
+
