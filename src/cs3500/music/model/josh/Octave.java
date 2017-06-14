@@ -297,7 +297,7 @@ final class Octave {
     int addIndex = 0;
     for (int i = 0; i < pitchList.size(); i++) {
       int comparison = Integer.compare(pitchList.get(i).getStartPos(), note.getStartPos());
-      if (comparison == 0) {
+      if (comparison == 0 && pitchList.get(i).getInstrument() == note.getInstrument()) {
         throw new IllegalArgumentException("Note already exists at this position.");
       } else if (comparison > 0) {
         break;
