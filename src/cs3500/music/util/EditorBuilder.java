@@ -12,7 +12,7 @@ public class EditorBuilder implements CompositionBuilder<EditorOperations> {
 
   public EditorBuilder(String title) {
     this.model = new EditorModel();
-    this.model.create(title);
+    this.model.create();
   }
 
   @Override

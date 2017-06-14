@@ -14,7 +14,7 @@ public class EditorPanel extends JViewport {
     // Look for more documentation about the Graphics class,
     // and methods on it that may be useful
     g.setColor(Color.red);
-    g.drawRect(0, 0, getWidth()+ 300, getHeight());
+    g.drawRect(0, 0, getWidth() + 300, getHeight());
   }
 
   /*@Override

@@ -352,4 +352,18 @@ final class Octave {
       }
     }
   }
+
+  protected List<Integer[]> getNotes(int octave) {
+    List<Integer[]> notes = new ArrayList<>();
+    int i = 0;
+    for (Pitch p : this.pitches.keySet()) {
+      for (Note n : this.pitches.get(p)) {
+        Integer[] arr = n.getArray();
+        arr[3] = (octave * this.pitches.keySet().size()) + i;
+        notes.add(arr);
+      }
+      i += 1;
+    }
+    return notes;
+  }
 }

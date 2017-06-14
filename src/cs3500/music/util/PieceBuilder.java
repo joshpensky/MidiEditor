@@ -9,7 +9,7 @@ public final class PieceBuilder implements CompositionBuilder<Piece> {
   Piece piece;
 
   public PieceBuilder() {
-    this.piece = new Piece("New Piece");
+    this.piece = new Piece();
   }
 
   @Override
@@ -28,7 +28,7 @@ public final class PieceBuilder implements CompositionBuilder<Piece> {
   @Override
   public CompositionBuilder<Piece> addNote(int start, int end, int instrument,
                                            int pitch, int volume) {
-    this.piece.addNote(start, end, instrument, pitch, volume);
+    //this.piece.addNote(start, end, instrument, pitch, volume);
     return this;
   }
 }

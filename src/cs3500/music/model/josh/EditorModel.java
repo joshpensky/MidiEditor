@@ -21,56 +21,28 @@ public class EditorModel implements EditorOperations {
   }
 
   @Override
-  public void create(String title) throws IllegalArgumentException {
-    if (this.getPieceFromMemory(title) != null) {
-      throw new IllegalArgumentException("Piece already exists with given title.");
-    }
-    Piece next = new Piece(title);
+  public void create() throws IllegalArgumentException {
+    Piece next = new Piece();
     this.pieces.add(0, next);
     this.opened = next;
   }
 
-  @Override
-  public void open(String title) throws IllegalArgumentException {
-    Piece piece = this.getPieceFromMemory(title);
-    if (piece == null) {
-      throw new IllegalArgumentException("There is no piece that exists with the given title, \""
-        + title + "\".");
-    }
-    this.opened = piece;
-  }
-
-  @Override
-  public void copy(String toCopy, String newTitle) throws IllegalArgumentException {
-    Piece piece = this.getPieceFromMemory(toCopy);
-    if (piece == null) {
-      throw new IllegalArgumentException("There is no piece to copy that exists with the given "
-        + "title, \"" + toCopy + "\".");
-    } else if (this.getPieceFromMemory(newTitle) != null) {
-      throw new IllegalArgumentException("Piece already exists with given new title.");
-    }
-    Piece copy = new Piece(newTitle);
-    copy.overlay(piece);
-    this.pieces.add(0, copy);
-    this.opened = copy;
-  }
-
-  /**
-   * Helper to the create, open, and copy methods. Gets the piece from the list of pieces in the
-   * model, or null if no such piece exists.
-   *
-   * @param title   the title of the desired piece
-   * @return the piece with the matching title, or null if no piece has the given title
-   * @throws IllegalArgumentException if the given title is uninitialized
-   */
-  private Piece getPieceFromMemory(String title) throws IllegalArgumentException {
-    for (Piece p : this.pieces) {
-      if (p.getTitle().equals(title)) {
-        return p;
-      }
-    }
-    return null;
-  }
+//  /**
+//   * Helper to the create, open, and copy methods. Gets the piece from the list of pieces in the
+//   * model, or null if no such piece exists.
+//   *
+//   * @param title   the title of the desired piece
+//   * @return the piece with the matching title, or null if no piece has the given title
+//   * @throws IllegalArgumentException if the given title is uninitialized
+//   */
+//  private Piece getPieceFromMemory(String title) throws IllegalArgumentException {
+//    for (Piece p : this.pieces) {
+//      if (p.getTitle().equals(title)) {
+//        return p;
+//      }
+//    }
+//    return null;
+//  }
 
   @Override
   public String view() {
@@ -84,27 +56,27 @@ public class EditorModel implements EditorOperations {
     this.opened = null;
   }
 
-  @Override
-  public String list() {
-    StringBuilder builder = new StringBuilder();
-    for (Piece p : this.pieces) {
-      if (p.equals(opened)) {
-        builder.append(">  ");
-      } else {
-        builder.append("   ");
-      }
-      builder.append(p.getTitle() + "\n");
-    }
-    return builder.toString();
-  }
+//  @Override
+//  public String list() {
+//    StringBuilder builder = new StringBuilder();
+//    for (Piece p : this.pieces) {
+//      if (p.equals(opened)) {
+//        builder.append(">  ");
+//      } else {
+//        builder.append("   ");
+//      }
+//      builder.append(p.getTitle() + "\n");
+//    }
+//    return builder.toString();
+//  }
 
   @Override
   public void addNote(int start, int end, int instrument, int pitch, int volume)
     throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
-    /*this.opened.addNote(getOctave(pitch), getPitch(pitch), start, getDuration(start, end),
-      instrument, volume);*/
-    this.opened.addNote(start, end, instrument, pitch, volume);
+    this.opened.addNote(Utils.getOctave(pitch), Utils.getPitch(pitch), start, Utils.getDuration
+        (start, end), instrument, volume);
+    //this.opened.addNote(start, end, instrument, pitch, volume);
   }
 
   @Override
@@ -145,29 +117,29 @@ public class EditorModel implements EditorOperations {
     this.opened.setTempo(tempo);
   }
 
-  @Override
-  public void overlay(String overlayTitle) throws IllegalStateException, IllegalArgumentException {
-    this.openedPieceException();
-    Piece toOverlay = this.getPieceFromMemory(overlayTitle);
-    if (toOverlay == null) {
-      throw new IllegalArgumentException("There is no piece with the given title, \""
-        + overlayTitle + "\".");
-    }
-    this.opened.overlay(new Piece(toOverlay));
-  }
-
-  @Override
-  public void addToEnd(String title) throws IllegalStateException, IllegalArgumentException {
-    this.openedPieceException();
-    Piece toAdd = this.getPieceFromMemory(title);
-    if (toAdd == null) {
-      throw new IllegalArgumentException("There is no piece with the given title, \""
-        + title + "\".");
-    }
-    toAdd = new Piece(toAdd);
-    toAdd.move(this.opened.length());
-    this.opened.overlay(toAdd);
-  }
+//  @Override
+//  public void overlay(String overlayTitle) throws IllegalStateException, IllegalArgumentException {
+//    this.openedPieceException();
+//    Piece toOverlay = this.getPieceFromMemory(overlayTitle);
+//    if (toOverlay == null) {
+//      throw new IllegalArgumentException("There is no piece with the given title, \""
+//        + overlayTitle + "\".");
+//    }
+//    this.opened.overlay(new Piece(toOverlay));
+//  }
+//
+//  @Override
+//  public void addToEnd(String title) throws IllegalStateException, IllegalArgumentException {
+//    this.openedPieceException();
+//    Piece toAdd = this.getPieceFromMemory(title);
+//    if (toAdd == null) {
+//      throw new IllegalArgumentException("There is no piece with the given title, \""
+//        + title + "\".");
+//    }
+//    toAdd = new Piece(toAdd);
+//    toAdd.move(this.opened.length());
+//    this.opened.overlay(toAdd);
+//  }
 
   /**
    * Helper to the print, close, addNote, removeNote, editNotePitch, editNotePosition,
@@ -180,5 +152,18 @@ public class EditorModel implements EditorOperations {
     if (this.opened == null) {
       throw new IllegalStateException("There is no piece currently open.");
     }
+  }
+
+  @Override
+  public List<Integer[]> getNotes() {
+    this.openedPieceException();
+    return this.opened.getNotes();
+  }
+
+  @Override
+  public List<Integer[]> getNotesAtBeat() {
+    this.openedPieceException();
+    //return this.opened.getNotesAtBeat();
+    return null;
   }
 }
