@@ -69,14 +69,34 @@ public final class Utils {
     if (pitch < 0 || pitch > 127) {
       throw new IllegalArgumentException();
     }
-    return Pitch.values()[pitch % Pitch.values().length];
+    //return Pitch.values()[pitch % Pitch.values().length];
+    int pitches = Pitch.values().length;
+    int middleC = 60;
+    int octave = getOctave(pitch);
+    if (octave >= 4) {
+      middleC += (pitches * (octave - 4));
+
+    } else {
+      middleC -= (pitches * (4 - octave));
+    }
+    System.out.println(middleC + " " + pitch);
+    return Pitch.values()[Math.abs(middleC - pitch)];
   }
 
   public static int getOctave(int pitch) throws IllegalArgumentException {
     if (pitch < 0 || pitch > 127) {
       throw new IllegalArgumentException();
     }
-    return pitch / Pitch.values().length;
+    int pitches = Pitch.values().length;
+    int middleC = 60;
+    if (pitch > middleC) {
+      int up = (int) Math.floor((pitch - middleC) / (double) pitches);
+      return 4 + up;
+    } else {
+      int down = (int) Math.ceil((middleC - pitch) / (double) pitches);
+      return 4 - down;
+    }
+
   }
 
   public static int getDuration(int start, int end) throws IllegalArgumentException {
@@ -84,5 +104,23 @@ public final class Utils {
       throw new IllegalArgumentException();
     }
     return (end - start) + 1;
+  }
+
+  public static int getTone(int octave, Pitch pitch) {
+    int pitchIndex = -1;
+    for (int i = 0; i < Pitch.values().length; i++) {
+      System.out.println(Pitch.values()[i].toString());
+      if (Pitch.values()[i] == pitch) {
+        pitchIndex = i;
+        break;
+      }
+    }
+    System.out.println(octave + " : " + pitchIndex);
+    int middleC = 60;
+    if (octave >= 4) {
+      return (middleC + ((octave - 4) * Pitch.values().length)) + pitchIndex;
+    } else {
+      return (middleC - (octave * Pitch.values().length)) + pitchIndex;
+    }
   }
 }

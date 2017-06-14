@@ -359,7 +359,7 @@ final class Octave {
     for (Pitch p : this.pitches.keySet()) {
       for (Note n : this.pitches.get(p)) {
         Integer[] arr = n.getArray();
-        arr[3] = (octave * this.pitches.keySet().size()) + i;
+        arr[3] = Utils.getTone(octave, p);
         notes.add(arr);
       }
       i += 1;
