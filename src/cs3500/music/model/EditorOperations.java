@@ -142,4 +142,6 @@ public interface EditorOperations {
   List<Integer[]> getNotes();
 
   List<Integer[]> getNotesAtBeat();
+
+  int totalPieceLength();
 }

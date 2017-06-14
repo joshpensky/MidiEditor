@@ -166,4 +166,9 @@ public class EditorModel implements EditorOperations {
     //return this.opened.getNotesAtBeat();
     return null;
   }
+
+  @Override
+  public int totalPieceLength() {
+    return this.opened.length();
+  }
 }
