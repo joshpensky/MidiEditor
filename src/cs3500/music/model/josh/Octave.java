@@ -113,8 +113,8 @@ final class Octave {
     String onset = Utils.padString("X", padding, Utils.Alignment.CENTER);
     String sustain = Utils.padString("|", padding, Utils.Alignment.CENTER);
     for (Note n : notes) {
-      int start = n.getPosition();
-      int end = n.getEndPoint();
+      int start = n.getStartPos();
+      int end = n.getEndPos();
       pitchCol.set(start, onset);
       for (int i = start + 1; i <= end; i++) {
         pitchCol.set(i, sustain);
@@ -152,7 +152,7 @@ final class Octave {
       List<Note> pitchList = this.pitches.get(p);
       int length = 0;
       for (Note note : pitchList) {
-        length = Math.max(length, note.getEndPoint());
+        length = Math.max(length, note.getEndPos());
       }
       longest = Math.max(longest, length);
     }
@@ -170,9 +170,10 @@ final class Octave {
    *                                  position are negative, if the duration is zero, or if a note
    *                                  already exists at the given position
    */
-  void addNote(Pitch pitch, int position, int duration) throws IllegalArgumentException {
+  void addNote(Pitch pitch, int position, int duration, int instrument, int volume) throws
+    IllegalArgumentException {
     this.checkPitchException(pitch);
-    this.addNoteInOrder(pitch, new Note(position, duration));
+    this.addNoteInOrder(pitch, new Note(position, duration, instrument, volume));
   }
 
   /**
@@ -187,7 +188,7 @@ final class Octave {
     this.checkPitchException(pitch);
     List<Note> pitchList = this.pitches.get(pitch);
     for (Note n : pitchList) {
-      if (n.getPosition() == position) {
+      if (n.getStartPos() == position) {
         pitchList.remove(n);
         return;
       }
@@ -210,7 +211,7 @@ final class Octave {
     if (!pitch.equals(newPitch)) {
       List<Note> pitchList = this.pitches.get(pitch);
       for (Note n : pitchList) {
-        if (n.getPosition() == position) {
+        if (n.getStartPos() == position) {
           Note test = new Note(n);
           this.addNoteInOrder(newPitch, test);
           pitchList.remove(n);
@@ -235,9 +236,9 @@ final class Octave {
     if (position != newPosition) {
       List<Note> pitchList = this.pitches.get(pitch);
       for (Note n : pitchList) {
-        if (n.getPosition() == position) {
+        if (n.getStartPos() == position) {
           Note test = new Note(n);
-          test.setPosition(newPosition);
+          test.setStartPos(newPosition);
           this.addNoteInOrder(pitch, test);
           pitchList.remove(n);
           return;
@@ -260,7 +261,7 @@ final class Octave {
     this.checkPitchException(pitch);
     List<Note> pitchList = this.pitches.get(pitch);
     for (Note n : pitchList) {
-      if (n.getPosition() == position) {
+      if (n.getStartPos() == position) {
         n.setDuration(newDuration);
         return;
       }
@@ -295,7 +296,7 @@ final class Octave {
     List<Note> pitchList = this.pitches.get(pitch);
     int addIndex = 0;
     for (int i = 0; i < pitchList.size(); i++) {
-      int comparison = Integer.compare(pitchList.get(i).getPosition(), note.getPosition());
+      int comparison = Integer.compare(pitchList.get(i).getStartPos(), note.getStartPos());
       if (comparison == 0) {
         throw new IllegalArgumentException("Note already exists at this position.");
       } else if (comparison > 0) {
@@ -346,7 +347,7 @@ final class Octave {
           pitchList = Utils.reverse(this.pitches.get(p));
         }
         for (Note n : pitchList) {
-          n.setPosition(n.getPosition() + distance);
+          n.setStartPos(n.getStartPos() + distance);
         }
       }
     }

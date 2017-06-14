@@ -8,9 +8,10 @@ import java.util.ArrayList;
 /**
  * Represents a musical piece that can be edited in the editor.
  */
-final class Piece {
+public final class Piece {
   private Map<Integer, Octave> octaves;
   private String title;
+  private int tempo;
 
   /**
    * Default constructor.
@@ -19,11 +20,12 @@ final class Piece {
    * @param title      the title of the piece
    * @throws IllegalArgumentException if the given title is uninitialized
    */
-  Piece(String title) throws IllegalArgumentException {
+  public Piece(String title) throws IllegalArgumentException {
     if (title == null) {
       throw new IllegalArgumentException("Cannot set piece to an uninitialized title.");
     }
     this.title = title;
+    this.setTempo(0);
     this.octaves = new HashMap<>();
     for (int i = 1; i <= 10; i++) {
       this.octaves.put(i, new Octave());
@@ -37,11 +39,12 @@ final class Piece {
    * @param other      the piece to be copied
    * @throws IllegalArgumentException if the given piece is uninitialized
    */
-  Piece(Piece other) throws IllegalArgumentException {
+  public Piece(Piece other) throws IllegalArgumentException {
     if (other == null) {
       throw new IllegalArgumentException("Cannot duplicate uninitialized piece.");
     }
     this.title = other.title;
+    this.tempo = other.tempo;
     this.octaves = new HashMap<>();
     for (int i = 1; i <= 10; i++) {
       this.octaves.put(i, new Octave(other.octaves.get(i)));
@@ -61,7 +64,8 @@ final class Piece {
         return false;
       }
     }
-    return this.title.equals(other.title);
+    return this.title.equals(other.title)
+        && this.tempo == other.tempo;
   }
 
   @Override
@@ -100,7 +104,7 @@ final class Piece {
         builder.append(Utils.padString("", lineNumPaddingString, Utils.Alignment.RIGHT));
       } else {
         builder.append(Utils.padString(Integer.toString(i - 1), lineNumPaddingString,
-              Utils.Alignment.RIGHT));
+          Utils.Alignment.RIGHT));
       }
       builder.append("  ");
       for (List<String> pitchCol : arr) {
@@ -207,10 +211,10 @@ final class Piece {
    *
    * @throws IllegalArgumentException if the given note is uninitialized
    */
-  void addNote(int octave, Pitch pitch, int position, int duration)
-      throws IllegalArgumentException {
+  void addNote(int octave, Pitch pitch, int position, int duration, int instrument, int volume)
+    throws IllegalArgumentException {
     checkOctaveException(octave);
-    this.octaves.get(octave).addNote(pitch, position, duration);
+    this.octaves.get(octave).addNote(pitch, position, duration, instrument, volume);
   }
 
   /**
@@ -233,7 +237,7 @@ final class Piece {
    *                                  does not exist in the piece
    */
   void editPitch(int octave, Pitch pitch, int position, Pitch newPitch)
-      throws IllegalArgumentException {
+    throws IllegalArgumentException {
     checkOctaveException(octave);
     this.octaves.get(octave).editPitch(pitch, position, newPitch);
   }
@@ -246,7 +250,7 @@ final class Piece {
    *                                  negative, or if the note does not exist in the piece
    */
   void editPosition(int octave, Pitch pitch, int position, int newPosition)
-      throws IllegalArgumentException {
+    throws IllegalArgumentException {
     checkOctaveException(octave);
     this.octaves.get(octave).editPosition(pitch, position, newPosition);
   }
@@ -258,7 +262,7 @@ final class Piece {
    *                                  negative, or if the note does not exist in the piece
    */
   void editDuration(int octave, Pitch pitch, int position, int newDuration)
-      throws IllegalArgumentException {
+    throws IllegalArgumentException {
     checkOctaveException(octave);
     this.octaves.get(octave).editDuration(pitch, position, newDuration);
   }
@@ -313,5 +317,16 @@ final class Piece {
    */
   String getTitle() {
     return this.title;
+  }
+
+  int getTempo() {
+    return this.tempo;
+  }
+
+  public void setTempo(int tempo) {
+    if (tempo < 0) {
+      throw new IllegalArgumentException("Cannot set negative tempo.");
+    }
+    this.tempo = tempo;
   }
 }

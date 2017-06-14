@@ -68,7 +68,7 @@ public interface EditorOperations {
    *                                  given pitch is uninitialized, the position or duration are
    *                                  negative, or the duration is zero
    */
-  void addNote(int octave, Pitch pitch, int position, int duration)
+  void addNote(int start, int end, int instrument, int pitch, int volume)
       throws IllegalStateException, IllegalArgumentException;
 
   /**
@@ -82,7 +82,7 @@ public interface EditorOperations {
    *                                  given pitch is uninitialized, the position is negative, or if
    *                                  there is no note at the given location
    */
-  void removeNote(int octave, Pitch pitch, int position)
+  void removeNote(int start, int instrument, int pitch)
       throws IllegalStateException, IllegalArgumentException;
 
   /**
@@ -97,7 +97,7 @@ public interface EditorOperations {
    *                                  of the given pitches are uninitialized, the position is
    *                                  negative, or there is no note at the given location
    */
-  void editNotePitch(int octave, Pitch pitch, int position, Pitch newPitch)
+  void editNotePitch(int start, int instrument, int pitch, int editedPitch)
       throws IllegalStateException, IllegalArgumentException;
 
   /**
@@ -112,7 +112,7 @@ public interface EditorOperations {
    *                                  given pitch is uninitialized, either of the positions are
    *                                  negative, or there is no note at the given location
    */
-  void editNotePosition(int octave, Pitch pitch, int position, int newPosition)
+  void editNotePosition(int start, int instrument, int pitch, int editedStart)
       throws IllegalStateException, IllegalArgumentException;
 
   /**
@@ -128,8 +128,17 @@ public interface EditorOperations {
    *                                  negative, the new duration is zero, or there is no note at
    *                                  the given location
    */
-  void editNoteDuration(int octave, Pitch pitch, int position, int newDuration)
+  void editNoteDuration(int start, int instrument, int pitch, int editedEnd)
       throws IllegalStateException, IllegalArgumentException;
+
+  /**
+   * Sets the tempo of the currently opened piece.
+   *
+   * @param tempo   the tempo to set the piece
+   * @throws IllegalStateException if there is no currently opened piece
+   * @throws IllegalArgumentException if the given tempo is negative
+   */
+  void setTempo(int tempo) throws IllegalStateException, IllegalArgumentException;
 
   /**
    * Overlays a piece of music in memory with the given title over the currently opened one.

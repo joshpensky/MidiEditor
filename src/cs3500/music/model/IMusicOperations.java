@@ -5,7 +5,7 @@ package cs3500.music.model;
  */
 public interface IMusicOperations<T> {
 
-    void addNoe(int startPos, int endPos, int instrument, int pitch, int volume);
+    void addNote(int startPos, int endPos, int instrument, int pitch, int volume);
 
     void removeNote(int startPos, int endPos, int instrument, int pitch, int volume);
 
@@ -17,6 +17,6 @@ public interface IMusicOperations<T> {
 
     void removeTrack(int startPOs, T track);
 
-    void setTempo (int tempo);
+    void setTempo(int tempo);
 
 }

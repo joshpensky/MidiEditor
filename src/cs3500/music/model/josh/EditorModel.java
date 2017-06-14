@@ -99,38 +99,67 @@ public class EditorModel implements EditorOperations {
   }
 
   @Override
-  public void addNote(int octave, Pitch pitch, int position, int duration)
-      throws IllegalStateException, IllegalArgumentException {
+  public void addNote(int start, int end, int instrument, int pitch, int volume)
+    throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
-    this.opened.addNote(octave, pitch, position, duration);
+    this.opened.addNote(getOctave(pitch), getPitch(pitch), start, getDuration(start, end),
+      instrument, volume);
   }
 
   @Override
-  public void removeNote(int octave, Pitch pitch, int position)
-      throws IllegalStateException, IllegalArgumentException {
+  public void removeNote(int start, int instrument, int pitch)
+    throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
-    this.opened.removeNote(octave, pitch, position);
+    this.opened.removeNote(getOctave(pitch), getPitch(pitch), start);
   }
 
   @Override
-  public void editNotePitch(int octave, Pitch pitch, int position, Pitch newPitch)
-      throws IllegalStateException, IllegalArgumentException {
+  public void editNotePitch(int start, int instrument, int pitch, int editedPitch)
+    throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
-    this.opened.editPitch(octave, pitch, position, newPitch);
+    int octave = getOctave(pitch);
+    if (octave != getOctave(editedPitch)) {
+      throw new IllegalArgumentException("Cannot edit octave, only pitch.");
+    }
+    this.opened.editPitch(octave, getPitch(pitch), start, getPitch(editedPitch));
   }
 
   @Override
-  public void editNotePosition(int octave, Pitch pitch, int position, int newPosition)
-      throws IllegalStateException, IllegalArgumentException {
+  public void editNotePosition(int start, int instrument, int pitch, int editedStart)
+    throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
-    this.opened.editPosition(octave, pitch, position, newPosition);
+    this.opened.editPosition(getOctave(pitch), getPitch(pitch), start, editedStart);
   }
 
   @Override
-  public void editNoteDuration(int octave, Pitch pitch, int position, int newDuration)
-      throws IllegalStateException, IllegalArgumentException {
+  public void editNoteDuration(int start, int instrument, int pitch, int editedEnd)
+    throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
-    this.opened.editDuration(octave, pitch, position, newDuration);
+    this.opened.editDuration(getOctave(pitch), getPitch(pitch), start, editedEnd);
+  }
+
+  private Pitch getPitch(int pitch) {
+    if (pitch < 0 || pitch > 127) {
+      throw new IllegalArgumentException();
+    }
+    return Pitch.values()[pitch % Pitch.values().length];
+  }
+
+  private int getOctave(int pitch) {
+    if (pitch < 0 || pitch > 127) {
+      throw new IllegalArgumentException();
+    }
+    return pitch / Pitch.values().length;
+  }
+
+  private int getDuration(int start, int end) {
+    return (start - end) + 1;
+  }
+
+  @Override
+  public void setTempo(int tempo) {
+    this.openedPieceException();
+    this.opened.setTempo(tempo);
   }
 
   @Override
