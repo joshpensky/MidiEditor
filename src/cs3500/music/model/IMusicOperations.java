@@ -1,7 +1,9 @@
 package cs3500.music.model;
 
+import java.util.List;
+
 /**
- * Created by Will on 6/13/2017.
+ * Created by will on 6/13/2017.
  */
 public interface IMusicOperations<T> {
 
@@ -18,5 +20,9 @@ public interface IMusicOperations<T> {
     void removeTrack(int startPOs, T track);
 
     void setTempo(int tempo);
+
+    void setTitle(String title);
+
+    List<Integer[]> getBeatsAt(int index);
 
 }

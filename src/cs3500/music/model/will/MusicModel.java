@@ -3,26 +3,44 @@ package cs3500.music.model.will;
 import java.util.ArrayList;
 import java.util.List;
 
+import cs3500.music.model.IMusicOperations;
+
 /**
  * Model for the IMusicModel interface. Has a track that holds the chords that have been added to
  * this model.
  */
-public class MusicModel implements IMusicModel {
+public class MusicModel implements IMusicOperations<Track> {
   private Track track;
-
+  private int tempo;
   private Note highestNote;
   private Note lowerstNote;
+  private String title;
+
+
+
+  void setTitle(String title) {
+    this.title = title;
+  }
+
+  List<Integer[]> getBeatsAt(int index) {
+    Integer[] temp = new Integer[5];
+    List<Integer[]> holder = new ArrayList<>();
+    for (Note n : this.track.getFullTrack().get(index).getChord()) {
+      
+    }
+  }
 
   /**
    * Constructor for this model.
    */
   public MusicModel() {
     track = new Track();
+    this.tempo = 1;
   }
 
 
   @Override
-  public Track getTrack() {
+  public Track getState() {
     Track temp = new Track(this.track);
     return temp;
   }
@@ -32,17 +50,20 @@ public class MusicModel implements IMusicModel {
     this.track = new Track();
     highestNote = null;
     lowerstNote = null;
+    this.tempo = 1;
+
   }
 
   @Override
   public void startTrack(Track track) {
     checkNull(track, "Track cannot be null");
     this.track = track;
+    this.tempo = 1;
     this.getExtremeNotes();
   }
 
   @Override
-  public String getMixerState() {
+  public String stringState() {
 
     String header = "";
     if (this.track.length() == 0) {
@@ -159,15 +180,6 @@ public class MusicModel implements IMusicModel {
   }
 
   @Override
-  public void insertChord(int measure, Chord chord) {
-    this.checkNull(chord, "Chord cannot be null");
-    this.track.insertChord(measure, chord);
-    this.getExtremeNotes();
-
-  }
-
-
-  @Override
   public Note removeNote(int measure, Note note) {
     this.checkNull(note, "Note cannot be null");
     if (measure >= this.track.length() || measure < 0) {
@@ -178,31 +190,45 @@ public class MusicModel implements IMusicModel {
     return temp;
   }
 
-  @Override
-  public Chord removeChord(int measure) {
+
+  private void removeBeat(int measure) {
     if (measure >= this.track.length()) {
       throw new IllegalArgumentException("Measure for removal is out of bounds");
     }
 
     Chord temp = this.track.removeChord(measure);
     this.getExtremeNotes();
+
+  }
+
+  /**
+   *
+   * @param measure
+   * @return
+   */
+  private Track removeChord(int measure) {
+    if (measure >= this.track.length()) {
+      throw new IllegalArgumentException("Measure for removal is out of bounds");
+    }
+
+    Track temp = this.track.chordToTrack(this.track.removeChord(measure));
+    this.getExtremeNotes();
     return temp;
   }
 
   @Override
-  public List<Chord> cutCords(int start, int numToBeCut) {
-    if (start < 0 || start >= this.track.length() || start + numToBeCut >= this.track.length()) {
+  public void removeTrack(int start, Track t) {
+    if (start < 0 || start >= this.track.length() || start + t.length() >= this.track.length()) {
       throw new IllegalArgumentException("Index for cutting out of bounds");
     }
-    List<Chord> temp = new ArrayList<>();
+    Track temp = new Track();
 
-    for (int i = 0; i < numToBeCut; i++) {
-      temp.add(this.removeChord(start + i));
+    for (int i = 0; i < t.length(); i++) {
+      temp.addTrack(i,this.removeChord(start + i));
     }
 
     this.getExtremeNotes();
 
-    return temp;
   }
 
   @Override
@@ -213,6 +239,18 @@ public class MusicModel implements IMusicModel {
     this.checkNull(track, "Track cannot be or have null components");
     this.track.addTrack(startPosition, track);
     this.getExtremeNotes();
+  }
+
+
+  /**
+   *
+   * @param tempo
+   */
+  void setTempo (int tempo) {
+    if (tempo <= 0) {
+      throw new IllegalArgumentException("Tempo must be > 0");
+    }
+    this.tempo = tempo;
   }
 
   /**

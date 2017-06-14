@@ -173,6 +173,19 @@ public class Track {
   }
 
   /**
+   *
+   */
+
+  protected Track chordToTrack(Chord c) {
+    Track temp = new Track();
+
+    for (Note n : c.getChord()) {
+      temp.addNote(0, n);
+    }
+
+    return temp;
+  }
+  /**
    * Extends the track to allow for insertions out of bounds of what already exists.
    * Allows for a note to be added at measure 5 when the track is only 2 beats long.
    * @param length the required total length this track needs to be.
