@@ -211,10 +211,13 @@ public final class Piece {
    *
    * @throws IllegalArgumentException if the given note is uninitialized
    */
-  void addNote(int octave, Pitch pitch, int position, int duration, int instrument, int volume)
-    throws IllegalArgumentException {
+  public void addNote(int start, int end, int instrument, int pitch, int volume)
+      //int octave, Pitch pitch, int position, int duration, int instrument, int volume)
+      throws IllegalArgumentException {
+    int octave = Utils.getOctave(pitch);
     checkOctaveException(octave);
-    this.octaves.get(octave).addNote(pitch, position, duration, instrument, volume);
+    this.octaves.get(octave).addNote(Utils.getPitch(pitch), start, Utils.getDuration(start, end),
+        instrument, volume);
   }
 
   /**

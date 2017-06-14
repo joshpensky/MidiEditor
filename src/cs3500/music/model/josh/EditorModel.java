@@ -102,58 +102,41 @@ public class EditorModel implements EditorOperations {
   public void addNote(int start, int end, int instrument, int pitch, int volume)
     throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
-    this.opened.addNote(getOctave(pitch), getPitch(pitch), start, getDuration(start, end),
-      instrument, volume);
+    /*this.opened.addNote(getOctave(pitch), getPitch(pitch), start, getDuration(start, end),
+      instrument, volume);*/
+    this.opened.addNote(start, end, instrument, pitch, volume);
   }
 
   @Override
   public void removeNote(int start, int instrument, int pitch)
     throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
-    this.opened.removeNote(getOctave(pitch), getPitch(pitch), start);
+    this.opened.removeNote(Utils.getOctave(pitch), Utils.getPitch(pitch), start);
   }
 
   @Override
   public void editNotePitch(int start, int instrument, int pitch, int editedPitch)
     throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
-    int octave = getOctave(pitch);
-    if (octave != getOctave(editedPitch)) {
+    int octave = Utils.getOctave(pitch);
+    if (octave != Utils.getOctave(editedPitch)) {
       throw new IllegalArgumentException("Cannot edit octave, only pitch.");
     }
-    this.opened.editPitch(octave, getPitch(pitch), start, getPitch(editedPitch));
+    this.opened.editPitch(octave, Utils.getPitch(pitch), start, Utils.getPitch(editedPitch));
   }
 
   @Override
   public void editNotePosition(int start, int instrument, int pitch, int editedStart)
     throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
-    this.opened.editPosition(getOctave(pitch), getPitch(pitch), start, editedStart);
+    this.opened.editPosition(Utils.getOctave(pitch), Utils.getPitch(pitch), start, editedStart);
   }
 
   @Override
   public void editNoteDuration(int start, int instrument, int pitch, int editedEnd)
     throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
-    this.opened.editDuration(getOctave(pitch), getPitch(pitch), start, editedEnd);
-  }
-
-  private Pitch getPitch(int pitch) {
-    if (pitch < 0 || pitch > 127) {
-      throw new IllegalArgumentException();
-    }
-    return Pitch.values()[pitch % Pitch.values().length];
-  }
-
-  private int getOctave(int pitch) {
-    if (pitch < 0 || pitch > 127) {
-      throw new IllegalArgumentException();
-    }
-    return pitch / Pitch.values().length;
-  }
-
-  private int getDuration(int start, int end) {
-    return (start - end) + 1;
+    this.opened.editDuration(Utils.getOctave(pitch), Utils.getPitch(pitch), start, editedEnd);
   }
 
   @Override

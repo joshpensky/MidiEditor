@@ -4,7 +4,8 @@ import cs3500.music.model.EditorOperations;
 import cs3500.music.model.josh.EditorModel;
 
 /**
- * Created by josh_jpeg on 6/14/17.
+ * Creates a new model with a new piece in it already using the methods defined in the
+ * {@link EditorOperations} interface.
  */
 public class EditorBuilder implements CompositionBuilder<EditorOperations> {
   EditorOperations model;
@@ -16,6 +17,7 @@ public class EditorBuilder implements CompositionBuilder<EditorOperations> {
 
   @Override
   public EditorOperations build() {
+    // No parametrization involved
     return this.model;
   }
 
