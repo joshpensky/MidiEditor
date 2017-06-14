@@ -2,6 +2,8 @@ package cs3500.music.model;
 
 import cs3500.music.model.josh.Pitch;
 
+import java.util.List;
+
 /**
  * Represents all of the operations that the model of a Midi Editor should have.
  */
@@ -13,27 +15,7 @@ public interface EditorOperations {
    * @throws IllegalArgumentException if the given title is uninitialized, or if a piece already
    *                                  exists in memory with the given title
    */
-  void create(String title) throws IllegalArgumentException;
-
-  /**
-   * Replaces the currently opened piece with the piece in memory with the given title.
-   *
-   * @param title   the title of the piece to be opened
-   * @throws IllegalArgumentException if the given title is uninitialized, or if there is no
-   *                                  piece with the given title in memory
-   */
-  void open(String title) throws IllegalArgumentException;
-
-  /**
-   * Creates a copy of an existing piece in memory with a new title, and opens it.
-   *
-   * @param toCopy     the title of the piece to be copied
-   * @param newTitle   the new title of the copied piece
-   * @throws IllegalArgumentException if either of the given titles are uninitialized, if there
-   *                                  is no piece with the given title in memory, or if a piece
-   *                                  already exists in memory with the given new title
-   */
-  void copy(String toCopy, String newTitle) throws IllegalArgumentException;
+  void create() throws IllegalArgumentException;
 
   /**
    * Returns a String representation of the current state of the currently opened piece, or an
@@ -50,11 +32,6 @@ public interface EditorOperations {
    * @throws IllegalStateException if there is no currently opened piece
    */
   void close() throws IllegalStateException;
-
-  /**
-   * Lists the titles of all pieces currently in memory of the model.
-   */
-  String list();
 
   /**
    * Adds a new note to the currently opened piece in the given octave at the given pitch.
@@ -140,25 +117,29 @@ public interface EditorOperations {
    */
   void setTempo(int tempo) throws IllegalStateException, IllegalArgumentException;
 
-  /**
-   * Overlays a piece of music in memory with the given title over the currently opened one.
-   * This only should modify the currently opened piece, NOT the overlaying piece.
-   *
-   * @param overlayTitle   the title of the piece to be overlaid
-   * @throws IllegalStateException if there is no currently opened piece
-   * @throws IllegalArgumentException if the given title is uninitialized, or there is no
-   *                                  piece in memory with the overlay's title
-   */
-  void overlay(String overlayTitle) throws IllegalStateException, IllegalArgumentException;
+//  /**
+//   * Overlays a piece of music in memory with the given title over the currently opened one.
+//   * This only should modify the currently opened piece, NOT the overlaying piece.
+//   *
+//   * @param overlayTitle   the title of the piece to be overlaid
+//   * @throws IllegalStateException if there is no currently opened piece
+//   * @throws IllegalArgumentException if the given title is uninitialized, or there is no
+//   *                                  piece in memory with the overlay's title
+//   */
+//  void overlay(String overlayTitle) throws IllegalStateException, IllegalArgumentException;
+//
+//  /**
+//   * Adds a piece of music in memory with the given title, to the end of the currently opened one.
+//   * This only should modify the currently opened piece, NOT the one being added.
+//   *
+//   * @param addTitle   the title of the piece to be added to the end
+//   * @throws IllegalStateException if there is no currently opened piece
+//   * @throws IllegalArgumentException if the given title is uninitialized, or there is no
+//   *                                  piece in memory with the given title
+//   */
+//  void addToEnd(String addTitle) throws IllegalStateException, IllegalArgumentException;
 
-  /**
-   * Adds a piece of music in memory with the given title, to the end of the currently opened one.
-   * This only should modify the currently opened piece, NOT the one being added.
-   *
-   * @param addTitle   the title of the piece to be added to the end
-   * @throws IllegalStateException if there is no currently opened piece
-   * @throws IllegalArgumentException if the given title is uninitialized, or there is no
-   *                                  piece in memory with the given title
-   */
-  void addToEnd(String addTitle) throws IllegalStateException, IllegalArgumentException;
+  List<Integer[]> getNotes();
+
+  List<Integer[]> getNotesAtBeat();
 }

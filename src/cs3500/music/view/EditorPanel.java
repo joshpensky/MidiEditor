@@ -19,7 +19,7 @@ public class EditorPanel extends JViewport {
     g.setColor(Color.red);
     g.drawRect(0, 0, getWidth()+ 300, getHeight());
 
-    this.notes =
+
     g.setColor(Color.black);
     String temp_note_name = "";
     for (int i = 0; i < notes.size(); i++) {

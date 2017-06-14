@@ -143,4 +143,13 @@ public final class Note {
   int getInstrument() {
     return this.instrument;
   }
+
+  protected Integer[] getArray() {
+    Integer[] arr = new Integer[5];
+    arr[0] = this.startPos;
+    arr[1] = this.endPos;
+    arr[2] = this.instrument;
+    arr[4] = this.volume;
+    return arr;
+  }
 }

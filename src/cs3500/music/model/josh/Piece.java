@@ -10,21 +10,15 @@ import java.util.ArrayList;
  */
 public final class Piece {
   private Map<Integer, Octave> octaves;
-  private String title;
   private int tempo;
 
   /**
    * Default constructor.
    * Constructs a new {@code Piece} object with a title and a measure.
    *
-   * @param title      the title of the piece
    * @throws IllegalArgumentException if the given title is uninitialized
    */
-  public Piece(String title) throws IllegalArgumentException {
-    if (title == null) {
-      throw new IllegalArgumentException("Cannot set piece to an uninitialized title.");
-    }
-    this.title = title;
+  public Piece() throws IllegalArgumentException {
     this.setTempo(0);
     this.octaves = new HashMap<>();
     for (int i = 1; i <= 10; i++) {
@@ -43,7 +37,6 @@ public final class Piece {
     if (other == null) {
       throw new IllegalArgumentException("Cannot duplicate uninitialized piece.");
     }
-    this.title = other.title;
     this.tempo = other.tempo;
     this.octaves = new HashMap<>();
     for (int i = 1; i <= 10; i++) {
@@ -64,14 +57,13 @@ public final class Piece {
         return false;
       }
     }
-    return this.title.equals(other.title)
-        && this.tempo == other.tempo;
+    return this.tempo == other.tempo;
   }
 
   @Override
   public int hashCode() {
     int result = this.octaves.hashCode();
-    result = 31 * result + this.title.hashCode();
+    result = 31 * result + this.tempo;
     return result;
   }
 
@@ -211,13 +203,11 @@ public final class Piece {
    *
    * @throws IllegalArgumentException if the given note is uninitialized
    */
-  public void addNote(int start, int end, int instrument, int pitch, int volume)
-      //int octave, Pitch pitch, int position, int duration, int instrument, int volume)
+  public void addNote(int octave, Pitch pitch, int position, int duration, int instrument, int
+    volume)
       throws IllegalArgumentException {
-    int octave = Utils.getOctave(pitch);
     checkOctaveException(octave);
-    this.octaves.get(octave).addNote(Utils.getPitch(pitch), start, Utils.getDuration(start, end),
-        instrument, volume);
+    this.octaves.get(octave).addNote(pitch, position, duration, instrument, volume);
   }
 
   /**
@@ -313,15 +303,6 @@ public final class Piece {
     }
   }
 
-  /**
-   * Gets the title of this piece.
-   *
-   * @return the title of this piece
-   */
-  String getTitle() {
-    return this.title;
-  }
-
   int getTempo() {
     return this.tempo;
   }
@@ -331,5 +312,19 @@ public final class Piece {
       throw new IllegalArgumentException("Cannot set negative tempo.");
     }
     this.tempo = tempo;
+  }
+
+  public List<Integer[]> getNotes() {
+    List<List<Integer[]>> allOctaves = new ArrayList<>();
+    for (Integer i : this.octaves.keySet()) {
+      allOctaves.add(this.octaves.get(i).getNotes(i));
+    }
+    List<Integer[]> allNotes = new ArrayList<>();
+    for (List<Integer[]> list : allOctaves) {
+      for (Integer[] arr : list) {
+        allNotes.add(arr);
+      }
+    }
+    return allNotes;
   }
 }

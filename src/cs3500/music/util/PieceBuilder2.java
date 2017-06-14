@@ -12,7 +12,7 @@ public class PieceBuilder2 implements CompositionBuilder<Piece> {
 
   public PieceBuilder2(EditorOperations model, String title) {
     this.model = model;
-    this.model.create(title);
+    this.model.create();
   }
 
   @Override
