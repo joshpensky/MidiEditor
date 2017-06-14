@@ -1,21 +1,23 @@
 package cs3500.music.model.josh;
-
 /**
  * Represents the different types of pitches of a note.
  */
 public enum Pitch {
-  C("C"), CSHARP("C#"), D("D"), DSHARP("D#"), E("E"), F("F"), FSHARP("F#"),
-  G("G"), GSHARP("G#"), A("A"), ASHARP("A#"), B("B");
+  C("C", false), CSHARP("C#", true), D("D", false), DSHARP("D#", true), E("E", false),
+  F("F", false), FSHARP("F#", true), G("G", false), GSHARP("G#", true), A("A", false),
+  ASHARP("A#", true), B("B", false);
 
   private final String toString;
+  private final boolean isSharp;
 
   /**
    * Constructs a new Pitch.
    *
    * @param toString   the String representation of the pitch
    */
-  Pitch(String toString) {
+  Pitch(String toString, boolean isSharp) {
     this.toString = toString;
+    this.isSharp = isSharp;
   }
 
   /**
@@ -26,5 +28,9 @@ public enum Pitch {
   @Override
   public String toString() {
     return this.toString;
+  }
+
+  public boolean isSharp() {
+    return this.isSharp;
   }
 }

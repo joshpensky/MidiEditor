@@ -5,7 +5,7 @@ import javax.sound.midi.*;
 /**
  * A skeleton for MIDI playback
  */
-public class MidiViewImpl /*implements YourViewInterfaceHere*/ {
+public class MidiViewImpl implements ViewInterface {
   private final Synthesizer synth;
   private final Receiver receiver;
 
@@ -62,5 +62,10 @@ public class MidiViewImpl /*implements YourViewInterfaceHere*/ {
     in the subsequent assignments.
     */
     this.receiver.close(); // Only call this once you're done playing *all* notes
+  }
+
+  @Override
+  public void initialize() {
+
   }
 }

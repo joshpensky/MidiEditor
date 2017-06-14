@@ -8,28 +8,40 @@ import javax.swing.*;
 /**
  * A skeleton Frame (i.e., a window) in Swing
  */
-public class GuiViewFrame extends javax.swing.JFrame /*implements YourViewInterfaceHere*/ {
+public class GuiViewFrame extends javax.swing.JFrame implements ViewInterface {
+  private static final int WIDTH = 1100;
 
-  private final JPanel displayPanel; // You may want to refine this to a subtype of JPanel
+  private final JPanel container;
+  private final JPanel pianoPanel; // You may want to refine this to a subtype of JPanel
+  private final JViewport editorPanel;
+  private final JScrollPane editorContainer;
 
   /**
    * Creates new GuiView
    */
   public GuiViewFrame() {
-    this.displayPanel = new ConcreteGuiViewPanel();
+    this.container = new JPanel(new BorderLayout(0, 0));//FlowLayout(FlowLayout.CENTER, 0, 0));
+    this.editorPanel = new EditorPanel();
+    this.editorContainer = new JScrollPane(this.editorPanel,
+      JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+      JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+    this.editorContainer.setPreferredSize(new Dimension(WIDTH, 500));
+    this.pianoPanel = new PianoPanel();
+    container.add(editorContainer, BorderLayout.NORTH);
+    container.add(pianoPanel, BorderLayout.SOUTH);
+    this.getContentPane().add(container);
     this.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-    this.getContentPane().add(displayPanel);
     this.pack();
   }
 
-  //@Override
+  @Override
   public void initialize(){
     this.setVisible(true);
+    this.setResizable(false);
   }
 
   @Override
   public Dimension getPreferredSize(){
-    return new Dimension(100, 100);
+    return new Dimension(WIDTH, 750);
   }
-
 }

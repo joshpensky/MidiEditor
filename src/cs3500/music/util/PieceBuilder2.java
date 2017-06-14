@@ -19,7 +19,8 @@ public class PieceBuilder2 implements CompositionBuilder<Piece> {
   public Piece build() {
     // means parametrizing over Piece type in the interface
     // in order to return and open this in a model
-    return this.model.getOpened();
+    //return this.model.getOpened();
+    return null;
   }
 
   @Override
