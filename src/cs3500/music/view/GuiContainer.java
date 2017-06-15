@@ -3,6 +3,7 @@ package cs3500.music.view;
 import cs3500.music.model.EditorOperations;
 
 import javax.swing.*;
+import java.util.List;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -27,7 +28,7 @@ public class GuiContainer extends JPanel {
         JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
     this.editorContainer.setPreferredSize(new Dimension(width, contHeight));
 
-    this.pianoPanel = new PianoPanel(width);
+    this.pianoPanel = new PianoPanel(this.model.getNotesAtBeat(0), width);
 
     this.add(editorContainer, BorderLayout.NORTH);
     this.add(pianoPanel, BorderLayout.SOUTH);
@@ -51,7 +52,9 @@ public class GuiContainer extends JPanel {
 
   private void updatePosition(KeyEvent e) {
     if (e.getKeyCode() == 39 || e.getKeyCode() == 37) {
-      this.editorPanel.updateCursor(e.getKeyCode() == 39);
+      int beat = this.editorPanel.updateCursor(e.getKeyCode() == 39);
+      this.pianoPanel.updateNotes(this.model.getNotesAtBeat(beat));
+      repaint();
     }
   }
 }

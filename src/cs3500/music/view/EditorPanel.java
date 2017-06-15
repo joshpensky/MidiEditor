@@ -4,8 +4,6 @@ import cs3500.music.util.MidiConversion;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,8 +31,8 @@ public class EditorPanel extends JViewport {
   protected EditorPanel(EditorOperations model, int width, int height) {
     this.model = model;
     this.notes = this.model.getNotes();
-    this.highPitch = this.getHighestPitch(this.notes);
-    this.lowPitch = this.getLowestPitch(this.notes);
+    this.highPitch = this.getHighestPitch();
+    this.lowPitch = this.getLowestPitch();
     this.numRows = highPitch - lowPitch + 1;
     this.pieceLength = this.model.totalPieceLength();
     this.cursorPosition = 0;
@@ -68,7 +66,6 @@ public class EditorPanel extends JViewport {
       this.cursorPosition = Math.max(0, this.cursorPosition - 1);
     }
     this.updateOffset(this.cursorPosition - startingPos);
-    repaint();
     return this.cursorPosition;
   }
 
@@ -168,18 +165,18 @@ public class EditorPanel extends JViewport {
     return cellHeight;
   }
 
-  private int getLowestPitch(List<Integer[]> loi) {
+  private int getLowestPitch() {
     int low = 128;
-    for (Integer[] i : loi) {
-      low = Math.min(low, i[3]);
+    for (Integer[] note : this.notes) {
+      low = Math.min(low, note[3]);
     }
     return low;
   }
 
-  private int getHighestPitch(List<Integer[]> loi) {
+  private int getHighestPitch() {
     int high = 0;
-    for (Integer[] i : loi) {
-      high = Math.max(high, i[3]);
+    for (Integer[] note : this.notes) {
+      high = Math.max(high, note[3]);
     }
     return high;
   }
