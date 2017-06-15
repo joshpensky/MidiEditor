@@ -14,20 +14,27 @@ import java.util.List;
  * Created by josh_jpeg on 6/14/17.
  */
 public class EditorPanel extends JViewport {
-  private static List<Integer[]> notes;
-  private final EditorOperations model;
-  private int pieceLength = 0;
+  private static final int SCROLL_PADDING = 3;
   private static final int START_HEIGHT = 40;
-  private static final int START_WIDTH = 30;
+  private static final int START_WIDTH = 40;
   private static final int CELL_WIDTH = 30;
   private int cellHeight = 5;
+
+  private final EditorOperations model;
+  private static List<Integer[]> notes;
+  private int pieceLength;
   private int cursorPosition;
+  private int offset;
+  private boolean reachedEnd = false;
 
   EditorPanel(EditorOperations model) {
     this.model = model;
-    this.cursorPosition = 0;
     this.notes = this.model.getNotes();
     this.pieceLength = this.model.totalPieceLength();
+    System.out.println(pieceLength);
+
+    this.cursorPosition = 0;
+    this.offset = 0;
   }
 
   @Override
@@ -39,45 +46,73 @@ public class EditorPanel extends JViewport {
 
     System.out.println(highest + "   " + lowest);
     this.cellHeight = getPitchHeight(numRows);
+    int offsetX = (this.offset * CELL_WIDTH);
 
-    this.addAllNotes(g, highest);
-    this.constructGrid(g, highest, lowest, numRows);
-    this.drawCursor(g, numRows);
+    this.addAllNotes(g, highest, offsetX);
+    this.constructGrid(g, highest, lowest, numRows, offsetX);
+    this.drawCursor(g, numRows, offsetX);
 
     System.out.println(this.model.getNotesAtBeat(20000).toString());
   }
 
   public void updateCursor(boolean forward) {
+    int startingPos = this.cursorPosition + 0;
+    int cellsShown = (this.getWidth() - START_WIDTH) / CELL_WIDTH;
     if (forward) {
-      this.cursorPosition = Math.min(this.pieceLength - 1, this.cursorPosition + 1);
+      this.cursorPosition = Math.min(this.pieceLength, this.cursorPosition + 1);
+      if ((cellsShown + this.offset) >= this.pieceLength) {
+        this.reachedEnd = true;
+      }
     } else {
       this.cursorPosition = Math.max(0, this.cursorPosition - 1);
     }
+    this.updateOffset(this.cursorPosition - startingPos);
     repaint();
   }
 
-  private void constructGrid(Graphics g, int highest, int lowest, int numRows) {
-    g.setColor(Color.black);
-    for (int i = highest; i >= lowest; i--) {
-      g.drawString(this.getNoteName(i), 1, ((highest - i) * this.cellHeight) + (int)
-          (.5 * this.cellHeight) + START_HEIGHT);
+  private void updateOffset(int cursorChange) {
+    if (cursorChange < 0) {
+      if (START_WIDTH + (this.cursorPosition * CELL_WIDTH)
+          <= START_WIDTH + ((this.offset + SCROLL_PADDING) * CELL_WIDTH)) {
+        this.offset = Math.max(0, this.offset - 1);
+        this.reachedEnd = false;
+      }
+    } else if (cursorChange > 0) {
+      if ((START_WIDTH + ((this.cursorPosition + SCROLL_PADDING) * CELL_WIDTH) > getWidth())
+          && ((this.cursorPosition + SCROLL_PADDING) <= this.pieceLength)
+          && !this.reachedEnd) {
+        this.offset += 1;
+      }
     }
+  }
 
-    g.drawRect(START_WIDTH, START_HEIGHT, pieceLength * CELL_WIDTH,
-        (numRows * this.cellHeight));
+  private void constructGrid(Graphics g, int highest, int lowest, int numRows, int offsetX) {
+    /*g.drawRect(START_WIDTH, START_HEIGHT, this.pieceLength * CELL_WIDTH,
+        (numRows * this.cellHeight));*/
 
-    for (int i = 0; i < pieceLength; i++) {
+    for (int i = 0; i <= pieceLength; i++) {
       if (i % 4 == 0) {
-        g.drawString(Integer.toString(i), START_WIDTH + (i * CELL_WIDTH), START_HEIGHT - 10);
-        g.drawLine(START_WIDTH + (i * CELL_WIDTH), START_HEIGHT, START_WIDTH + (i * CELL_WIDTH),
-            START_HEIGHT + (numRows * this.cellHeight) );
+        g.drawString(Integer.toString(i), START_WIDTH + (i * CELL_WIDTH) - offsetX,
+            START_HEIGHT - 10);
+        g.drawLine(START_WIDTH + (i * CELL_WIDTH) - offsetX, START_HEIGHT,
+            START_WIDTH + (i * CELL_WIDTH) - offsetX,
+            START_HEIGHT + (numRows * this.cellHeight));
       }
     }
 
     for (int i = 0; i <= numRows; i++) {
-      g.drawLine(START_WIDTH, (i * this.cellHeight) +  START_HEIGHT,
-          (pieceLength * CELL_WIDTH) + START_WIDTH,
+      g.drawLine(START_WIDTH - offsetX, (i * this.cellHeight) +  START_HEIGHT,
+          (pieceLength * CELL_WIDTH) + START_WIDTH - offsetX,
           (i * this.cellHeight) +  START_HEIGHT);
+    }
+
+    g.setColor(Color.white);
+    g.fillRect(0, 0, START_WIDTH, getHeight());
+    g.setColor(Color.black);
+    for (int i = highest; i >= lowest; i--) {
+      g.setColor(Color.black);
+      g.drawString(this.getNoteName(i), 1,
+        (int) ((highest - i + 0.5) * this.cellHeight) + START_HEIGHT);
     }
   }
 
@@ -88,18 +123,18 @@ public class EditorPanel extends JViewport {
     return pitch + octave;
   }
 
-  private void drawCursor(Graphics g, int numRows) {
+  private void drawCursor(Graphics g, int numRows, int offsetX) {
     int cursorWidth = 4;
-    int cursorHeadDiameter = 14;
-    int cursorHeadCutDiameter = 8;
+    int headDiameter = 14;
+    int headCutDiameter = 8;
     g.setColor(Color.red);
-    g.fillRect(START_WIDTH + (this.cursorPosition * CELL_WIDTH) - (cursorWidth / 2),
+    g.fillRect(START_WIDTH + (this.cursorPosition * CELL_WIDTH) - (cursorWidth / 2) - offsetX,
         START_HEIGHT, cursorWidth, numRows * this.cellHeight);
-    g.fillOval(START_WIDTH + (this.cursorPosition * CELL_WIDTH) - (cursorHeadDiameter / 2),
-        START_HEIGHT - (cursorHeadDiameter / 2), cursorHeadDiameter, cursorHeadDiameter);
+    g.fillOval(START_WIDTH + (this.cursorPosition * CELL_WIDTH) - (headDiameter / 2) - offsetX,
+        START_HEIGHT - (headDiameter / 2), headDiameter, headDiameter);
     g.setColor(Color.white);
-    g.fillOval(START_WIDTH + (this.cursorPosition * CELL_WIDTH) - (cursorHeadCutDiameter / 2),
-      START_HEIGHT - (cursorHeadCutDiameter / 2), cursorHeadCutDiameter, cursorHeadCutDiameter);
+    g.fillOval(START_WIDTH + (this.cursorPosition * CELL_WIDTH) - (headCutDiameter / 2) - offsetX,
+      START_HEIGHT - (headCutDiameter / 2), headCutDiameter, headCutDiameter);
   }
 
   /*@Override
@@ -154,17 +189,16 @@ public class EditorPanel extends JViewport {
   }
 
 
-  private void addAllNotes(Graphics g, int highNote) {
+  private void addAllNotes(Graphics g, int highNote, int offsetX) {
     Integer[] temp;
     for (int i = 0; i < this.notes.size(); i++) {
       temp = this.notes.get(i);
       g.setColor(Color.green);
-      g.fillRect(START_WIDTH + (temp[0] + 1) * CELL_WIDTH,
+      g.fillRect(START_WIDTH + ((temp[0] + 1) * CELL_WIDTH) - offsetX,
           START_HEIGHT + (highNote - temp[3]) * this.cellHeight,
           (temp[1] - temp[0] - 1) * CELL_WIDTH, this.cellHeight);
       g.setColor(Color.BLACK);
-
-      g.fillRect(START_WIDTH + (temp[0] * CELL_WIDTH),
+      g.fillRect(START_WIDTH + (temp[0] * CELL_WIDTH) - offsetX,
           START_HEIGHT + (highNote - temp[3]) * this.cellHeight, CELL_WIDTH, this.cellHeight);
 
     }
