@@ -21,7 +21,7 @@ public class MusicEditor {
     //MidiViewImpl midiView = new MidiViewImpl();
     // You probably need to connect these views to your model, too...
 
-    String fileName = "mystery-3.txt";
+    String fileName = "mary-little-lamb.txt";
     EditorOperations model = MusicReader.parseFile(new FileReader(fileName), new EditorBuilder());
     //EditorOperations model = new EditorModel();
     ViewInterface view = ViewFactory.getView("audio", model);

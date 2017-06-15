@@ -59,7 +59,7 @@ public class MidiConversion {
     if (octave >= 4) {
       return (middleC + ((octave - 4) * Pitch.values().length)) + pitchIndex;
     } else {
-      return (middleC - (octave * Pitch.values().length)) + pitchIndex;
+      return (middleC - ((4 - octave) * Pitch.values().length)) + pitchIndex;
     }
   }
 }
