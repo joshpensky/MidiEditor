@@ -4,6 +4,8 @@ import cs3500.music.util.MidiConversion;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,74 +17,89 @@ public class EditorPanel extends JViewport {
   private static List<Integer[]> notes;
   private final EditorOperations model;
   private int pieceLength = 0;
-  private int pitchLineHeight = 5;
-  private int startHeight = 40;
-  private int noteSize = 30;
-  private int startWidth = 30;
+  private static final int START_HEIGHT = 40;
+  private static final int START_WIDTH = 30;
+  private static final int CELL_WIDTH = 30;
+  private int cellHeight = 5;
+  private int cursorPosition;
 
   EditorPanel(EditorOperations model) {
     this.model = model;
+    this.cursorPosition = 0;
+    this.notes = this.model.getNotes();
+    this.pieceLength = this.model.totalPieceLength();
   }
 
   @Override
-  protected void paintComponent(Graphics g){
-    // Handle the default painting
+  protected void paintComponent(Graphics g) {
     super.paintComponent(g);
-
-    // Look for more documentation about the Graphics class,
-    // and methods on it that may be useful
-    g.setColor(Color.red);
-    g.drawRect(0, 0, getWidth()+ 300, getHeight());
-
-
-
-    this.notes = this.model.getNotes();
     int highest = this.getHighestPitch(this.notes);
     int lowest = this.getLowestPitch(this.notes);
+    int numRows = highest - lowest + 1;
 
     System.out.println(highest + "   " + lowest);
-    pieceLength = this.model.totalPieceLength();
-
-    String temp_note_name = "";
-    this.pitchLineHeight = getPitchHeight(this.notes.size());
+    this.cellHeight = getPitchHeight(numRows);
 
     this.addAllNotes(g, highest);
-    this.constructGrid(g, highest, lowest, temp_note_name, pieceLength);
+    this.constructGrid(g, highest, lowest, numRows);
+    this.drawCursor(g, numRows);
 
     System.out.println(this.model.getNotesAtBeat(20000).toString());
   }
 
-  private void constructGrid(Graphics g, int highest, int lowest, String temp_note_name,
-                             int pieceLength) {
+  public void updateCursor(boolean forward) {
+    if (forward) {
+      this.cursorPosition = Math.min(this.pieceLength - 1, this.cursorPosition + 1);
+    } else {
+      this.cursorPosition = Math.max(0, this.cursorPosition - 1);
+    }
+    repaint();
+  }
+
+  private void constructGrid(Graphics g, int highest, int lowest, int numRows) {
     g.setColor(Color.black);
     for (int i = highest; i >= lowest; i--) {
-      temp_note_name = this.getNoteName(i);
-      g.drawString(temp_note_name, 1, ((highest - i) * pitchLineHeight) + (int)
-          (.5 * pitchLineHeight) + startHeight);
+      g.drawString(this.getNoteName(i), 1, ((highest - i) * this.cellHeight) + (int)
+          (.5 * this.cellHeight) + START_HEIGHT);
     }
 
-    g.drawRect(startWidth, startHeight, pieceLength  * noteSize,
-        (this.notes.size() * pitchLineHeight)-1);
+    g.drawRect(START_WIDTH, START_HEIGHT, pieceLength * CELL_WIDTH,
+        (numRows * this.cellHeight));
 
     for (int i = 0; i < pieceLength; i++) {
       if (i % 4 == 0) {
-        g.drawString(Integer.toString(i), startWidth + (i * noteSize), startHeight - 1);
-        g.drawLine(startWidth + (i * noteSize), startHeight, startWidth + (i * noteSize),
-            (this.notes.size() * pitchLineHeight)-1 );
+        g.drawString(Integer.toString(i), START_WIDTH + (i * CELL_WIDTH), START_HEIGHT - 10);
+        g.drawLine(START_WIDTH + (i * CELL_WIDTH), START_HEIGHT, START_WIDTH + (i * CELL_WIDTH),
+            START_HEIGHT + (numRows * this.cellHeight) );
       }
     }
 
-    for (int i = 0; i < this.notes.size(); i++) {
-      g.drawLine(startWidth, (i * pitchLineHeight) +  startHeight,
-          (pieceLength * noteSize) + startWidth,
-          (i * pitchLineHeight) +  startHeight);
+    for (int i = 0; i <= numRows; i++) {
+      g.drawLine(START_WIDTH, (i * this.cellHeight) +  START_HEIGHT,
+          (pieceLength * CELL_WIDTH) + START_WIDTH,
+          (i * this.cellHeight) +  START_HEIGHT);
     }
   }
+
   private String getNoteName(int note) {
     String pitch = MidiConversion.getPitch(note).toString();
     String octave = Integer.toString(MidiConversion.getOctave(note));
 
     return pitch + octave;
+  }
+
+  private void drawCursor(Graphics g, int numRows) {
+    int cursorWidth = 4;
+    int cursorHeadDiameter = 14;
+    int cursorHeadCutDiameter = 8;
+    g.setColor(Color.red);
+    g.fillRect(START_WIDTH + (this.cursorPosition * CELL_WIDTH) - (cursorWidth / 2),
+        START_HEIGHT, cursorWidth, numRows * this.cellHeight);
+    g.fillOval(START_WIDTH + (this.cursorPosition * CELL_WIDTH) - (cursorHeadDiameter / 2),
+        START_HEIGHT - (cursorHeadDiameter / 2), cursorHeadDiameter, cursorHeadDiameter);
+    g.setColor(Color.white);
+    g.fillOval(START_WIDTH + (this.cursorPosition * CELL_WIDTH) - (cursorHeadCutDiameter / 2),
+      START_HEIGHT - (cursorHeadCutDiameter / 2), cursorHeadCutDiameter, cursorHeadCutDiameter);
   }
 
   /*@Override
@@ -113,34 +130,27 @@ public class EditorPanel extends JViewport {
   }
 
   private int getPitchHeight(int length) {
-    if (getHeight() / length <  20) {
+    int cellHeight = (getHeight() - START_HEIGHT) / length;
+    if (cellHeight < 20) {
       return 20;
-    } else {
-      return  getHeight() / this.notes.size();
     }
+    return cellHeight;
   }
 
-
   private int getLowestPitch(List<Integer[]> loi) {
-    int temp = 128;
+    int low = 128;
     for (Integer[] i : loi) {
-      /*if (i[3] < temp) {
-        temp = i[3];
-      }*/
-      System.out.println(i[3]);
-      temp = Math.min(temp, i[3]);
+      low = Math.min(low, i[3]);
     }
-    return temp;
+    return low;
   }
 
   private int getHighestPitch(List<Integer[]> loi) {
-    int temp = 0;
+    int high = 0;
     for (Integer[] i : loi) {
-      if (i[3] > temp) {
-        temp = i[3];
-      }
+      high = Math.max(high, i[3]);
     }
-    return temp;
+    return high;
   }
 
 
@@ -149,13 +159,13 @@ public class EditorPanel extends JViewport {
     for (int i = 0; i < this.notes.size(); i++) {
       temp = this.notes.get(i);
       g.setColor(Color.green);
-      g.fillRect(startWidth + (temp[0] + 1) * noteSize,
-          startHeight + (highNote - temp[3]) * pitchLineHeight,
-          (temp[1] - temp[0] - 1) * noteSize, pitchLineHeight);
+      g.fillRect(START_WIDTH + (temp[0] + 1) * CELL_WIDTH,
+          START_HEIGHT + (highNote - temp[3]) * this.cellHeight,
+          (temp[1] - temp[0] - 1) * CELL_WIDTH, this.cellHeight);
       g.setColor(Color.BLACK);
 
-      g.fillRect(startWidth + (temp[0] * noteSize),
-          startHeight + (highNote - temp[3]) * pitchLineHeight, noteSize, pitchLineHeight);
+      g.fillRect(START_WIDTH + (temp[0] * CELL_WIDTH),
+          START_HEIGHT + (highNote - temp[3]) * this.cellHeight, CELL_WIDTH, this.cellHeight);
 
     }
 

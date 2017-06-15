@@ -19,7 +19,6 @@ public class PianoPanel extends JPanel {
   private int numKeys;
   private static final int KEY_WIDTH = 15;
   private static final int KEY_HEIGHT = 200;
-  int yellow = 0;
 
   protected PianoPanel() {
     this.numOctaves = 10;
@@ -29,29 +28,6 @@ public class PianoPanel extends JPanel {
         this.numKeys += 1;
       }
     }
-    /*this.setFocusable(true);
-    this.requestFocusInWindow();
-    this.addKeyListener(new KeyListener() {
-      @Override
-      public void keyTyped(KeyEvent e) {
-
-      }
-
-      @Override
-      public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == 39) {
-          yellow += 5;
-        } else if (e.getKeyCode() == 37) {
-          yellow -= 5;
-        }
-        repaint();
-      }
-
-      @Override
-      public void keyReleased(KeyEvent e) {
-
-      }
-    });*/
   }
 
   private int getStartPos() {
@@ -70,8 +46,6 @@ public class PianoPanel extends JPanel {
     for (int i = 0; i < 10; i++) {
       position = drawOctave(g, position);
     }
-    g.setColor(Color.red);
-    g.fillRect(yellow, 0, 5, KEY_HEIGHT);
   }
 
   private int drawOctave(Graphics g, int startPos) {
