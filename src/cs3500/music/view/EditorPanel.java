@@ -41,13 +41,15 @@ public class EditorPanel extends JViewport {
     int lowest = getLowestPitch(this.notes);
 
     System.out.println(highest + "   " + lowest);
-    pieceLength = this.notes.size();
+    pieceLength = this.model.totalPieceLength();
 
     String temp_note_name = "";
     this.pitchLineHeight = getPitchHeight(this.notes.size());
 
     this.addAllNotes(g, highest);
     this.constructGrid(g, highest, lowest, temp_note_name, pieceLength);
+
+    System.out.println(this.model.getNotesAtBeat(20000).toString());
 
 
 
@@ -150,7 +152,7 @@ public class EditorPanel extends JViewport {
       g.setColor(Color.green);
       g.fillRect(startWidth + (temp[0] + 1) * noteSize,
           startHeight + (highNote - temp[3]) * pitchLineHeight,
-          (temp[1] - temp[0]) * noteSize, pitchLineHeight);
+          (temp[1] - temp[0] - 1) * noteSize, pitchLineHeight);
       g.setColor(Color.BLACK);
 
       g.fillRect(startWidth + (temp[0] * noteSize),
