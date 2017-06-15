@@ -50,35 +50,12 @@ public class MidiViewImpl implements ViewInterface {
    *   </a>
    */
 
-  public void playNote(int tempo, List<Integer[]> notes, int length)
-      throws InvalidMidiDataException {
-
-    Sequence sequence = new Sequence(Sequence.PPQ, 10);
-    Map<Integer, Track> tracks = new TreeMap<>();
-
-    for (Integer[] note : notes) {
-      MidiMessage startMsg = new ShortMessage(ShortMessage.NOTE_ON, 0, note[3], note[4]);
-      MidiMessage stopMsg = new ShortMessage(ShortMessage.NOTE_OFF, 0, note[3], note[4]);
-
-      Track tr;
-      int instrum = note[2];
-      if (tracks.containsKey(instrum)) {
-        tr = tracks.get(instrum);
-      } else {
-        tr = sequence.createTrack();
-        tracks.put(instrum, tr);
-        MidiMessage instrument = new ShortMessage(ShortMessage.PROGRAM_CHANGE, 0, instrum, 0);
-        tr.add(new MidiEvent(instrument, 0));
-      }
-      tr.add(new MidiEvent(startMsg, note[0]));
-      tr.add(new MidiEvent(stopMsg, note[1]));
-    }
-
+  public void playNote(int tempo, List<Integer[]> notes, int length) throws
+    InvalidMidiDataException {
     try {
       Sequencer seq = MidiSystem.getSequencer();
-      seq.setSequence(sequence);
-      seq.setTempoInBPM(tempo);
-      seq.open();
+      seq.setSequence(createSequence(tempo, notes));
+      seq.setTempoInMPQ(tempo);
       seq.addMetaEventListener(new MetaEventListener() {
         @Override
         public void meta(MetaMessage meta) {
@@ -86,42 +63,41 @@ public class MidiViewImpl implements ViewInterface {
             System.exit(0);
         }
       });
+      seq.open();
       seq.start();
     } catch (MidiUnavailableException e) {
       System.err.println("whoops");
     }
+  }
 
-    /*Instrument[] orchestra = this.synth.getAvailableInstruments();
-    System.out.println(length);
+  private Sequence createSequence(int tempo, List<Integer[]> notes) throws
+    InvalidMidiDataException {
+    Sequence sequence = new Sequence(Sequence.PPQ, 4);
+    Map<Integer, Track> tracks = new TreeMap<>();
     for (Integer[] note : notes) {
-      System.out.println("{" + note[0] + ", " + note[1] + ", " + note[2] + ", " + note[3]
-          + ", " + note[4] + "}");
-      this.synth.loadInstrument(orchestra[note[2]]);
-      MidiMessage startMsg = new ShortMessage(ShortMessage.NOTE_ON, note[2], note[3], note[4]);
-      MidiMessage stopMsg = new ShortMessage(ShortMessage.NOTE_OFF, note[2], note[3], note[4]);
-      //this.receiver.send(startMsg, -1);
-      this.receiver.send(startMsg, note[0]);
-      //this.receiver.send(stopMsg, this.synth.getMicrosecondPosition() + 200000);
-      this.receiver.send(stopMsg, note[1]);
+      System.out.println("note " + note[0] + " " + note[1] + " " + note[2] + " " + note[3]
+          + " " + note[4]);
+      int start = note[0];
+      int end = note[1];
+      int instrument = note[2];
+      int pitch = note[3];
+      int volume = note[4];
+      int channel = instrument;
+      MidiMessage startMsg = new ShortMessage(ShortMessage.NOTE_ON, channel, pitch, volume);
+      MidiMessage stopMsg = new ShortMessage(ShortMessage.NOTE_OFF, channel, pitch, volume);
+      Track tr;
+      if (tracks.containsKey(instrument)) {
+        tr = tracks.get(instrument);
+      } else {
+        tr = sequence.createTrack();
+        MidiMessage addInstum = new ShortMessage(ShortMessage.PROGRAM_CHANGE, channel, instrument, 0);
+        tr.add(new MidiEvent(addInstum, 0));
+        tracks.put(instrument, tr);
+      }
+      tr.add(new MidiEvent(startMsg, start));
+      tr.add(new MidiEvent(stopMsg, end));
     }
-
-    try {
-      Thread.sleep(length);
-    } catch (InterruptedException e) {
-      System.err.println("interrupted");
-    }*/
-
-    /* 
-    The receiver does not "block", i.e. this method
-    immediately moves to the next line and closes the 
-    receiver without waiting for the synthesizer to 
-    finish playing. 
-    
-    You can make the program artificially "wait" using
-    Thread.sleep. A better solution will be forthcoming
-    in the subsequent assignments.
-    */
-    //this.receiver.close(); // Only call this once you're done playing *all* notes
+    return sequence;
   }
 
   @Override

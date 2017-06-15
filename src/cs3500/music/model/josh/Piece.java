@@ -1,7 +1,7 @@
 package cs3500.music.model.josh;
 
 import java.util.Map;
-import java.util.HashMap;
+import java.util.TreeMap;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -20,7 +20,7 @@ public final class Piece {
    */
   public Piece() throws IllegalArgumentException {
     this.setTempo(0);
-    this.octaves = new HashMap<>();
+    this.octaves = new TreeMap<>();
     for (int i = 1; i <= 10; i++) {
       this.octaves.put(i, new Octave());
     }
@@ -38,7 +38,7 @@ public final class Piece {
       throw new IllegalArgumentException("Cannot duplicate uninitialized piece.");
     }
     this.tempo = other.tempo;
-    this.octaves = new HashMap<>();
+    this.octaves = new TreeMap<>();
     for (int i = 1; i <= 10; i++) {
       this.octaves.put(i, new Octave(other.octaves.get(i)));
     }

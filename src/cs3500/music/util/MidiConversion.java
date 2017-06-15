@@ -15,7 +15,6 @@ public class MidiConversion {
     int octave = getOctave(pitch);
     if (octave >= 4) {
       middleC += (pitches * (octave - 4));
-
     } else {
       middleC -= (pitches * (4 - octave));
     }
@@ -40,7 +39,7 @@ public class MidiConversion {
 
   public static int getDuration(int start, int end) throws IllegalArgumentException {
     if (end < start) {
-        throw new IllegalArgumentException();
+        throw new IllegalArgumentException("End cannot be before start.");
     }
     return (end - start) + 1;
   }
