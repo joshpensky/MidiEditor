@@ -10,7 +10,7 @@ import cs3500.music.model.josh.EditorModel;
 public class EditorBuilder implements CompositionBuilder<EditorOperations> {
   EditorOperations model;
 
-  public EditorBuilder(String title) {
+  public EditorBuilder() {
     this.model = new EditorModel();
     this.model.create();
   }

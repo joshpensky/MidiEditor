@@ -24,4 +24,11 @@ public class AddTest {
     assertEquals(test, notes.get(0));
     assertEquals(test2, notes.get(1));
   }
+
+  @Test
+  public void test77() {
+    assertEquals(Pitch.F, Utils.getPitch(77));
+    assertEquals(5, Utils.getOctave(77));
+    assertEquals(77, Utils.getTone(5, Pitch.F));
+  }
 }
