@@ -133,10 +133,9 @@ public class EditorModel implements EditorOperations {
   }
 
   @Override
-  public List<Integer[]> getNotesAtBeat() {
+  public List<Integer[]> getNotesAtBeat(int beat) {
     this.openedPieceException();
-    //return this.opened.getNotesAtBeat();
-    return null;
+    return this.opened.getNotesAtBeat(beat);
   }
 
   @Override

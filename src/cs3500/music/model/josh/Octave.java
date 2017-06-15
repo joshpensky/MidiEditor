@@ -368,4 +368,20 @@ final class Octave {
     }
     return notes;
   }
+
+  public List<Integer[]> getNotesAtBeat(int octave, int beat) {
+    List<Integer[]> notes = new ArrayList<>();
+    int i = 0;
+    for (Pitch p : this.pitches.keySet()) {
+      for (Note n : this.pitches.get(p)) {
+        if (n.getStartPos() <= beat && n.getEndPos() >= beat) {
+          Integer[] arr = n.getArray();
+          arr[3] = MidiConversion.getMidiPitch(octave, p);
+          notes.add(arr);
+        }
+      }
+      i += 1;
+    }
+    return notes;
+  }
 }

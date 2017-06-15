@@ -327,4 +327,18 @@ public final class Piece {
     }
     return allNotes;
   }
+
+  public List<Integer[]> getNotesAtBeat(int beat) {
+    List<List<Integer[]>> allOctaves = new ArrayList<>();
+    for (Integer i : this.octaves.keySet()) {
+      allOctaves.add(this.octaves.get(i).getNotesAtBeat(i, beat));
+    }
+    List<Integer[]> allNotes = new ArrayList<>();
+    for (List<Integer[]> list : allOctaves) {
+      for (Integer[] arr : list) {
+        allNotes.add(arr);
+      }
+    }
+    return allNotes;
+  }
 }

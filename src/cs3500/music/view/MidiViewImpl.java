@@ -1,6 +1,9 @@
 package cs3500.music.view;
 
+import cs3500.music.model.EditorOperations;
+
 import javax.sound.midi.*;
+import java.util.List;
 
 /**
  * A skeleton for MIDI playback
@@ -65,7 +68,8 @@ public class MidiViewImpl implements ViewInterface {
   }
 
   @Override
-  public void initialize() {
+  public void initialize(EditorOperations model) {
+    List<Integer[]> allNotes = model.getNotes();
 
   }
 }
