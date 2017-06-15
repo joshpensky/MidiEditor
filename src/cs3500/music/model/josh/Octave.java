@@ -2,7 +2,10 @@ package cs3500.music.model.josh;
 
 import cs3500.music.util.MidiConversion;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Represents an octave in a piece.
@@ -368,7 +371,7 @@ final class Octave {
     List<Integer[]> notes = new ArrayList<>();
     for (Pitch p : this.pitches.keySet()) {
       for (Note n : this.pitches.get(p)) {
-        if (n.getStartPos() <= beat && n.getEndPos() >= beat) {
+        if (n.getStartPos() <= beat && n.getEndPos() > beat) {
           Integer[] arr = n.getArray();
           arr[3] = MidiConversion.getMidiPitch(octave, p);
           notes.add(arr);

@@ -11,9 +11,11 @@ import java.util.TreeMap;
  * A skeleton for MIDI playback
  */
 public class MidiViewImpl implements ViewInterface {
+  EditorOperations model;
   private final Sequencer sequencer;
 
-  public MidiViewImpl() throws MidiUnavailableException {
+  public MidiViewImpl(EditorOperations model) throws MidiUnavailableException {
+    this.model = model;
     this.sequencer = MidiSystem.getSequencer();
     this.sequencer.open();
   }
@@ -59,7 +61,7 @@ public class MidiViewImpl implements ViewInterface {
   }
 
   @Override
-  public void initialize(EditorOperations model) {
+  public void initialize() {
     try {
       playNote(model.getTempo(), model.getNotes(), model.totalPieceLength());
     } catch (InvalidMidiDataException e) {

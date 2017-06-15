@@ -21,10 +21,10 @@ public class MusicEditor {
     //MidiViewImpl midiView = new MidiViewImpl();
     // You probably need to connect these views to your model, too...
 
-    String fileName = "df-ttfaf.txt";
+    String fileName = "mystery-3.txt";
     EditorOperations model = MusicReader.parseFile(new FileReader(fileName), new EditorBuilder());
-    //EditorOperations model = new EditorModel();
-    ViewInterface view = ViewFactory.getView("audio", model);
-    view.initialize(model);
+//    EditorOperations model = new EditorModel();
+    ViewInterface view = ViewFactory.getView("visual", model);
+    view.initialize();
   }
 }

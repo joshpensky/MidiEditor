@@ -20,7 +20,7 @@ public class ViewFactory {
         return new GuiViewFrame(model);
       case "audio":
         try {
-          return new MidiViewImpl();
+          return new MidiViewImpl(model);
         } catch (MidiUnavailableException e) {
           System.err.println("Midi unavailable.");
         }

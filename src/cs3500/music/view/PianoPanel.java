@@ -1,13 +1,12 @@
 package cs3500.music.view;
 import cs3500.music.model.josh.Pitch;
+import cs3500.music.util.MidiConversion;
 
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Color;
+
+import java.util.*;
 
 import javax.swing.*;
 
@@ -15,13 +14,14 @@ import javax.swing.*;
  * A dummy view that simply draws a string
  */
 public class PianoPanel extends JPanel {
+  private Map<Integer, List<Pitch>> notes;
   private int numOctaves;
   private int numKeys;
   private static final int KEY_WIDTH = 15;
   private static final int KEY_HEIGHT = 200;
-  int yellow = 0;
 
-  protected PianoPanel() {
+  protected PianoPanel(List<Integer[]> notes, int width) {
+    updateNotes(notes);
     this.numOctaves = 10;
     this.numKeys = 0;
     for (Pitch p : Pitch.values()) {
@@ -29,29 +29,7 @@ public class PianoPanel extends JPanel {
         this.numKeys += 1;
       }
     }
-    /*this.setFocusable(true);
-    this.requestFocusInWindow();
-    this.addKeyListener(new KeyListener() {
-      @Override
-      public void keyTyped(KeyEvent e) {
-
-      }
-
-      @Override
-      public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == 39) {
-          yellow += 5;
-        } else if (e.getKeyCode() == 37) {
-          yellow -= 5;
-        }
-        repaint();
-      }
-
-      @Override
-      public void keyReleased(KeyEvent e) {
-
-      }
-    });*/
+    this.setPreferredSize(new Dimension(width, KEY_HEIGHT + 50));
   }
 
   private int getStartPos() {
@@ -68,17 +46,19 @@ public class PianoPanel extends JPanel {
     // and methods on it that may be useful
     int position = getStartPos();
     for (int i = 0; i < 10; i++) {
-      position = drawOctave(g, position);
+      position = drawOctave(g, position, this.notes.getOrDefault(i, new ArrayList<>()));
     }
-    g.setColor(Color.red);
-    g.fillRect(yellow, 0, 5, KEY_HEIGHT);
   }
 
-  private int drawOctave(Graphics g, int startPos) {
+  private int drawOctave(Graphics g, int startPos, List<Pitch> highlighted) {
     int position = startPos;
     for (Pitch p : Pitch.values()) {
       if (!p.isSharp()) {
-        g.setColor(Color.white);
+        if (highlighted.contains(p)) {
+          g.setColor(Color.yellow);
+        } else {
+          g.setColor(Color.white);
+        }
         g.fillRect(position, 0, KEY_WIDTH, KEY_HEIGHT);
         g.setColor(Color.black);
         g.drawRect(position, 0, KEY_WIDTH, KEY_HEIGHT);
@@ -90,8 +70,13 @@ public class PianoPanel extends JPanel {
     position = startPos;
     for (Pitch p : Pitch.values()) {
       if (p.isSharp()) {
-        g.setColor(Color.black);
+        if (highlighted.contains(p)) {
+          g.setColor(Color.yellow);
+        } else {
+          g.setColor(Color.black);
+        }
         g.fillRect(position - ((3 * sharpKeyWidth) / 4), 0, sharpKeyWidth, sharpKeyHeight);
+        g.setColor(Color.black);
         g.drawRect(position - ((3 * sharpKeyWidth) / 4), 0, sharpKeyWidth, sharpKeyHeight);
       } else {
         position += KEY_WIDTH;
@@ -100,10 +85,16 @@ public class PianoPanel extends JPanel {
     return position;
   }
 
-  @Override
-  public Dimension getPreferredSize() {
-    return new Dimension(1100, KEY_HEIGHT + 50);
+  protected void updateNotes(List<Integer[]> notes) {
+    this.notes = new TreeMap<>();
+    for (Integer[] note : notes) {
+      int octave = MidiConversion.getOctave(note[3]);
+      Pitch pitch = MidiConversion.getPitch(note[3]);
+      if (this.notes.containsKey(octave)) {
+        this.notes.get(octave).add(pitch);
+      } else {
+        this.notes.put(octave, new ArrayList<>(Arrays.asList(pitch)));
+      }
+    }
   }
-
-
 }
