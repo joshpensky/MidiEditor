@@ -20,7 +20,7 @@ public class EditorPanel extends JViewport {
   private int startWidth = 30;
 
   EditorPanel(EditorOperations model) {
-      this.model = model;
+    this.model = model;
   }
 
   @Override
@@ -37,7 +37,7 @@ public class EditorPanel extends JViewport {
     pieceLength = this.notes.size();
     g.setColor(Color.black);
     String temp_note_name = "";
-    this.pitchLineHeight = getHeight() / this.notes.size();
+    this.pitchLineHeight = getPitchHeight(this.notes.size());
 
     for (int i = 0; i < notes.size(); i++) {
 
@@ -48,17 +48,18 @@ public class EditorPanel extends JViewport {
     g.drawRect(startWidth, startHeight, pieceLength  * noteSize, (this.notes.size() * pitchLineHeight)-1);
 
     for (int i = 0; i < pieceLength; i++) {
-        if (i % 4 == 0) {
-            g.drawString(Integer.toString(i), startWidth + (i * noteSize), startHeight - 1);
-            g.drawLine(startWidth + (i * noteSize), startHeight, startWidth + (i * noteSize),
-                    (this.notes.size() * pitchLineHeight)-1 );
-        }
+      if (i % 4 == 0) {
+        g.drawString(Integer.toString(i), startWidth + (i * noteSize), startHeight - 1);
+        g.drawLine(startWidth + (i * noteSize), startHeight, startWidth + (i * noteSize),
+            (this.notes.size() * pitchLineHeight)-1 );
+      }
     }
 
     for (int i = 0; i < this.notes.size(); i++) {
-        g.drawLine(startWidth, (i * pitchLineHeight) +  startHeight, (pieceLength * noteSize) + startWidth,
-                (i * pitchLineHeight) +  startHeight);
+      g.drawLine(startWidth, (i * pitchLineHeight) +  startHeight, (pieceLength * noteSize) + startWidth,
+          (i * pitchLineHeight) +  startHeight);
     }
+
 
 
 
@@ -80,21 +81,31 @@ public class EditorPanel extends JViewport {
 
 
   private List<Integer[]> getTemp() {
-      List<Integer[]> temp = new ArrayList<>();
-      Integer[] a = new Integer[5];
-      a[0] = 0;
-      a[1] = 2;
-      a[2] = 1;
-      a[3] = 64;
-      a[4] = 72;
-      for (int i = 0; i <10; i++) {
-          temp.add(a.clone());
+    List<Integer[]> temp = new ArrayList<>();
+    Integer[] a = new Integer[5];
+    a[0] = 0;
+    a[1] = 2;
+    a[2] = 1;
+    a[3] = 64;
+    a[4] = 72;
+    for (int i = 0; i <50; i++) {
+      temp.add(a.clone());
 
-      }
+    }
 
-      for (Integer[] c : temp) {
-          c[4] = (int)(Math.random() *127 + 1);
-      }
+    for (Integer[] c : temp) {
+      c[0] = (int)(Math.random() * 10);
+      c[1] = (int)(Math.random() * 3) + c[0];
+      c[4] = (int)(Math.random() *127 + 1);
+    }
     return temp;
+  }
+
+  private int getPitchHeight(int length) {
+    if (getHeight() / length <  20) {
+      return 20;
+    } else {
+      return  getHeight() / this.notes.size();
+    }
   }
 }
