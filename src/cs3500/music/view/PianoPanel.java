@@ -2,12 +2,6 @@ package cs3500.music.view;
 import cs3500.music.model.josh.Pitch;
 
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
 
 import javax.swing.*;
 
@@ -20,7 +14,7 @@ public class PianoPanel extends JPanel {
   private static final int KEY_WIDTH = 15;
   private static final int KEY_HEIGHT = 200;
 
-  protected PianoPanel() {
+  protected PianoPanel(int width) {
     this.numOctaves = 10;
     this.numKeys = 0;
     for (Pitch p : Pitch.values()) {
@@ -28,6 +22,7 @@ public class PianoPanel extends JPanel {
         this.numKeys += 1;
       }
     }
+    this.setPreferredSize(new Dimension(width, KEY_HEIGHT + 50));
   }
 
   private int getStartPos() {
@@ -73,11 +68,4 @@ public class PianoPanel extends JPanel {
     }
     return position;
   }
-
-  @Override
-  public Dimension getPreferredSize() {
-    return new Dimension(1100, KEY_HEIGHT + 50);
-  }
-
-
 }

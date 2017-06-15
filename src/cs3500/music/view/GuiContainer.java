@@ -1,7 +1,6 @@
 package cs3500.music.view;
 
 import cs3500.music.model.EditorOperations;
-import cs3500.music.model.josh.Pitch;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,17 +16,18 @@ public class GuiContainer extends JPanel {
   private final JScrollPane editorContainer;
   private final EditorOperations model;
 
-  protected GuiContainer(EditorOperations model) {
+  protected GuiContainer(EditorOperations model, int width) {
     this.setLayout(new BorderLayout(0, 0));
     this.model = model;
 
-    this.editorPanel = new EditorPanel(this.model);
+    int contHeight = 500;
+    this.editorPanel = new EditorPanel(this.model, width, contHeight);
     this.editorContainer = new JScrollPane(this.editorPanel,
         JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-        JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-    this.editorContainer.setPreferredSize(new Dimension(WIDTH, 500));
+        JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    this.editorContainer.setPreferredSize(new Dimension(width, contHeight));
 
-    this.pianoPanel = new PianoPanel();
+    this.pianoPanel = new PianoPanel(width);
 
     this.add(editorContainer, BorderLayout.NORTH);
     this.add(pianoPanel, BorderLayout.SOUTH);
@@ -37,23 +37,19 @@ public class GuiContainer extends JPanel {
 
     this.addKeyListener(new KeyListener() {
       @Override
-      public void keyTyped(KeyEvent e) {
-
-      }
+      public void keyTyped(KeyEvent e) {}
 
       @Override
       public void keyPressed(KeyEvent e) {
-        updateCursor(e);
+        updatePosition(e);
       }
 
       @Override
-      public void keyReleased(KeyEvent e) {
-
-      }
+      public void keyReleased(KeyEvent e) {}
     });
   }
 
-  private void updateCursor(KeyEvent e) {
+  private void updatePosition(KeyEvent e) {
     if (e.getKeyCode() == 39 || e.getKeyCode() == 37) {
       this.editorPanel.updateCursor(e.getKeyCode() == 39);
     }

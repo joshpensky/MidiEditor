@@ -21,7 +21,7 @@ public class GuiViewFrame extends javax.swing.JFrame implements ViewInterface {
    */
   public GuiViewFrame(EditorOperations model) {
     this.model = model;
-    this.container = new GuiContainer(this.model);//FlowLayout(FlowLayout.CENTER, 0, 0));
+    this.container = new GuiContainer(this.model, WIDTH);
     this.getContentPane().add(container);
     this.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
     this.pack();
