@@ -9,11 +9,11 @@ import java.util.List;
 /**
  * A skeleton for MIDI playback
  */
-public class MidiViewImpl implements MusicEditorView {
+public class MidiView implements MusicEditorView {
   MusicEditorOperations model;
   private final Sequencer sequencer;
 
-  public MidiViewImpl(MusicEditorOperations model) throws MidiUnavailableException {
+  public MidiView(MusicEditorOperations model) throws MidiUnavailableException {
     this.model = model;
     this.sequencer = MidiSystem.getSequencer();
     this.sequencer.open();

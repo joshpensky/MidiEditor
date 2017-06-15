@@ -4,14 +4,14 @@ import cs3500.music.model.MusicEditorOperations;
 import cs3500.music.model.EditorModel;
 
 /**
- * Represents a builder for an editor model. Uses the {@link MusicEditorOperations#setTempo(int)} and
- * {@link MusicEditorOperations#addNote(int, int, int, int, int)} methods to build the piece, without
- * needing to touch the model itself.
+ * Represents a builder for an editor model. Uses the {@link MusicEditorOperations#setTempo(int)}
+ * and {@link MusicEditorOperations#addNote(int, int, int, int, int)} methods to build the piece,
+ * without needing to touch the model itself.
  */
-public class EditorBuilder implements CompositionBuilder<MusicEditorOperations> {
+public class MusicEditorBuilder implements CompositionBuilder<MusicEditorOperations> {
   MusicEditorOperations model;
 
-  public EditorBuilder() {
+  public MusicEditorBuilder() {
     this.model = new EditorModel();
     this.model.create();
   }

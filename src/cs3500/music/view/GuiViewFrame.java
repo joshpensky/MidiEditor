@@ -34,9 +34,5 @@ public class GuiViewFrame extends JFrame implements MusicEditorView {
     this.setVisible(true);
     this.setResizable(false);
   }
-
-  protected MusicEditorOperations getModel() {
-    return model;
-  }
 }
 

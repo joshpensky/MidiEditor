@@ -5,9 +5,9 @@ import cs3500.music.model.MusicEditorOperations;
 import javax.sound.midi.MidiUnavailableException;
 
 /**
- * Created by josh_jpeg on 6/14/17.
+ * Factory class for creating {@link MusicEditorView}s.
  */
-public class ViewFactory {
+public class MusicEditorViewFactory {
 
   public static MusicEditorView getView(String viewName, MusicEditorOperations model)
       throws IllegalArgumentException, MidiUnavailableException {
@@ -16,10 +16,12 @@ public class ViewFactory {
     }
     viewName = viewName.toLowerCase();
     switch (viewName) {
+      case "text":
+        return new TextView(model);
       case "visual":
         return new GuiViewFrame(model);
       case "audio":
-        return new MidiViewImpl(model);
+        return new MidiView(model);
       default:
         throw new IllegalArgumentException("Given view, " + viewName + ", does not exist.");
     }
