@@ -19,9 +19,9 @@ import java.util.List;
  * the editor cursor.
  */
 public class EditorPanel extends JViewport {
-  private static final Color COLOR_CURSOR = Color.decode("#FF4B89");
-  private static final Color COLOR_NOTE_ONSET = Color.decode("#298AFF");
-  private static final Color COLOR_NOTE_SUSTAIN = Color.decode("#7BB7FF");
+  private static final Color COLOR_CURSOR = Color.decode("#FF3362");
+  private static final Color COLOR_NOTE_ONSET = Color.decode("#2079E5");
+  private static final Color COLOR_NOTE_SUSTAIN = Color.decode("#FF972F");
   private static final Color COLOR_LINES = Color.decode("#E3E3E3");
   private static final Color COLOR_LINES_DARK = Color.decode("#95989A");
   private static final Color COLOR_TEXT = Color.decode("#5E6162");

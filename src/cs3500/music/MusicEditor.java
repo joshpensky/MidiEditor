@@ -16,7 +16,7 @@ import javax.sound.midi.MidiUnavailableException;
  */
 public class MusicEditor {
   public static void main(String[] args) throws IOException, InvalidMidiDataException {
-    String fileName = "mystery-2.txt";
+    String fileName = "mystery-1.txt";
     String viewName = "visual";
     MusicEditorOperations model = MusicReader.parseFile(new FileReader(fileName), new MusicEditorBuilder());
     try {
