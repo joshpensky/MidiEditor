@@ -15,15 +15,22 @@ import javax.sound.midi.MidiUnavailableException;
  *
  */
 public class MusicEditor {
-  public static void main(String[] args) throws IOException, InvalidMidiDataException {
-    String fileName = "mystery-1.txt";
-    String viewName = "visual";
-    MusicEditorOperations model = MusicReader.parseFile(new FileReader(fileName), new MusicEditorBuilder());
+  public static void main(String[] args) throws IOException, InvalidMidiDataException,
+      MidiUnavailableException {
+    if (args.length != 2) {
+      throw new IllegalArgumentException("Must give two arguments:\n"
+          + "1) the file name (ex.: \"mary-little-lamb.txt\")\n"
+          + "2) the desired view (either \"text\", \"audio\", or \"visual\")");
+    }
+    String fileName = args[0];
+    String viewName = args[1];
+    MusicEditorOperations model = MusicReader.parseFile(new FileReader(fileName),
+        new MusicEditorBuilder());
     try {
       MusicEditorView view = MusicEditorViewFactory.getView(viewName, model);
       view.initialize();
     } catch (MidiUnavailableException e) {
-      System.err.println("midi unavailable.");
+      throw new MidiUnavailableException("Midi is currently unavailable. Try again later.");
     }
   }
 }

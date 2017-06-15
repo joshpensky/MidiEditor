@@ -43,10 +43,7 @@ public class MidiView implements MusicEditorView {
     InvalidMidiDataException {
     Sequence sequence = new Sequence(Sequence.PPQ, 1);
     Track tr = sequence.createTrack();
-    System.out.println("tempo " + tempo);
     for (Integer[] note : notes) {
-      System.out.println("note " + note[0] + " " + note[1] + " " + note[2] + " " + note[3]
-          + " " + note[4]);
       int start = note[0];
       int end = note[1];
       int instrum = note[2];
