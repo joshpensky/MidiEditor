@@ -25,6 +25,6 @@ public class MusicEditor {
     EditorOperations model = MusicReader.parseFile(new FileReader(fileName), new EditorBuilder());
 //    EditorOperations model = new EditorModel();
     ViewInterface view = ViewFactory.getView("visual", model);
-    view.initialize(model);
+    view.initialize();
   }
 }

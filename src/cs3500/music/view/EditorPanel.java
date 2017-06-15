@@ -17,7 +17,7 @@ public class EditorPanel extends JViewport {
   private int pieceLength = 0;
   private int pitchLineHeight = 5;
   private int startHeight = 40;
-  private int noteSize = 15;
+  private int noteSize = 30;
   private int startWidth = 30;
 
   EditorPanel(EditorOperations model) {
@@ -38,7 +38,7 @@ public class EditorPanel extends JViewport {
 
     this.notes = this.model.getNotes();
     int highest = this.getHighestPitch(this.notes);
-    int lowest = getLowestPitch(this.notes);
+    int lowest = this.getLowestPitch(this.notes);
 
     System.out.println(highest + "   " + lowest);
     pieceLength = this.model.totalPieceLength();
@@ -50,9 +50,6 @@ public class EditorPanel extends JViewport {
     this.constructGrid(g, highest, lowest, temp_note_name, pieceLength);
 
     System.out.println(this.model.getNotesAtBeat(20000).toString());
-
-
-
   }
 
   private void constructGrid(Graphics g, int highest, int lowest, String temp_note_name,
@@ -127,9 +124,11 @@ public class EditorPanel extends JViewport {
   private int getLowestPitch(List<Integer[]> loi) {
     int temp = 128;
     for (Integer[] i : loi) {
-      if (i[3] < temp) {
+      /*if (i[3] < temp) {
         temp = i[3];
-      }
+      }*/
+      System.out.println(i[3]);
+      temp = Math.min(temp, i[3]);
     }
     return temp;
   }

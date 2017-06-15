@@ -39,7 +39,7 @@ public class GuiViewFrame extends javax.swing.JFrame implements ViewInterface {
   }
 
   @Override
-  public void initialize(EditorOperations model){
+  public void initialize(){
     this.setVisible(true);
     this.setResizable(false);
   }

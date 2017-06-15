@@ -5,7 +5,7 @@ import cs3500.music.util.MidiConversion;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
+import java.util.TreeMap;
 
 /**
  * Represents an octave in a piece.
@@ -18,7 +18,7 @@ final class Octave {
    * Creates a new {@code Octave} object.
    */
   Octave() {
-    this.pitches = new HashMap<>();
+    this.pitches = new TreeMap<>();
     for (Pitch p : Pitch.values()) {
       this.pitches.put(p, new ArrayList<>());
     }
@@ -35,7 +35,7 @@ final class Octave {
     if (other == null) {
       throw new IllegalArgumentException("Given octave is uninitialized.");
     }
-    this.pitches = new HashMap<>();
+    this.pitches = new TreeMap<>();
     for (Pitch p : Pitch.values()) {
       List<Note> newNotes = new ArrayList<>();
       List<Note> pitchList = other.pitches.get(p);

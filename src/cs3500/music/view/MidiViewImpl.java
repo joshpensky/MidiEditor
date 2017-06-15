@@ -68,8 +68,8 @@ public class MidiViewImpl implements ViewInterface {
   }
 
   @Override
-  public void initialize(EditorOperations model) {
-    List<Integer[]> allNotes = model.getNotes();
+  public void initialize() {
+    //List<Integer[]> allNotes = model.getNotes();
 
   }
 }
