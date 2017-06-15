@@ -1,6 +1,7 @@
 package cs3500.music.model.josh;
 
 import cs3500.music.model.EditorOperations;
+import cs3500.music.util.MidiConversion;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,23 +28,6 @@ public class EditorModel implements EditorOperations {
     this.opened = next;
   }
 
-//  /**
-//   * Helper to the create, open, and copy methods. Gets the piece from the list of pieces in the
-//   * model, or null if no such piece exists.
-//   *
-//   * @param title   the title of the desired piece
-//   * @return the piece with the matching title, or null if no piece has the given title
-//   * @throws IllegalArgumentException if the given title is uninitialized
-//   */
-//  private Piece getPieceFromMemory(String title) throws IllegalArgumentException {
-//    for (Piece p : this.pieces) {
-//      if (p.getTitle().equals(title)) {
-//        return p;
-//      }
-//    }
-//    return null;
-//  }
-
   @Override
   public String view() {
     this.openedPieceException();
@@ -56,59 +40,47 @@ public class EditorModel implements EditorOperations {
     this.opened = null;
   }
 
-//  @Override
-//  public String list() {
-//    StringBuilder builder = new StringBuilder();
-//    for (Piece p : this.pieces) {
-//      if (p.equals(opened)) {
-//        builder.append(">  ");
-//      } else {
-//        builder.append("   ");
-//      }
-//      builder.append(p.getTitle() + "\n");
-//    }
-//    return builder.toString();
-//  }
-
   @Override
   public void addNote(int start, int end, int instrument, int pitch, int volume)
     throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
-    this.opened.addNote(Utils.getOctave(pitch), Utils.getPitch(pitch), start, Utils.getDuration
-        (start, end), instrument, volume);
-    //this.opened.addNote(start, end, instrument, pitch, volume);
+    this.opened.addNote(MidiConversion.getOctave(pitch), MidiConversion.getPitch(pitch), start, 
+        MidiConversion.getDuration(start, end), instrument, volume);
   }
 
   @Override
   public void removeNote(int start, int instrument, int pitch)
     throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
-    this.opened.removeNote(Utils.getOctave(pitch), Utils.getPitch(pitch), start);
+    this.opened.removeNote(MidiConversion.getOctave(pitch), MidiConversion.getPitch(pitch), start);
   }
 
   @Override
   public void editNotePitch(int start, int instrument, int pitch, int editedPitch)
     throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
-    int octave = Utils.getOctave(pitch);
-    if (octave != Utils.getOctave(editedPitch)) {
+    int octave = MidiConversion.getOctave(pitch);
+    if (octave != MidiConversion.getOctave(editedPitch)) {
       throw new IllegalArgumentException("Cannot edit octave, only pitch.");
     }
-    this.opened.editPitch(octave, Utils.getPitch(pitch), start, Utils.getPitch(editedPitch));
+    this.opened.editPitch(octave, MidiConversion.getPitch(pitch), start,
+        MidiConversion.getPitch(editedPitch));
   }
 
   @Override
   public void editNotePosition(int start, int instrument, int pitch, int editedStart)
     throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
-    this.opened.editPosition(Utils.getOctave(pitch), Utils.getPitch(pitch), start, editedStart);
+    this.opened.editPosition(MidiConversion.getOctave(pitch), MidiConversion.getPitch(pitch), start,
+        editedStart);
   }
 
   @Override
   public void editNoteDuration(int start, int instrument, int pitch, int editedEnd)
     throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
-    this.opened.editDuration(Utils.getOctave(pitch), Utils.getPitch(pitch), start, editedEnd);
+    this.opened.editDuration(MidiConversion.getOctave(pitch), MidiConversion.getPitch(pitch), start,
+        editedEnd);
   }
 
   @Override

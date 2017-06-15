@@ -1,5 +1,6 @@
 package cs3500.music.view;
 import cs3500.music.model.EditorOperations;
+import cs3500.music.util.MidiConversion;
 
 import javax.swing.*;
 import java.awt.*;
@@ -67,8 +68,8 @@ public class EditorPanel extends JViewport {
   }
 
   private String getNoteName(Integer[] note) {
-    String pitch = Utils.getPitch(note[4]).toString();
-    String octave = Integer.toString(Utils.getOctave(note[4]));
+    String pitch = MidiConversion.getPitch(note[4]).toString();
+    String octave = Integer.toString(MidiConversion.getOctave(note[4]));
 
     return pitch+octave;
   }

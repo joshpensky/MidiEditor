@@ -1,6 +1,7 @@
 package cs3500.music.model.josh;
 
 import cs3500.music.model.EditorOperations;
+import cs3500.music.util.MidiConversion;
 import org.junit.Test;
 
 import java.util.List;
@@ -27,8 +28,13 @@ public class AddTest {
 
   @Test
   public void test77() {
-    assertEquals(Pitch.F, Utils.getPitch(77));
-    assertEquals(5, Utils.getOctave(77));
-    assertEquals(77, Utils.getTone(5, Pitch.F));
+    assertEquals(Pitch.F, MidiConversion.getPitch(77));
+    assertEquals(5, MidiConversion.getOctave(77));
+    assertEquals(77, MidiConversion.getMidiPitch(5, Pitch.F));
+  }
+
+  @Test
+  public void testMiddleC() {
+    assertEquals(60, MidiConversion.getMidiPitch(4, Pitch.C));
   }
 }
