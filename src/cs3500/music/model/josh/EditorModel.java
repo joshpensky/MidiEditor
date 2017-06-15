@@ -89,6 +89,12 @@ public class EditorModel implements EditorOperations {
     this.opened.setTempo(tempo);
   }
 
+  @Override
+  public int getTempo() {
+    this.openedPieceException();
+    return this.opened.getTempo();
+  }
+
 //  @Override
 //  public void overlay(String overlayTitle) throws IllegalStateException, IllegalArgumentException {
 //    this.openedPieceException();
@@ -140,6 +146,7 @@ public class EditorModel implements EditorOperations {
 
   @Override
   public int totalPieceLength() {
+    this.openedPieceException();
     return this.opened.length();
   }
 }

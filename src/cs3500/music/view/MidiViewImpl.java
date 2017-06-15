@@ -4,6 +4,8 @@ import cs3500.music.model.EditorOperations;
 
 import javax.sound.midi.*;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * A skeleton for MIDI playback
@@ -48,12 +50,67 @@ public class MidiViewImpl implements ViewInterface {
    *   </a>
    */
 
-  public void playNote() throws InvalidMidiDataException {
-    MidiMessage start = new ShortMessage(ShortMessage.NOTE_ON, 0, 60, 64);
-    MidiMessage stop = new ShortMessage(ShortMessage.NOTE_OFF, 0, 60, 64);
-    this.receiver.send(start, -1);
-    this.receiver.send(stop, this.synth.getMicrosecondPosition() + 200000);
-    
+  public void playNote(int tempo, List<Integer[]> notes, int length)
+      throws InvalidMidiDataException {
+
+    Sequence sequence = new Sequence(Sequence.PPQ, 10);
+    Map<Integer, Track> tracks = new TreeMap<>();
+
+    for (Integer[] note : notes) {
+      MidiMessage startMsg = new ShortMessage(ShortMessage.NOTE_ON, 0, note[3], note[4]);
+      MidiMessage stopMsg = new ShortMessage(ShortMessage.NOTE_OFF, 0, note[3], note[4]);
+
+      Track tr;
+      int instrum = note[2];
+      if (tracks.containsKey(instrum)) {
+        tr = tracks.get(instrum);
+      } else {
+        tr = sequence.createTrack();
+        tracks.put(instrum, tr);
+        MidiMessage instrument = new ShortMessage(ShortMessage.PROGRAM_CHANGE, 0, instrum, 0);
+        tr.add(new MidiEvent(instrument, 0));
+      }
+      tr.add(new MidiEvent(startMsg, note[0]));
+      tr.add(new MidiEvent(stopMsg, note[1]));
+    }
+
+    try {
+      Sequencer seq = MidiSystem.getSequencer();
+      seq.setSequence(sequence);
+      seq.setTempoInBPM(tempo);
+      seq.open();
+      seq.addMetaEventListener(new MetaEventListener() {
+        @Override
+        public void meta(MetaMessage meta) {
+          if (meta.getType() == 47)
+            System.exit(0);
+        }
+      });
+      seq.start();
+    } catch (MidiUnavailableException e) {
+      System.err.println("whoops");
+    }
+
+    /*Instrument[] orchestra = this.synth.getAvailableInstruments();
+    System.out.println(length);
+    for (Integer[] note : notes) {
+      System.out.println("{" + note[0] + ", " + note[1] + ", " + note[2] + ", " + note[3]
+          + ", " + note[4] + "}");
+      this.synth.loadInstrument(orchestra[note[2]]);
+      MidiMessage startMsg = new ShortMessage(ShortMessage.NOTE_ON, note[2], note[3], note[4]);
+      MidiMessage stopMsg = new ShortMessage(ShortMessage.NOTE_OFF, note[2], note[3], note[4]);
+      //this.receiver.send(startMsg, -1);
+      this.receiver.send(startMsg, note[0]);
+      //this.receiver.send(stopMsg, this.synth.getMicrosecondPosition() + 200000);
+      this.receiver.send(stopMsg, note[1]);
+    }
+
+    try {
+      Thread.sleep(length);
+    } catch (InterruptedException e) {
+      System.err.println("interrupted");
+    }*/
+
     /* 
     The receiver does not "block", i.e. this method
     immediately moves to the next line and closes the 
@@ -64,12 +121,16 @@ public class MidiViewImpl implements ViewInterface {
     Thread.sleep. A better solution will be forthcoming
     in the subsequent assignments.
     */
-    this.receiver.close(); // Only call this once you're done playing *all* notes
+    //this.receiver.close(); // Only call this once you're done playing *all* notes
   }
 
   @Override
   public void initialize(EditorOperations model) {
-    List<Integer[]> allNotes = model.getNotes();
+    try {
+      playNote(model.getTempo(), model.getNotes(), model.totalPieceLength());
+    } catch (InvalidMidiDataException e) {
+      System.err.println("whhops, midi sucks.");
+    }
 
   }
 }
