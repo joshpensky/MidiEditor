@@ -17,7 +17,6 @@ public class EditorBuilder implements CompositionBuilder<EditorOperations> {
 
   @Override
   public EditorOperations build() {
-    // No parametrization involved
     return this.model;
   }
 

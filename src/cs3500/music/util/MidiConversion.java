@@ -6,19 +6,21 @@ import cs3500.music.model.josh.Pitch;
  * Created by Will on 6/14/2017.
  */
 public class MidiConversion {
+  private static final int MIDDLE_C = 60;
+
   public static Pitch getPitch(int pitch) throws IllegalArgumentException {
     if (pitch < 0 || pitch > 127) {
       throw new IllegalArgumentException("Given pitch is not in range [0, 127].");
     }
     int pitches = Pitch.values().length;
-    int middleC = 60;
+    int middle = MIDDLE_C;
     int octave = getOctave(pitch);
     if (octave >= 4) {
-      middleC += (pitches * (octave - 4));
+      middle += (pitches * (octave - 4));
     } else {
-      middleC -= (pitches * (4 - octave));
+      middle -= (pitches * (4 - octave));
     }
-    return Pitch.values()[Math.abs(middleC - pitch)];
+    return Pitch.values()[Math.abs(middle - pitch)];
   }
 
   public static int getOctave(int pitch) throws IllegalArgumentException {
@@ -26,14 +28,13 @@ public class MidiConversion {
       throw new IllegalArgumentException("Given pitch is not in range [0, 127].");
     }
     int pitches = Pitch.values().length;
-    int middleCValue = 60;
-    int middleCOctave = 4;
-    if (pitch > middleCValue) {
-      int up = (int) Math.floor((pitch - middleCValue) / (double) pitches);
-      return middleCOctave + up;
+    int middle = MIDDLE_C;
+    if (pitch > middle) {
+      int up = (int) Math.floor((pitch - middle) / (double) pitches);
+      return middle + up;
     } else {
-      int down = (int) Math.ceil((middleCValue - pitch) / (double) pitches);
-      return middleCOctave - down;
+      int down = (int) Math.ceil((middle - pitch) / (double) pitches);
+      return middle - down;
     }
   }
 
@@ -55,11 +56,10 @@ public class MidiConversion {
         break;
       }
     }
-    int middleC = 60;
     if (octave >= 4) {
-      return (middleC + ((octave - 4) * Pitch.values().length)) + pitchIndex;
+      return (MIDDLE_C + ((octave - 4) * Pitch.values().length)) + pitchIndex;
     } else {
-      return (middleC - ((4 - octave) * Pitch.values().length)) + pitchIndex;
+      return (MIDDLE_C - ((4 - octave) * Pitch.values().length)) + pitchIndex;
     }
   }
 }

@@ -21,7 +21,6 @@ public class MidiViewImpl implements ViewInterface {
   public void playNote(int tempo, List<Integer[]> notes, int length) throws
     InvalidMidiDataException {
     this.sequencer.setSequence(createSequence(tempo, notes));
-    this.sequencer.setTempoInMPQ(tempo);
     this.sequencer.addMetaEventListener(new MetaEventListener() {
       @Override
       public void meta(MetaMessage meta) {
@@ -30,6 +29,7 @@ public class MidiViewImpl implements ViewInterface {
       }
     });
     this.sequencer.start();
+    this.sequencer.setTempoInMPQ(tempo);
   }
 
   private Sequence createSequence(int tempo, List<Integer[]> notes) throws
@@ -45,9 +45,10 @@ public class MidiViewImpl implements ViewInterface {
       int instrument = note[2];
       int pitch = note[3];
       int volume = note[4];
-      MidiMessage startMsg = new ShortMessage(ShortMessage.NOTE_ON, instrument, pitch, volume);
-      MidiMessage stopMsg = new ShortMessage(ShortMessage.NOTE_OFF, instrument, pitch, volume);
-      MidiMessage addInstum = new ShortMessage(ShortMessage.PROGRAM_CHANGE, instrument, instrument, 0);
+      int channel = instrument / 8;
+      MidiMessage startMsg = new ShortMessage(ShortMessage.NOTE_ON, channel, pitch, volume);
+      MidiMessage stopMsg = new ShortMessage(ShortMessage.NOTE_OFF, channel, pitch, volume);
+      MidiMessage addInstum = new ShortMessage(ShortMessage.PROGRAM_CHANGE, channel, instrument, 0);
       if (tr.remove(new MidiEvent(addInstum, 0))) {
         tr.add(new MidiEvent(addInstum, 0));
       }
@@ -62,7 +63,7 @@ public class MidiViewImpl implements ViewInterface {
     try {
       playNote(model.getTempo(), model.getNotes(), model.totalPieceLength());
     } catch (InvalidMidiDataException e) {
-      System.err.println("whhops, midi sucks.");
+      System.err.println("whhops, midi sucks: " + e.getMessage());
     }
 
   }
