@@ -1,6 +1,6 @@
 package cs3500.music.view;
 
-import cs3500.music.model.EditorOperations;
+import cs3500.music.model.MusicEditorOperations;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -11,33 +11,36 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 /**
- * Created by josh_jpeg on 6/15/17.
+ * Represents the main container panel in the {@link GuiViewFrame}. This panel contains the
+ * editor panel (encapsulated in a scroll pane), as well as the piano panel.
  */
 public class GuiContainer extends JPanel {
   private final PianoPanel pianoPanel; // You may want to refine this to a subtype of JPanel
   private final EditorPanel editorPanel;
-  private final JScrollPane editorContainer;
-  private final EditorOperations model;
+  private final MusicEditorOperations model;
 
-  protected GuiContainer(EditorOperations model, int width) {
-    this.setLayout(new BorderLayout(0, 0));
+  protected GuiContainer(MusicEditorOperations model, int width) {
+    if (model == null) {
+      throw new IllegalArgumentException("Given model is uninitialized.");
+    } else if (width <= 0) {
+      throw new IllegalArgumentException("Width cannot be negative or zero.");
+    }
     this.model = model;
-
+    this.setLayout(new BorderLayout(0, 0));
     int contHeight = 500;
+    // Adds the editor panel to a scroll pane, then adds the scroll pane
     this.editorPanel = new EditorPanel(this.model, width, contHeight);
-    this.editorContainer = new JScrollPane(this.editorPanel,
+    JScrollPane editorContainer = new JScrollPane(this.editorPanel,
         JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
         JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-    this.editorContainer.setPreferredSize(new Dimension(width, contHeight));
-
-    this.pianoPanel = new PianoPanel(this.model.getNotesAtBeat(0), width);
-
+    editorContainer.setPreferredSize(new Dimension(width, contHeight));
     this.add(editorContainer, BorderLayout.NORTH);
-    this.add(pianoPanel, BorderLayout.SOUTH);
-
+    // Adds the piano panel and starts piano at note 0
+    this.pianoPanel = new PianoPanel(this.model.getNotesAtBeat(0), width);
+    this.add(this.pianoPanel, BorderLayout.SOUTH);
+    // Adds the key listener to the container for moving the cursor
     this.setFocusable(true);
     this.requestFocusInWindow();
-
     this.addKeyListener(new KeyListener() {
       @Override
       public void keyTyped(KeyEvent e) {}

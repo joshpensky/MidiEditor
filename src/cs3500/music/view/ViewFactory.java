@@ -1,6 +1,6 @@
 package cs3500.music.view;
 
-import cs3500.music.model.EditorOperations;
+import cs3500.music.model.MusicEditorOperations;
 
 import javax.sound.midi.MidiUnavailableException;
 
@@ -9,7 +9,7 @@ import javax.sound.midi.MidiUnavailableException;
  */
 public class ViewFactory {
 
-  public static ViewInterface getView(String viewName, EditorOperations model)
+  public static MusicEditorView getView(String viewName, MusicEditorOperations model)
       throws IllegalArgumentException, MidiUnavailableException {
     if (viewName == null) {
       throw new IllegalArgumentException();

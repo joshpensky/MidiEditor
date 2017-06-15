@@ -1,6 +1,6 @@
 package cs3500.music.view;
 
-import cs3500.music.model.EditorOperations;
+import cs3500.music.model.MusicEditorOperations;
 
 import javax.sound.midi.*;
 
@@ -9,11 +9,11 @@ import java.util.List;
 /**
  * A skeleton for MIDI playback
  */
-public class MidiViewImpl implements ViewInterface {
-  EditorOperations model;
+public class MidiViewImpl implements MusicEditorView {
+  MusicEditorOperations model;
   private final Sequencer sequencer;
 
-  public MidiViewImpl(EditorOperations model) throws MidiUnavailableException {
+  public MidiViewImpl(MusicEditorOperations model) throws MidiUnavailableException {
     this.model = model;
     this.sequencer = MidiSystem.getSequencer();
     this.sequencer.open();

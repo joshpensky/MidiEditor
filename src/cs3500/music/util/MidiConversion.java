@@ -1,6 +1,6 @@
 package cs3500.music.util;
 
-import cs3500.music.model.josh.Pitch;
+import cs3500.music.model.Pitch;
 
 /**
  * Created by Will on 6/14/2017.

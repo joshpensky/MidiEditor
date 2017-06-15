@@ -1,6 +1,6 @@
 package cs3500.music.view;
 
-import cs3500.music.model.EditorOperations;
+import cs3500.music.model.MusicEditorOperations;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -8,18 +8,19 @@ import javax.swing.JPanel;
 import java.awt.Dimension;
 
 /**
- * A skeleton Frame (i.e., a window) in Swing
+ * Represents the frame for the GUI view. Holds the {@link GuiContainer} to display both the
+ * editor and piano view of the currently opened piece in the model.
  */
-public class GuiViewFrame extends JFrame implements ViewInterface {
-  private static final int WIDTH = 1100;
+public class GuiViewFrame extends JFrame implements MusicEditorView {
+  private static final int WIDTH = 1200;
 
   private final JPanel container;
-  private final EditorOperations model;
+  private final MusicEditorOperations model;
 
   /**
    * Creates new GuiView
    */
-  public GuiViewFrame(EditorOperations model) {
+  public GuiViewFrame(MusicEditorOperations model) {
     this.model = model;
     this.container = new GuiContainer(this.model, WIDTH);
     this.getContentPane().add(container);
@@ -34,7 +35,7 @@ public class GuiViewFrame extends JFrame implements ViewInterface {
     this.setResizable(false);
   }
 
-  protected EditorOperations getModel() {
+  protected MusicEditorOperations getModel() {
     return model;
   }
 }

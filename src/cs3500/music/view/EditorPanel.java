@@ -1,6 +1,6 @@
 package cs3500.music.view;
 
-import cs3500.music.model.EditorOperations;
+import cs3500.music.model.MusicEditorOperations;
 import cs3500.music.util.MidiConversion;
 
 import javax.swing.JViewport;
@@ -14,16 +14,25 @@ import java.util.List;
 
 
 /**
- * Created by josh_jpeg on 6/14/17.
+ * Represents the panel in {@link GuiContainer} that contains the editor view. The editor view
+ * displays all of the notes currently opened in the model, as well as the current position of
+ * the editor cursor.
  */
 public class EditorPanel extends JViewport {
+  private static final Color COLOR_CURSOR = Color.decode("#FF4B89");
+  private static final Color COLOR_NOTE_ONSET = Color.decode("#298AFF");
+  private static final Color COLOR_NOTE_SUSTAIN = Color.decode("#7BB7FF");
+  private static final Color COLOR_LINES = Color.decode("#E3E3E3");
+  private static final Color COLOR_LINES_DARK = Color.decode("#95989A");
+  private static final Color COLOR_TEXT = Color.decode("#5E6162");
+
   private static final int SCROLL_PADDING = 3;
-  private static final int START_HEIGHT = 40;
+  private static final int START_HEIGHT = 30;
   private static final int START_WIDTH = 40;
   private static final int CELL_WIDTH = 30;
   private int cellHeight = 5;
 
-  private final EditorOperations model;
+  private final MusicEditorOperations model;
   private List<Integer[]> notes;
   private int highPitch;
   private int lowPitch;
@@ -33,7 +42,7 @@ public class EditorPanel extends JViewport {
   private int offset;
   private boolean reachedEnd = false;
 
-  protected EditorPanel(EditorOperations model, int width, int height) {
+  protected EditorPanel(MusicEditorOperations model, int width, int height) {
     this.model = model;
     this.notes = this.model.getNotes();
     this.highPitch = this.getHighestPitch();
@@ -93,6 +102,7 @@ public class EditorPanel extends JViewport {
     // Measure lines
     for (int i = 0; i <= pieceLength; i++) {
       if (i % 4 == 0) {
+        g.setColor(COLOR_LINES_DARK);
         g.drawString(Integer.toString(i), START_WIDTH + (i * CELL_WIDTH) - offsetX,
             START_HEIGHT - 10);
         g.drawLine(START_WIDTH + (i * CELL_WIDTH) - offsetX, START_HEIGHT,
@@ -103,6 +113,11 @@ public class EditorPanel extends JViewport {
 
     // Pitch lines
     for (int i = 0; i <= numRows; i++) {
+      if (i == 0 || i == numRows) {
+        g.setColor(COLOR_LINES_DARK);
+      } else {
+        g.setColor(COLOR_LINES);
+      }
       g.drawLine(START_WIDTH - offsetX, (i * this.cellHeight) +  START_HEIGHT,
           (pieceLength * CELL_WIDTH) + START_WIDTH - offsetX,
           (i * this.cellHeight) +  START_HEIGHT);
@@ -111,10 +126,10 @@ public class EditorPanel extends JViewport {
     // Pitch names
     g.setColor(Color.white);
     g.fillRect(0, 0, START_WIDTH, getHeight());
-    g.setColor(Color.black);
+    g.setColor(COLOR_LINES_DARK);
     g.drawLine(START_WIDTH, START_HEIGHT, START_WIDTH, START_HEIGHT + (numRows * this.cellHeight));
+    g.setColor(COLOR_TEXT);
     for (int i = highest; i >= lowest; i--) {
-      g.setColor(Color.black);
       g.drawString(this.getNoteName(i), 1,
         (int) ((highest - i + 0.5) * this.cellHeight) + START_HEIGHT);
     }
@@ -131,7 +146,7 @@ public class EditorPanel extends JViewport {
     int cursorWidth = 4;
     int headDiameter = 14;
     int headCutDiameter = 8;
-    g.setColor(Color.red);
+    g.setColor(COLOR_CURSOR);
     g.fillRect(START_WIDTH + (this.cursorPosition * CELL_WIDTH) - (cursorWidth / 2) - offsetX,
         START_HEIGHT, cursorWidth, numRows * this.cellHeight);
     g.fillOval(START_WIDTH + (this.cursorPosition * CELL_WIDTH) - (headDiameter / 2) - offsetX,
@@ -188,11 +203,11 @@ public class EditorPanel extends JViewport {
 
   private void addAllNotes(Graphics g, int highNote, int offsetX) {
     for (Integer[] note : this.notes) {
-      g.setColor(Color.green);
+      g.setColor(COLOR_NOTE_SUSTAIN);
       g.fillRect(START_WIDTH + ((note[0] + 1) * CELL_WIDTH) - offsetX,
           START_HEIGHT + (highNote - note[3]) * this.cellHeight,
           (note[1] - note[0] - 1) * CELL_WIDTH, this.cellHeight);
-      g.setColor(Color.BLACK);
+      g.setColor(COLOR_NOTE_ONSET);
       g.fillRect(START_WIDTH + (note[0] * CELL_WIDTH) - offsetX,
           START_HEIGHT + (highNote - note[3]) * this.cellHeight, CELL_WIDTH, this.cellHeight);
     }

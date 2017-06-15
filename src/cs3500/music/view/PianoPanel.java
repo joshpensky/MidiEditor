@@ -1,6 +1,6 @@
 package cs3500.music.view;
 
-import cs3500.music.model.josh.Pitch;
+import cs3500.music.model.Pitch;
 import cs3500.music.util.MidiConversion;
 
 import javax.swing.JPanel;
@@ -16,14 +16,19 @@ import java.util.Map;
 import java.util.TreeMap;
 
 /**
- * A dummy view that simply draws a string
+ * Represents the panel in {@link GuiContainer} that represents the piano, or keyboard, view.
+ * Displays a 10-octave, 120-key keyboard.
  */
 public class PianoPanel extends JPanel {
+  private static final Color COLOR_KEY_OUTLINE = Color.decode("#95989A");
+  private static final Color COLOR_KEY_PRESS = Color.decode("#FFC802");
+
+  private static final int KEY_WIDTH = 15;
+  private static final int KEY_HEIGHT = 200;
+
   private Map<Integer, List<Pitch>> notes;
   private int numOctaves;
   private int numKeys;
-  private static final int KEY_WIDTH = 15;
-  private static final int KEY_HEIGHT = 200;
 
   protected PianoPanel(List<Integer[]> notes, int width) {
     updateNotes(notes);
@@ -60,12 +65,12 @@ public class PianoPanel extends JPanel {
     for (Pitch p : Pitch.values()) {
       if (!p.isSharp()) {
         if (highlighted.contains(p)) {
-          g.setColor(Color.yellow);
+          g.setColor(COLOR_KEY_PRESS);
         } else {
           g.setColor(Color.white);
         }
         g.fillRect(position, 0, KEY_WIDTH, KEY_HEIGHT);
-        g.setColor(Color.black);
+        g.setColor(COLOR_KEY_OUTLINE);
         g.drawRect(position, 0, KEY_WIDTH, KEY_HEIGHT);
         position += KEY_WIDTH;
       }
@@ -76,12 +81,12 @@ public class PianoPanel extends JPanel {
     for (Pitch p : Pitch.values()) {
       if (p.isSharp()) {
         if (highlighted.contains(p)) {
-          g.setColor(Color.yellow);
+          g.setColor(COLOR_KEY_PRESS);
         } else {
           g.setColor(Color.black);
         }
         g.fillRect(position - ((3 * sharpKeyWidth) / 4), 0, sharpKeyWidth, sharpKeyHeight);
-        g.setColor(Color.black);
+        g.setColor(COLOR_KEY_OUTLINE);
         g.drawRect(position - ((3 * sharpKeyWidth) / 4), 0, sharpKeyWidth, sharpKeyHeight);
       } else {
         position += KEY_WIDTH;
