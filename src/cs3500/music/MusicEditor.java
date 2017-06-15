@@ -13,6 +13,7 @@ import cs3500.music.view.ViewInterface;
 import java.io.FileReader;
 import java.io.IOException;
 import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiUnavailableException;
 
 
 public class MusicEditor {
@@ -24,7 +25,11 @@ public class MusicEditor {
     String fileName = "mystery-3.txt";
     EditorOperations model = MusicReader.parseFile(new FileReader(fileName), new EditorBuilder());
 //    EditorOperations model = new EditorModel();
-    ViewInterface view = ViewFactory.getView("visual", model);
-    view.initialize();
+    try {
+      ViewInterface view = ViewFactory.getView("visual", model);
+      view.initialize();
+    } catch (MidiUnavailableException e) {
+      System.err.println("midi unavailable.");
+    }
   }
 }

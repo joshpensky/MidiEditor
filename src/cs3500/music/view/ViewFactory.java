@@ -10,7 +10,7 @@ import javax.sound.midi.MidiUnavailableException;
 public class ViewFactory {
 
   public static ViewInterface getView(String viewName, EditorOperations model)
-      throws IllegalArgumentException {
+      throws IllegalArgumentException, MidiUnavailableException {
     if (viewName == null) {
       throw new IllegalArgumentException();
     }
@@ -19,11 +19,7 @@ public class ViewFactory {
       case "visual":
         return new GuiViewFrame(model);
       case "audio":
-        try {
-          return new MidiViewImpl(model);
-        } catch (MidiUnavailableException e) {
-          System.err.println("Midi unavailable.");
-        }
+        return new MidiViewImpl(model);
       default:
         throw new IllegalArgumentException("Given view, " + viewName + ", does not exist.");
     }

@@ -31,10 +31,10 @@ public class MidiConversion {
     int middle = MIDDLE_C;
     if (pitch > middle) {
       int up = (int) Math.floor((pitch - middle) / (double) pitches);
-      return middle + up;
+      return 4 + up;
     } else {
       int down = (int) Math.ceil((middle - pitch) / (double) pitches);
-      return middle - down;
+      return 4 - down;
     }
   }
 
