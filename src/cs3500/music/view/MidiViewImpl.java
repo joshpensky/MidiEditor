@@ -3,9 +3,8 @@ package cs3500.music.view;
 import cs3500.music.model.EditorOperations;
 
 import javax.sound.midi.*;
+
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * A skeleton for MIDI playback
@@ -26,8 +25,14 @@ public class MidiViewImpl implements ViewInterface {
     this.sequencer.addMetaEventListener(new MetaEventListener() {
       @Override
       public void meta(MetaMessage meta) {
-        if (meta.getType() == 47)
-          sequencer.close();
+        if (meta.getType() == 47) {
+          try {
+            Thread.sleep(1000);
+            sequencer.close();
+          } catch (InterruptedException e) {
+            System.err.println("interrupted");
+          }
+        }
       }
     });
     this.sequencer.start();
@@ -44,15 +49,15 @@ public class MidiViewImpl implements ViewInterface {
           + " " + note[4]);
       int start = note[0];
       int end = note[1];
-      int instrument = note[2];
+      int instrum = note[2];
       int pitch = note[3];
       int volume = note[4];
-      int channel = instrument / 8;
+      int channel = instrum / 8;
       MidiMessage startMsg = new ShortMessage(ShortMessage.NOTE_ON, channel, pitch, volume);
       MidiMessage stopMsg = new ShortMessage(ShortMessage.NOTE_OFF, channel, pitch, volume);
-      MidiMessage addInstum = new ShortMessage(ShortMessage.PROGRAM_CHANGE, channel, instrument, 0);
-      if (tr.remove(new MidiEvent(addInstum, 0))) {
-        tr.add(new MidiEvent(addInstum, 0));
+      MidiMessage addInstrum = new ShortMessage(ShortMessage.PROGRAM_CHANGE, channel, instrum, 0);
+      if (tr.remove(new MidiEvent(addInstrum, 0))) {
+        tr.add(new MidiEvent(addInstrum, 0));
       }
       tr.add(new MidiEvent(startMsg, start));
       tr.add(new MidiEvent(stopMsg, end));

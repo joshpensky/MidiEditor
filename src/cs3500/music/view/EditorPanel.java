@@ -1,9 +1,14 @@
 package cs3500.music.view;
+
 import cs3500.music.model.EditorOperations;
 import cs3500.music.util.MidiConversion;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JViewport;
+
+import java.awt.Dimension;
+import java.awt.Color;
+import java.awt.Graphics;
+
 import java.util.ArrayList;
 import java.util.List;
 

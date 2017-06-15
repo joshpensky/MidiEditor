@@ -1,14 +1,19 @@
 package cs3500.music.view;
+
 import cs3500.music.model.josh.Pitch;
 import cs3500.music.util.MidiConversion;
+
+import javax.swing.JPanel;
 
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Color;
 
-import java.util.*;
-
-import javax.swing.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * A dummy view that simply draws a string
@@ -29,7 +34,7 @@ public class PianoPanel extends JPanel {
         this.numKeys += 1;
       }
     }
-    this.setPreferredSize(new Dimension(width, KEY_HEIGHT + 50));
+    this.setPreferredSize(new Dimension(width, KEY_HEIGHT + 30));
   }
 
   private int getStartPos() {

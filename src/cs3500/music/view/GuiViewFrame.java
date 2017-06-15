@@ -2,15 +2,15 @@ package cs3500.music.view;
 
 import cs3500.music.model.EditorOperations;
 
-import java.awt.*;
-import java.awt.event.MouseListener; // Possibly of interest for handling mouse events
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
-import javax.swing.*;
+import java.awt.Dimension;
 
 /**
  * A skeleton Frame (i.e., a window) in Swing
  */
-public class GuiViewFrame extends javax.swing.JFrame implements ViewInterface {
+public class GuiViewFrame extends JFrame implements ViewInterface {
   private static final int WIDTH = 1100;
 
   private final JPanel container;
@@ -25,17 +25,13 @@ public class GuiViewFrame extends javax.swing.JFrame implements ViewInterface {
     this.getContentPane().add(container);
     this.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
     this.pack();
+    this.setPreferredSize(new Dimension(WIDTH, this.container.getHeight()));
   }
 
   @Override
   public void initialize(){
     this.setVisible(true);
     this.setResizable(false);
-  }
-
-  @Override
-  public Dimension getPreferredSize(){
-    return new Dimension(WIDTH, 750);
   }
 
   protected EditorOperations getModel() {

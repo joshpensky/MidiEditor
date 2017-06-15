@@ -2,9 +2,11 @@ package cs3500.music.view;
 
 import cs3500.music.model.EditorOperations;
 
-import javax.swing.*;
-import java.util.List;
-import java.awt.*;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
