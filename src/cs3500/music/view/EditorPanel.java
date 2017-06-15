@@ -34,19 +34,36 @@ public class EditorPanel extends JViewport {
     g.setColor(Color.red);
     g.drawRect(0, 0, getWidth()+ 300, getHeight());
 
-    this.notes = getTemp();
+
+
+    this.notes = this.model.getNotes();
+    int highest = this.getHighestPitch(this.notes);
+    int lowest = getLowestPitch(this.notes);
+
+    System.out.println(highest + "   " + lowest);
     pieceLength = this.notes.size();
-    g.setColor(Color.black);
+
     String temp_note_name = "";
     this.pitchLineHeight = getPitchHeight(this.notes.size());
 
-    for (int i = 0; i < notes.size(); i++) {
+    this.addAllNotes(g, highest);
+    this.constructGrid(g, highest, lowest, temp_note_name, pieceLength);
 
-      temp_note_name = this.getNoteName(this.notes.get(i));
-      g.drawString(temp_note_name, 1, (i * pitchLineHeight) + (int) (.5 * pitchLineHeight) + startHeight);
+
+
+  }
+
+  private void constructGrid(Graphics g, int highest, int lowest, String temp_note_name,
+                             int pieceLength) {
+    g.setColor(Color.black);
+    for (int i = highest; i >= lowest; i--) {
+      temp_note_name = this.getNoteName(i);
+      g.drawString(temp_note_name, 1, ((highest - i) * pitchLineHeight) + (int)
+          (.5 * pitchLineHeight) + startHeight);
     }
 
-    g.drawRect(startWidth, startHeight, pieceLength  * noteSize, (this.notes.size() * pitchLineHeight)-1);
+    g.drawRect(startWidth, startHeight, pieceLength  * noteSize,
+        (this.notes.size() * pitchLineHeight)-1);
 
     for (int i = 0; i < pieceLength; i++) {
       if (i % 4 == 0) {
@@ -57,22 +74,16 @@ public class EditorPanel extends JViewport {
     }
 
     for (int i = 0; i < this.notes.size(); i++) {
-      g.drawLine(startWidth, (i * pitchLineHeight) +  startHeight, (pieceLength * noteSize) + startWidth,
+      g.drawLine(startWidth, (i * pitchLineHeight) +  startHeight,
+          (pieceLength * noteSize) + startWidth,
           (i * pitchLineHeight) +  startHeight);
     }
-
-
-
-
-
-
   }
+  private String getNoteName(int note) {
+    String pitch = MidiConversion.getPitch(note).toString();
+    String octave = Integer.toString(MidiConversion.getOctave(note));
 
-  private String getNoteName(Integer[] note) {
-    String pitch = MidiConversion.getPitch(note[4]).toString();
-    String octave = Integer.toString(MidiConversion.getOctave(note[4]));
-
-    return pitch+octave;
+    return pitch + octave;
   }
 
   /*@Override
@@ -89,7 +100,7 @@ public class EditorPanel extends JViewport {
     a[2] = 1;
     a[3] = 64;
     a[4] = 72;
-    for (int i = 0; i <50; i++) {
+    for (int i = 0; i <5; i++) {
       temp.add(a.clone());
 
     }
@@ -97,7 +108,7 @@ public class EditorPanel extends JViewport {
     for (Integer[] c : temp) {
       c[0] = (int)(Math.random() * 10);
       c[1] = (int)(Math.random() * 3) + c[0];
-      c[4] = (int)(Math.random() *127 + 1);
+      c[4] = (int)(Math.random() * 2 )+ 50;
     }
     return temp;
   }
@@ -108,5 +119,49 @@ public class EditorPanel extends JViewport {
     } else {
       return  getHeight() / this.notes.size();
     }
+  }
+
+
+  private int getLowestPitch(List<Integer[]> loi) {
+    int temp = 128;
+    for (Integer[] i : loi) {
+      if (i[3] < temp) {
+        temp = i[3];
+      }
+    }
+    return temp;
+  }
+
+  private int getHighestPitch(List<Integer[]> loi) {
+    int temp = 0;
+    for (Integer[] i : loi) {
+      if (i[3] > temp) {
+        temp = i[3];
+      }
+    }
+    return temp;
+  }
+
+
+  private void addAllNotes(Graphics g, int highNote) {
+    Integer[] temp;
+    for (int i = 0; i < this.notes.size(); i++) {
+      temp = this.notes.get(i);
+      g.setColor(Color.green);
+      g.fillRect(startWidth + (temp[0] + 1) * noteSize,
+          startHeight + (highNote - temp[3]) * pitchLineHeight,
+          (temp[1] - temp[0]) * noteSize, pitchLineHeight);
+      g.setColor(Color.BLACK);
+
+      g.fillRect(startWidth + (temp[0] * noteSize),
+          startHeight + (highNote - temp[3]) * pitchLineHeight, noteSize, pitchLineHeight);
+
+    }
+
+
+//    for (Integer[] i : this.notes) {
+//      g.setColor(Color.black);
+//      g.fillRect(i[0]);
+//    }
   }
 }
