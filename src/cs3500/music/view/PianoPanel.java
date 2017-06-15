@@ -46,7 +46,7 @@ public class PianoPanel extends JPanel {
     // and methods on it that may be useful
     int position = getStartPos();
     for (int i = 0; i < 10; i++) {
-      position = drawOctave(g, position, this.notes.getOrDefault(i, null));
+      position = drawOctave(g, position, this.notes.getOrDefault(i, new ArrayList<>()));
     }
   }
 
@@ -54,7 +54,7 @@ public class PianoPanel extends JPanel {
     int position = startPos;
     for (Pitch p : Pitch.values()) {
       if (!p.isSharp()) {
-        if (highlighted != null && highlighted.contains(p)) {
+        if (highlighted.contains(p)) {
           g.setColor(Color.yellow);
         } else {
           g.setColor(Color.white);
@@ -70,7 +70,7 @@ public class PianoPanel extends JPanel {
     position = startPos;
     for (Pitch p : Pitch.values()) {
       if (p.isSharp()) {
-        if (highlighted != null && highlighted.contains(p)) {
+        if (highlighted.contains(p)) {
           g.setColor(Color.yellow);
         } else {
           g.setColor(Color.black);
