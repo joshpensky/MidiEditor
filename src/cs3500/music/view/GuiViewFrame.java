@@ -12,7 +12,7 @@ import java.awt.Dimension;
  * editor and piano view of the currently opened piece in the model.
  */
 public class GuiViewFrame extends JFrame implements MusicEditorView {
-  private static final int WIDTH = 1200;
+  private static final int WIDTH = 1100;
 
   private final JPanel container;
   private final MusicEditorOperations model;

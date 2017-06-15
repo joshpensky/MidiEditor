@@ -49,7 +49,7 @@ public class MidiView implements MusicEditorView {
       int instrum = note[2];
       int pitch = note[3];
       int volume = note[4];
-      int channel = instrum / 8;
+      int channel = instrum - 1;// / 8;
       MidiMessage startMsg = new ShortMessage(ShortMessage.NOTE_ON, channel, pitch, volume);
       MidiMessage stopMsg = new ShortMessage(ShortMessage.NOTE_OFF, channel, pitch, volume);
       MidiMessage addInstrum = new ShortMessage(ShortMessage.PROGRAM_CHANGE, channel, instrum, 0);

@@ -9,7 +9,6 @@ import java.awt.Dimension;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -154,27 +153,6 @@ public class EditorPanel extends JViewport {
     g.setColor(Color.white);
     g.fillOval(START_WIDTH + (this.cursorPosition * CELL_WIDTH) - (headCutDiameter / 2) - offsetX,
       START_HEIGHT - (headCutDiameter / 2), headCutDiameter, headCutDiameter);
-  }
-
-  private List<Integer[]> getTemp() {
-    List<Integer[]> temp = new ArrayList<>();
-    Integer[] a = new Integer[5];
-    a[0] = 0;
-    a[1] = 2;
-    a[2] = 1;
-    a[3] = 64;
-    a[4] = 72;
-    for (int i = 0; i <5; i++) {
-      temp.add(a.clone());
-
-    }
-
-    for (Integer[] c : temp) {
-      c[0] = (int)(Math.random() * 10);
-      c[1] = (int)(Math.random() * 3) + c[0];
-      c[4] = (int)(Math.random() * 2 )+ 50;
-    }
-    return temp;
   }
 
   private int getPitchHeight(int height, int length) {
