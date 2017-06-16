@@ -115,28 +115,6 @@ public interface MusicEditorOperations {
    */
   void setTempo(int tempo) throws IllegalStateException, IllegalArgumentException;
 
-//  /**
-//   * Overlays a piece of music in memory with the given title over the currently opened one.
-//   * This only should modify the currently opened piece, NOT the overlaying piece.
-//   *
-//   * @param overlayTitle   the title of the piece to be overlaid
-//   * @throws IllegalStateException if there is no currently opened piece
-//   * @throws IllegalArgumentException if the given title is uninitialized, or there is no
-//   *                                  piece in memory with the overlay's title
-//   */
-//  void overlay(String overlayTitle) throws IllegalStateException, IllegalArgumentException;
-//
-//  /**
-//   * Adds a piece of music in memory with the given title, to the end of the currently opened one.
-//   * This only should modify the currently opened piece, NOT the one being added.
-//   *
-//   * @param addTitle   the title of the piece to be added to the end
-//   * @throws IllegalStateException if there is no currently opened piece
-//   * @throws IllegalArgumentException if the given title is uninitialized, or there is no
-//   *                                  piece in memory with the given title
-//   */
-//  void addToEnd(String addTitle) throws IllegalStateException, IllegalArgumentException;
-
   List<Integer[]> getNotes();
 
   List<Integer[]> getNotesAtBeat(int beat);

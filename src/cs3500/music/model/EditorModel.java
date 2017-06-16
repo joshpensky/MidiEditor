@@ -94,30 +94,6 @@ public final class EditorModel implements MusicEditorOperations {
     return this.opened.getTempo();
   }
 
-//  @Override
-//  public void overlay(String overlayTitle) throws IllegalStateException, IllegalArgumentException {
-//    this.openedPieceException();
-//    Piece toOverlay = this.getPieceFromMemory(overlayTitle);
-//    if (toOverlay == null) {
-//      throw new IllegalArgumentException("There is no piece with the given title, \""
-//        + overlayTitle + "\".");
-//    }
-//    this.opened.overlay(new Piece(toOverlay));
-//  }
-//
-//  @Override
-//  public void addToEnd(String title) throws IllegalStateException, IllegalArgumentException {
-//    this.openedPieceException();
-//    Piece toAdd = this.getPieceFromMemory(title);
-//    if (toAdd == null) {
-//      throw new IllegalArgumentException("There is no piece with the given title, \""
-//        + title + "\".");
-//    }
-//    toAdd = new Piece(toAdd);
-//    toAdd.move(this.opened.length());
-//    this.opened.overlay(toAdd);
-//  }
-
   /**
    * Helper to the print, close, addNote, removeNote, editNotePitch, editNotePosition,
    * editNoteDuration, and overlay methods. Checks if there is currently a piece opened, and if

@@ -271,37 +271,6 @@ public final class Piece {
     }
   }
 
-//  /**
-//   * Overlays the given piece on this one, creating different references than the given piece.
-//   *
-//   * @param other      the piece to be overlaid on top
-//   * @throws IllegalArgumentException if the given piece is uninitialized
-//   */
-//  void overlay(Piece other) throws IllegalArgumentException {
-//    if (other == null) {
-//      throw new IllegalArgumentException("Cannot merge with uninitialized piece.");
-//    }
-//    for (Integer i : this.octaves.keySet()) {
-//      this.octaves.get(i).overlay(new Octave(other.octaves.get(i)));
-//    }
-//  }
-//
-//  /**
-//   * Moves all octaves in this piece a given distance, either positive or negative. If the
-//   * distance is 0, it does not move anything.
-//   *
-//   * @param distance   the distance (measured in beats) to move all notes in the octave
-//   * @throws IllegalArgumentException if moving a note the given distance results in a negative
-//   *                                  position
-//   */
-//  protected void move(int distance) {
-//    if (distance != 0) {
-//      for (Integer i : this.octaves.keySet()) {
-//        this.octaves.get(i).move(distance);
-//      }
-//    }
-//  }
-
   protected int getTempo() {
     return this.tempo;
   }

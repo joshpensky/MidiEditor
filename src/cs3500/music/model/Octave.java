@@ -312,52 +312,6 @@ public final class Octave {
     pitchList.add(addIndex, note);
   }
 
-//  /**
-//   * Creates copies of all of the notes from the given octave and adds them to this octave if a
-//   * note does not already exist at the same position.
-//   *
-//   * @param other   the octave to be overlaid
-//   * @throws IllegalArgumentException if given octave is uninitialized
-//   */
-//  protected void overlay(Octave other) throws IllegalArgumentException {
-//    if (other == null) {
-//      throw new IllegalArgumentException("Given octave is uninitialized.");
-//    }
-//    for (Pitch p : this.pitches.keySet()) {
-//      for (Note n : other.pitches.get(p)) {
-//        try {
-//          this.addNoteInOrder(p, new Note(n));
-//        } catch (IllegalArgumentException e) {
-//          // Note already exists at same position in this octave, do not add it to overlay
-//        }
-//      }
-//    }
-//  }
-//
-//  /**
-//   * Moves all notes in this octave a given distance, either positive or negative. If the
-//   * distance is 0, it does not move anything.
-//   *
-//   * @param distance   the distance (measured in beats) to move all notes in the octave
-//   * @throws IllegalArgumentException if moving a note the given distance results in a negative
-//   *                                  position
-//   */
-//  protected void move(int distance) {
-//    if (distance != 0) {
-//      for (Pitch p : this.pitches.keySet()) {
-//        List<Note> pitchList;
-//        if (distance < 0) {
-//          pitchList = this.pitches.get(p);
-//        } else {
-//          pitchList = Utils.reverse(this.pitches.get(p));
-//        }
-//        for (Note n : pitchList) {
-//          n.setStartPos(n.getStartPos() + distance);
-//        }
-//      }
-//    }
-//  }
-
   protected List<Integer[]> getNotes(int octave) {
     List<Integer[]> notes = new ArrayList<>();
     for (Pitch p : this.pitches.keySet()) {

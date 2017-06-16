@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Created by josh_jpeg on 6/14/17.
  */
-public class AddTest {
+public class MidiConversionTest {
   MusicEditorOperations op = new EditorModel();
 
   @Test
