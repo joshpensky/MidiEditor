@@ -1,10 +1,9 @@
 package cs3500.music.tests;
 
 import cs3500.music.model.Pitch;
-import org.testng.annotations.Test;
+import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.testng.AssertJUnit.assertEquals;
 
 /**
  * Tests for the {@link Pitch} enumeration.
