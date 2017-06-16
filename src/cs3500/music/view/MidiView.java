@@ -37,6 +37,11 @@ public class MidiView implements MusicEditorView {
     });
     this.sequencer.start();
     this.sequencer.setTempoInMPQ(tempo);
+    /*while (this.sequencer.isRunning()) {
+      if (this.sequencer.getTickPosition() == 1) {
+        this.sequencer.close();
+      }
+    }*/
   }
 
   private Sequence createSequence(int tempo, List<Integer[]> notes) throws
@@ -49,13 +54,10 @@ public class MidiView implements MusicEditorView {
       int instrum = note[2];
       int pitch = note[3];
       int volume = note[4];
-      int channel = instrum - 1;// / 8;
-      MidiMessage startMsg = new ShortMessage(ShortMessage.NOTE_ON, channel, pitch, volume);
-      MidiMessage stopMsg = new ShortMessage(ShortMessage.NOTE_OFF, channel, pitch, volume);
-      MidiMessage addInstrum = new ShortMessage(ShortMessage.PROGRAM_CHANGE, channel, instrum, 0);
-      if (tr.remove(new MidiEvent(addInstrum, 0))) {
-        tr.add(new MidiEvent(addInstrum, 0));
-      }
+      MidiMessage startMsg = new ShortMessage(ShortMessage.NOTE_ON, 0, pitch, volume);
+      MidiMessage stopMsg = new ShortMessage(ShortMessage.NOTE_OFF, 0, pitch, volume);
+      MidiMessage addInstrum = new ShortMessage(ShortMessage.PROGRAM_CHANGE, 0, instrum, 0);
+      tr.add(new MidiEvent(addInstrum, start));
       tr.add(new MidiEvent(startMsg, start));
       tr.add(new MidiEvent(stopMsg, end));
     }
