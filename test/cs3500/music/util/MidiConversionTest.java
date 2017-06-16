@@ -133,4 +133,5 @@ public class MidiConversionTest {
         assertEquals(mc.getOctave(pitch), 4);
         assertEquals(mc.getMidiPitch(mc.getOctave(pitch), mc.getPitch(pitch)), pitch);
     }
- }
+
+}
