@@ -48,6 +48,11 @@ public class MidiConversion {
     if (end < start) {
         throw new IllegalArgumentException("End cannot be before start.");
     }
+
+    if (end < 0 || start < 0) {
+      throw new IllegalArgumentException("Cannot have negative start or end points.");
+    }
+
     return (end - start) + 1;
   }
 

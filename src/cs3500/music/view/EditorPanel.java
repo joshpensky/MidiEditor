@@ -99,7 +99,7 @@ public class EditorPanel extends JViewport {
   private void constructGrid(Graphics g, int highest, int lowest, int numRows, int offsetX) {
     // Measure lines (vertical)
     for (int i = 0; i <= this.pieceLength; i++) {
-      if (i % 4 == 0) {
+      if (i % 4 == 0 || i == pieceLength) {
         g.setColor(COLOR_LINES_DARK);
         g.drawString(Integer.toString(i), START_WIDTH + (i * CELL_WIDTH) - offsetX,
             START_HEIGHT - 10);
