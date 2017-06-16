@@ -8,14 +8,14 @@ import java.util.List;
 /**
  * Represents the model for a Midi Editor and an implementation of the MusicEditorOperations interface.
  */
-public class EditorModel implements MusicEditorOperations {
+public final class EditorModel implements MusicEditorOperations {
   private List<Piece> pieces;
   private Piece opened;
 
   /**
    * Creates a new {@code EditorModel} with no pieces in memory.
    */
-  public EditorModel() {
+  protected EditorModel() {
     this.pieces = new ArrayList<>();
     this.opened = null;
   }

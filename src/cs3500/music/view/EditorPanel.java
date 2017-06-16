@@ -135,10 +135,8 @@ public class EditorPanel extends JViewport {
   }
 
   private String getNoteName(int note) {
-    String pitch = MidiConversion.getPitch(note).toString();
-    String octave = Integer.toString(MidiConversion.getOctave(note));
-
-    return pitch + octave;
+    return MidiConversion.getPitch(note).toString()
+        + Integer.toString(MidiConversion.getOctave(note));
   }
 
   private void drawCursor(Graphics g, int numRows, int offsetX) {
@@ -152,7 +150,7 @@ public class EditorPanel extends JViewport {
         START_HEIGHT - (headDiameter / 2), headDiameter, headDiameter);
     g.setColor(Color.white);
     g.fillOval(START_WIDTH + (this.cursorPosition * CELL_WIDTH) - (headCutDiameter / 2) - offsetX,
-      START_HEIGHT - (headCutDiameter / 2), headCutDiameter, headCutDiameter);
+        START_HEIGHT - (headCutDiameter / 2), headCutDiameter, headCutDiameter);
   }
 
   private int getPitchHeight(int height, int length) {
@@ -166,7 +164,7 @@ public class EditorPanel extends JViewport {
   private int getLowestPitch() {
     int low = 128;
     for (Integer[] note : this.notes) {
-      low = Math.min(low, note[3]);
+      low = Math.min(low, note[MidiConversion.NOTE_PITCH]);
     }
     return low;
   }
@@ -174,20 +172,24 @@ public class EditorPanel extends JViewport {
   private int getHighestPitch() {
     int high = 0;
     for (Integer[] note : this.notes) {
-      high = Math.max(high, note[3]);
+      high = Math.max(high, note[MidiConversion.NOTE_PITCH]);
     }
     return high;
   }
 
   private void addAllNotes(Graphics g, int highNote, int offsetX) {
     for (Integer[] note : this.notes) {
+      int start = note[MidiConversion.NOTE_START];
+      int end = note[MidiConversion.NOTE_END];
+      int pitch = note[MidiConversion.NOTE_PITCH];
       g.setColor(COLOR_NOTE_SUSTAIN);
-      g.fillRect(START_WIDTH + ((note[0] + 1) * CELL_WIDTH) - offsetX,
-          START_HEIGHT + (highNote - note[3]) * this.cellHeight,
-          (note[1] - note[0] - 1) * CELL_WIDTH, this.cellHeight);
+      g.fillRect(START_WIDTH + ((start + 1) * CELL_WIDTH) - offsetX,
+          START_HEIGHT + (highNote - pitch) * this.cellHeight,
+          (end - start - 1) * CELL_WIDTH, this.cellHeight);
       g.setColor(COLOR_NOTE_ONSET);
-      g.fillRect(START_WIDTH + (note[0] * CELL_WIDTH) - offsetX,
-          START_HEIGHT + (highNote - note[3]) * this.cellHeight, CELL_WIDTH, this.cellHeight);
+      g.fillRect(START_WIDTH + (start * CELL_WIDTH) - offsetX,
+          START_HEIGHT + (highNote - pitch) * this.cellHeight,
+          CELL_WIDTH, this.cellHeight);
     }
   }
 }

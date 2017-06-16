@@ -26,12 +26,12 @@ public class PianoPanel extends JPanel {
   private static final int KEY_WIDTH = 15;
   private static final int KEY_HEIGHT = 200;
 
-  private Map<Integer, List<Pitch>> notes;
+  private Map<Integer, List<Pitch>> highlights;
   private int numOctaves;
   private int numKeys;
 
   protected PianoPanel(List<Integer[]> notes, int width) {
-    updateNotes(notes);
+    this.updateHighlights(notes);
     this.numOctaves = 10;
     this.numKeys = 0;
     for (Pitch p : Pitch.values()) {
@@ -42,12 +42,6 @@ public class PianoPanel extends JPanel {
     this.setPreferredSize(new Dimension(width, KEY_HEIGHT + 30));
   }
 
-  private int getStartPos() {
-    int windowWidth = getWidth();
-    int pianoWidth = numOctaves * numKeys * KEY_WIDTH;
-    return (windowWidth - pianoWidth) / 2;
-  }
-
   @Override
   protected void paintComponent(Graphics g){
     // Handle the default painting
@@ -56,8 +50,14 @@ public class PianoPanel extends JPanel {
     // and methods on it that may be useful
     int position = getStartPos();
     for (int i = 0; i < 10; i++) {
-      position = drawOctave(g, position, this.notes.getOrDefault(i, new ArrayList<>()));
+      position = drawOctave(g, position, this.highlights.getOrDefault(i, new ArrayList<>()));
     }
+  }
+
+  private int getStartPos() {
+    int windowWidth = getWidth();
+    int pianoWidth = numOctaves * numKeys * KEY_WIDTH;
+    return (windowWidth - pianoWidth) / 2;
   }
 
   private int drawOctave(Graphics g, int startPos, List<Pitch> highlighted) {
@@ -95,15 +95,15 @@ public class PianoPanel extends JPanel {
     return position;
   }
 
-  protected void updateNotes(List<Integer[]> notes) {
-    this.notes = new TreeMap<>();
+  protected void updateHighlights(List<Integer[]> notes) {
+    this.highlights = new TreeMap<>();
     for (Integer[] note : notes) {
-      int octave = MidiConversion.getOctave(note[3]);
-      Pitch pitch = MidiConversion.getPitch(note[3]);
-      if (this.notes.containsKey(octave)) {
-        this.notes.get(octave).add(pitch);
+      int octave = MidiConversion.getOctave(note[MidiConversion.NOTE_PITCH]);
+      Pitch pitch = MidiConversion.getPitch(note[MidiConversion.NOTE_PITCH]);
+      if (this.highlights.containsKey(octave)) {
+        this.highlights.get(octave).add(pitch);
       } else {
-        this.notes.put(octave, new ArrayList<>(Arrays.asList(pitch)));
+        this.highlights.put(octave, new ArrayList<>(Arrays.asList(pitch)));
       }
     }
   }

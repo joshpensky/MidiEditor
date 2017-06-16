@@ -1,6 +1,7 @@
 package cs3500.music.view;
 
 import cs3500.music.model.MusicEditorOperations;
+import cs3500.music.util.MidiConversion;
 
 import javax.sound.midi.*;
 
@@ -13,15 +14,15 @@ public class MidiView implements MusicEditorView {
   MusicEditorOperations model;
   private final Sequencer sequencer;
 
-  public MidiView(MusicEditorOperations model) throws MidiUnavailableException {
+  protected MidiView(MusicEditorOperations model) throws MidiUnavailableException {
     this.model = model;
     this.sequencer = MidiSystem.getSequencer();
     this.sequencer.open();
   }
 
-  public void playNote(int tempo, List<Integer[]> notes, int length) throws
-    InvalidMidiDataException {
-    this.sequencer.setSequence(createSequence(tempo, notes));
+  protected void playNote(int tempo, List<Integer[]> notes, int length)
+      throws InvalidMidiDataException {
+    this.sequencer.setSequence(createSequence(notes));
     this.sequencer.addMetaEventListener(new MetaEventListener() {
       @Override
       public void meta(MetaMessage meta) {
@@ -37,25 +38,27 @@ public class MidiView implements MusicEditorView {
     });
     this.sequencer.start();
     this.sequencer.setTempoInMPQ(tempo);
+    /*while (this.sequencer.isRunning()) {
+      if (this.sequencer.getTickPosition() == 1) {
+        this.sequencer.close();
+      }
+    }*/
   }
 
-  private Sequence createSequence(int tempo, List<Integer[]> notes) throws
-    InvalidMidiDataException {
+  private Sequence createSequence(List<Integer[]> notes)
+      throws InvalidMidiDataException {
     Sequence sequence = new Sequence(Sequence.PPQ, 1);
     Track tr = sequence.createTrack();
     for (Integer[] note : notes) {
-      int start = note[0];
-      int end = note[1];
-      int instrum = note[2];
-      int pitch = note[3];
-      int volume = note[4];
-      int channel = instrum - 1;// / 8;
-      MidiMessage startMsg = new ShortMessage(ShortMessage.NOTE_ON, channel, pitch, volume);
-      MidiMessage stopMsg = new ShortMessage(ShortMessage.NOTE_OFF, channel, pitch, volume);
-      MidiMessage addInstrum = new ShortMessage(ShortMessage.PROGRAM_CHANGE, channel, instrum, 0);
-      if (tr.remove(new MidiEvent(addInstrum, 0))) {
-        tr.add(new MidiEvent(addInstrum, 0));
-      }
+      int start = note[MidiConversion.NOTE_START];
+      int end = note[MidiConversion.NOTE_END];
+      int instrum = note[MidiConversion.NOTE_INSTRUMENT];
+      int pitch = note[MidiConversion.NOTE_PITCH];
+      int volume = note[MidiConversion.NOTE_VOLUME];
+      MidiMessage startMsg = new ShortMessage(ShortMessage.NOTE_ON, 0, pitch, volume);
+      MidiMessage stopMsg = new ShortMessage(ShortMessage.NOTE_OFF, 0, pitch, volume);
+      MidiMessage addInstrum = new ShortMessage(ShortMessage.PROGRAM_CHANGE, 0, instrum, 0);
+      tr.add(new MidiEvent(addInstrum, start));
       tr.add(new MidiEvent(startMsg, start));
       tr.add(new MidiEvent(stopMsg, end));
     }
