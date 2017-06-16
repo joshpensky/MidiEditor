@@ -38,7 +38,7 @@ public class PianoPanel extends JPanel {
    * @param notes   the notes to be highlighted on the piano
    * @param width   the width of the panel
    * @throws IllegalArgumentException if the given list of notes is or contains an null, or the
-   * given width is negative or zero
+   *                                  given width is negative or zero
    */
   protected PianoPanel(List<Integer[]> notes, int width) throws IllegalArgumentException {
     if (width <= 0) {
@@ -81,12 +81,12 @@ public class PianoPanel extends JPanel {
    * Draws a single octave on a piano, starting at the given position on the x-axis. Highlights
    * any keys in the octave if the respective pitches are in the given list.
    *
-   * @param g             the graphics object to draw on.m
+   * @param g             the graphics object to draw on
    * @param startPos      the starting x-position of the drawing of this octave
    * @param highlighted   the list of pitches to be highlighted in this octave
    * @return the ending x-position of the draw
    * @throws IllegalArgumentException if the given graphics is null, or the given list of pitches
-   * is or contains null
+   *                                  is or contains null
    */
   private int drawOctave(Graphics g, int startPos, List<Pitch> highlighted)
       throws IllegalArgumentException{

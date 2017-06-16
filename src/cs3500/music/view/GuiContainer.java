@@ -16,7 +16,7 @@ import java.awt.event.KeyListener;
  */
 public class GuiContainer extends JPanel {
   private StringBuilder log;
-  private final PianoPanel pianoPanel; // You may want to refine this to a subtype of JPanel
+  private final PianoPanel pianoPanel;
   private final EditorPanel editorPanel;
   private final MusicEditorOperations model;
 
@@ -27,7 +27,7 @@ public class GuiContainer extends JPanel {
    * @param model   the model be represented in the panels held in the container
    * @param width   the preferred width of the container
    * @throws IllegalArgumentException if the given model is uninitialized, or the given width is
-   * negative or zero
+   *                                  negative or zero
    */
   protected GuiContainer(MusicEditorOperations model, int width) throws IllegalArgumentException {
     if (model == null) {

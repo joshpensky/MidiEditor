@@ -56,7 +56,7 @@ public final class EditorModel implements MusicEditorOperations {
 
   @Override
   public void editNotePitch(int start, int instrument, int pitch, int editedPitch)
-    throws IllegalStateException, IllegalArgumentException {
+      throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
     int octave = MidiConversion.getOctave(pitch);
     if (octave != MidiConversion.getOctave(editedPitch)) {
@@ -68,7 +68,7 @@ public final class EditorModel implements MusicEditorOperations {
 
   @Override
   public void editNotePosition(int start, int instrument, int pitch, int editedStart)
-    throws IllegalStateException, IllegalArgumentException {
+      throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
     this.opened.editPosition(MidiConversion.getOctave(pitch), MidiConversion.getPitch(pitch), start,
         editedStart);
@@ -76,7 +76,7 @@ public final class EditorModel implements MusicEditorOperations {
 
   @Override
   public void editNoteDuration(int start, int instrument, int pitch, int editedEnd)
-    throws IllegalStateException, IllegalArgumentException {
+      throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
     this.opened.editDuration(MidiConversion.getOctave(pitch), MidiConversion.getPitch(pitch), start,
         editedEnd);
