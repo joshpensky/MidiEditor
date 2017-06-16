@@ -3,7 +3,7 @@ package cs3500.music.model;
 import cs3500.music.util.MidiConversion;
 import org.junit.Test;
 
-import static org.testng.AssertJUnit.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Will on 6/16/2017.

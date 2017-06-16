@@ -3,7 +3,7 @@ package cs3500.music.util;
 import cs3500.music.model.Pitch;
 import org.junit.Test;
 
-import static junit.framework.TestCase.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 /**
  * Tests for the dopest group this side of the quadrant.
