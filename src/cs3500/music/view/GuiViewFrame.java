@@ -32,7 +32,7 @@ public class GuiViewFrame extends JFrame implements MusicEditorView {
   }
 
   @Override
-  public void initialize(){
+  public void initialize() {
     this.setVisible(true);
     this.setResizable(false);
   }

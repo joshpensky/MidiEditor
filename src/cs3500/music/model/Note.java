@@ -16,12 +16,12 @@ public final class Note {
    * Default constructor.
    * Constructs a new {@code Note} object with the given parameters.
    *
-   * //@param position the starting position of the note in a piece
+   * @param position the starting position of the note in a piece
    * @param duration how long the note lasts (measured in beats)
    * @throws IllegalArgumentException if the duration or position are negative
    */
   protected Note(int startPos, int duration, int instrument, int volume)
-    throws IllegalArgumentException {
+      throws IllegalArgumentException {
     this.setStartPos(startPos);
     this.setDuration(duration);
     this.setInstrument(instrument);
@@ -67,7 +67,7 @@ public final class Note {
   /**
    * Sets the position of the note to the given variable.
    *
-   * //@param position the new position of this note
+   * @param position the new position of this note
    * @throws IllegalArgumentException if the given position is negative
    */
   protected void setStartPos(int startPos) throws IllegalArgumentException {

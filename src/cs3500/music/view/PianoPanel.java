@@ -89,7 +89,7 @@ public class PianoPanel extends JPanel {
    *                                  is or contains null
    */
   private int drawOctave(Graphics g, int startPos, List<Pitch> highlighted)
-      throws IllegalArgumentException{
+      throws IllegalArgumentException {
     if (g == null) {
       throw new IllegalArgumentException("Given graphics is uninitialized.");
     } else if (highlighted == null || highlighted.contains(null)) {

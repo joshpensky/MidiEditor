@@ -35,7 +35,7 @@ public final class MusicEditorModel implements MusicEditorOperations {
 
   @Override
   public void addNote(int start, int end, int instrument, int pitch, int volume)
-    throws IllegalStateException, IllegalArgumentException {
+      throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
     this.opened.addNote(MidiConversion.getOctave(pitch), MidiConversion.getPitch(pitch), start, 
         MidiConversion.getDuration(start, end), instrument, volume);
@@ -43,7 +43,7 @@ public final class MusicEditorModel implements MusicEditorOperations {
 
   @Override
   public void removeNote(int start, int instrument, int pitch)
-    throws IllegalStateException, IllegalArgumentException {
+      throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
     this.opened.removeNote(MidiConversion.getOctave(pitch), MidiConversion.getPitch(pitch), start);
   }

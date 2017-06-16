@@ -1,4 +1,5 @@
 package cs3500.music.model;
+
 /**
  * Represents the different types of pitches of a note.
  */

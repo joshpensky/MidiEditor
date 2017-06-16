@@ -96,7 +96,7 @@ public final class Piece {
         builder.append(Utils.padString("", lineNumPaddingString, Utils.Alignment.RIGHT));
       } else {
         builder.append(Utils.padString(Integer.toString(i - 1), lineNumPaddingString,
-          Utils.Alignment.RIGHT));
+            Utils.Alignment.RIGHT));
       }
       builder.append("  ");
       for (List<String> pitchCol : arr) {

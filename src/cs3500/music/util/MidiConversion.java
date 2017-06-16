@@ -66,11 +66,11 @@ public class MidiConversion {
    * @param end     the place the note ends
    * @return the duration of the note, difference between the start and end.
    * @throws IllegalArgumentException if the given end is less than the start, or the end or
-   * start are negative
+   *                                  start are negative
    */
   public static int getDuration(int start, int end) throws IllegalArgumentException {
     if (end < start) {
-        throw new IllegalArgumentException("End cannot be before start.");
+      throw new IllegalArgumentException("End cannot be before start.");
     } else if (end < 0 || start < 0) {
       throw new IllegalArgumentException("Cannot have negative start or end points.");
     }
@@ -84,7 +84,7 @@ public class MidiConversion {
    * @param pitch    the pitch of the intended note
    * @return the numerical representation for Midi of a pitch/octave combination
    * @throws IllegalArgumentException if the given pitch is uninitialized, or the pitch is not in
-   * the range [1, 10]
+   *                                  the range [1, 10]
    */
   public static int getMidiPitch(int octave, Pitch pitch) throws IllegalArgumentException {
     if (pitch == null) {

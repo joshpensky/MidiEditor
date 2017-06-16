@@ -138,12 +138,12 @@ public class EditorPanel extends JViewport {
       int pitch = note[MidiConversion.NOTE_PITCH];
       g.setColor(COLOR_NOTE_SUSTAIN);
       g.fillRect(START_WIDTH + ((start + 1) * CELL_WIDTH) - offsetX,
-        START_HEIGHT + (this.highPitch - pitch) * this.cellHeight,
-        (end - start - 1) * CELL_WIDTH, this.cellHeight);
+          START_HEIGHT + (this.highPitch - pitch) * this.cellHeight,
+          (end - start - 1) * CELL_WIDTH, this.cellHeight);
       g.setColor(COLOR_NOTE_ONSET);
       g.fillRect(START_WIDTH + (start * CELL_WIDTH) - offsetX,
-        START_HEIGHT + (this.highPitch - pitch) * this.cellHeight,
-        CELL_WIDTH, this.cellHeight);
+          START_HEIGHT + (this.highPitch - pitch) * this.cellHeight,
+          CELL_WIDTH, this.cellHeight);
     }
   }
 
@@ -155,7 +155,7 @@ public class EditorPanel extends JViewport {
    * @param g         the graphics object to draw on
    * @param offsetX   the current x-offset for scrolling of the piece
    */
-  private void drawGrid(Graphics g, int offsetX){
+  private void drawGrid(Graphics g, int offsetX) {
     this.drawMeasureLines(g, offsetX);
     this.drawPitchLines(g, offsetX);
     this.drawPitchNames(g);
@@ -251,8 +251,8 @@ public class EditorPanel extends JViewport {
    */
   private void drawProgress(Graphics g) {
     g.setColor(COLOR_CURSOR);
-    g.fillRect(0, 0, (int) ((this.cursorPosition / (double) this.pieceLength) * this.getWidth()),
-      2);
+    g.fillRect(0, 0,
+        (int) ((this.cursorPosition / (double) this.pieceLength) * this.getWidth()), 2);
   }
 
   /**
@@ -288,13 +288,13 @@ public class EditorPanel extends JViewport {
   private void updateScrollOffset(int cursorChange) {
     if (cursorChange < 0) {
       if (START_WIDTH + (this.cursorPosition * CELL_WIDTH)
-        <= START_WIDTH + ((this.scrollOffset + SCROLL_PADDING) * CELL_WIDTH)) {
+          <= START_WIDTH + ((this.scrollOffset + SCROLL_PADDING) * CELL_WIDTH)) {
         this.scrollOffset = Math.max(0, this.scrollOffset - 1);
         this.reachedEnd = false;
       }
     } else if (cursorChange > 0) {
       if ((START_WIDTH + ((this.cursorPosition + SCROLL_PADDING) * CELL_WIDTH) > getWidth())
-        && !this.reachedEnd) {
+          && !this.reachedEnd) {
         this.scrollOffset += 1;
       }
     }
