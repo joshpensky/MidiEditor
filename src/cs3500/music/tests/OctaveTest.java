@@ -1,4 +1,4 @@
-package cs3500.music.model;
+package cs3500.music.tests;
 
 import cs3500.music.model.Octave;
 
