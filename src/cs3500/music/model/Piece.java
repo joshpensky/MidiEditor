@@ -18,7 +18,7 @@ public final class Piece {
    *
    * @throws IllegalArgumentException if the given title is uninitialized
    */
-  public Piece() throws IllegalArgumentException {
+  protected Piece() throws IllegalArgumentException {
     this.setTempo(0);
     this.octaves = new TreeMap<>();
     for (int i = 1; i <= 10; i++) {
@@ -33,7 +33,7 @@ public final class Piece {
    * @param other      the piece to be copied
    * @throws IllegalArgumentException if the given piece is uninitialized
    */
-  public Piece(Piece other) throws IllegalArgumentException {
+  protected Piece(Piece other) throws IllegalArgumentException {
     if (other == null) {
       throw new IllegalArgumentException("Cannot duplicate uninitialized piece.");
     }
@@ -190,7 +190,7 @@ public final class Piece {
    *
    * @return the length of this piece (measured in beats)
    */
-  int length() {
+  protected int length() {
     int length = 0;
     for (Integer i : this.octaves.keySet()) {
       length = Math.max(length, this.octaves.get(i).length());
@@ -203,9 +203,8 @@ public final class Piece {
    *
    * @throws IllegalArgumentException if the given note is uninitialized
    */
-  public void addNote(int octave, Pitch pitch, int position, int duration, int instrument, int
-    volume)
-      throws IllegalArgumentException {
+  protected void addNote(int octave, Pitch pitch, int position, int duration, int instrument,
+                         int volume) throws IllegalArgumentException {
     checkOctaveException(octave);
     this.octaves.get(octave).addNote(pitch, position, duration, instrument, volume);
   }
@@ -216,7 +215,7 @@ public final class Piece {
    * @throws IllegalArgumentException if the given note is uninitialized, or if the note does not
    *                                  exist in the piece
    */
-  void removeNote(int octave, Pitch pitch, int position) throws IllegalArgumentException {
+  protected void removeNote(int octave, Pitch pitch, int position) throws IllegalArgumentException {
     checkOctaveException(octave);
     this.octaves.get(octave).removeNote(pitch, position);
   }
@@ -229,8 +228,8 @@ public final class Piece {
    * @throws IllegalArgumentException if the given note or pitch are uninitialized, or if the note
    *                                  does not exist in the piece
    */
-  void editPitch(int octave, Pitch pitch, int position, Pitch newPitch)
-    throws IllegalArgumentException {
+  protected void editPitch(int octave, Pitch pitch, int position, Pitch newPitch)
+      throws IllegalArgumentException {
     checkOctaveException(octave);
     this.octaves.get(octave).editPitch(pitch, position, newPitch);
   }
@@ -242,8 +241,8 @@ public final class Piece {
    * @throws IllegalArgumentException if the given note is uninitialized, the position is
    *                                  negative, or if the note does not exist in the piece
    */
-  void editPosition(int octave, Pitch pitch, int position, int newPosition)
-    throws IllegalArgumentException {
+  protected void editPosition(int octave, Pitch pitch, int position, int newPosition)
+      throws IllegalArgumentException {
     checkOctaveException(octave);
     this.octaves.get(octave).editPosition(pitch, position, newPosition);
   }
@@ -254,8 +253,8 @@ public final class Piece {
    * @throws IllegalArgumentException if the given note is uninitialized, the duration is
    *                                  negative, or if the note does not exist in the piece
    */
-  void editDuration(int octave, Pitch pitch, int position, int newDuration)
-    throws IllegalArgumentException {
+  protected void editDuration(int octave, Pitch pitch, int position, int newDuration)
+      throws IllegalArgumentException {
     checkOctaveException(octave);
     this.octaves.get(octave).editDuration(pitch, position, newDuration);
   }
@@ -272,38 +271,38 @@ public final class Piece {
     }
   }
 
-  /**
-   * Overlays the given piece on this one, creating different references than the given piece.
-   *
-   * @param other      the piece to be overlaid on top
-   * @throws IllegalArgumentException if the given piece is uninitialized
-   */
-  void overlay(Piece other) throws IllegalArgumentException {
-    if (other == null) {
-      throw new IllegalArgumentException("Cannot merge with uninitialized piece.");
-    }
-    for (Integer i : this.octaves.keySet()) {
-      this.octaves.get(i).overlay(new Octave(other.octaves.get(i)));
-    }
-  }
+//  /**
+//   * Overlays the given piece on this one, creating different references than the given piece.
+//   *
+//   * @param other      the piece to be overlaid on top
+//   * @throws IllegalArgumentException if the given piece is uninitialized
+//   */
+//  void overlay(Piece other) throws IllegalArgumentException {
+//    if (other == null) {
+//      throw new IllegalArgumentException("Cannot merge with uninitialized piece.");
+//    }
+//    for (Integer i : this.octaves.keySet()) {
+//      this.octaves.get(i).overlay(new Octave(other.octaves.get(i)));
+//    }
+//  }
+//
+//  /**
+//   * Moves all octaves in this piece a given distance, either positive or negative. If the
+//   * distance is 0, it does not move anything.
+//   *
+//   * @param distance   the distance (measured in beats) to move all notes in the octave
+//   * @throws IllegalArgumentException if moving a note the given distance results in a negative
+//   *                                  position
+//   */
+//  protected void move(int distance) {
+//    if (distance != 0) {
+//      for (Integer i : this.octaves.keySet()) {
+//        this.octaves.get(i).move(distance);
+//      }
+//    }
+//  }
 
-  /**
-   * Moves all octaves in this piece a given distance, either positive or negative. If the
-   * distance is 0, it does not move anything.
-   *
-   * @param distance   the distance (measured in beats) to move all notes in the octave
-   * @throws IllegalArgumentException if moving a note the given distance results in a negative
-   *                                  position
-   */
-  void move(int distance) {
-    if (distance != 0) {
-      for (Integer i : this.octaves.keySet()) {
-        this.octaves.get(i).move(distance);
-      }
-    }
-  }
-
-  int getTempo() {
+  protected int getTempo() {
     return this.tempo;
   }
 
@@ -314,7 +313,7 @@ public final class Piece {
     this.tempo = tempo;
   }
 
-  public List<Integer[]> getNotes() {
+  protected List<Integer[]> getNotes() {
     List<List<Integer[]>> allOctaves = new ArrayList<>();
     for (Integer i : this.octaves.keySet()) {
       allOctaves.add(this.octaves.get(i).getNotes(i));
@@ -328,7 +327,7 @@ public final class Piece {
     return allNotes;
   }
 
-  public List<Integer[]> getNotesAtBeat(int beat) {
+  protected List<Integer[]> getNotesAtBeat(int beat) {
     List<List<Integer[]>> allOctaves = new ArrayList<>();
     for (Integer i : this.octaves.keySet()) {
       allOctaves.add(this.octaves.get(i).getNotesAtBeat(i, beat));

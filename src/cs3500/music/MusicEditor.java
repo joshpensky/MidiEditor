@@ -1,7 +1,7 @@
 package cs3500.music;
 
 import cs3500.music.model.MusicEditorOperations;
-import cs3500.music.util.MusicEditorBuilder;
+import cs3500.music.model.MusicEditorBuilder;
 import cs3500.music.view.MusicEditorView;
 import cs3500.music.view.MusicEditorViewFactory;
 import cs3500.music.util.MusicReader;

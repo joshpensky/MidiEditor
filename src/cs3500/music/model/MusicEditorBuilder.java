@@ -1,7 +1,6 @@
-package cs3500.music.util;
+package cs3500.music.model;
 
-import cs3500.music.model.MusicEditorOperations;
-import cs3500.music.model.EditorModel;
+import cs3500.music.util.CompositionBuilder;
 
 /**
  * Represents a builder for an editor model. Uses the {@link MusicEditorOperations#setTempo(int)}

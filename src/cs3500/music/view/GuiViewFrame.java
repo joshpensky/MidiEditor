@@ -20,7 +20,7 @@ public class GuiViewFrame extends JFrame implements MusicEditorView {
   /**
    * Creates new GuiView
    */
-  public GuiViewFrame(MusicEditorOperations model) {
+  protected GuiViewFrame(MusicEditorOperations model) {
     this.model = model;
     this.container = new GuiContainer(this.model, WIDTH);
     this.getContentPane().add(container);

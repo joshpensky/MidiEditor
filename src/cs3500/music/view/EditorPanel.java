@@ -135,10 +135,8 @@ public class EditorPanel extends JViewport {
   }
 
   private String getNoteName(int note) {
-    String pitch = MidiConversion.getPitch(note).toString();
-    String octave = Integer.toString(MidiConversion.getOctave(note));
-
-    return pitch + octave;
+    return MidiConversion.getPitch(note).toString()
+        + Integer.toString(MidiConversion.getOctave(note));
   }
 
   private void drawCursor(Graphics g, int numRows, int offsetX) {
@@ -152,7 +150,7 @@ public class EditorPanel extends JViewport {
         START_HEIGHT - (headDiameter / 2), headDiameter, headDiameter);
     g.setColor(Color.white);
     g.fillOval(START_WIDTH + (this.cursorPosition * CELL_WIDTH) - (headCutDiameter / 2) - offsetX,
-      START_HEIGHT - (headCutDiameter / 2), headCutDiameter, headCutDiameter);
+        START_HEIGHT - (headCutDiameter / 2), headCutDiameter, headCutDiameter);
   }
 
   private int getPitchHeight(int height, int length) {
@@ -183,9 +181,7 @@ public class EditorPanel extends JViewport {
     for (Integer[] note : this.notes) {
       int start = note[MidiConversion.NOTE_START];
       int end = note[MidiConversion.NOTE_END];
-      int instrum = note[MidiConversion.NOTE_INSTRUMENT];
       int pitch = note[MidiConversion.NOTE_PITCH];
-      int volume = note[MidiConversion.NOTE_VOLUME];
       g.setColor(COLOR_NOTE_SUSTAIN);
       g.fillRect(START_WIDTH + ((start + 1) * CELL_WIDTH) - offsetX,
           START_HEIGHT + (highNote - pitch) * this.cellHeight,

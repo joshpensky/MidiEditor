@@ -10,14 +10,14 @@ import java.util.TreeMap;
 /**
  * Represents an octave in a piece.
  */
-final class Octave {
+public final class Octave {
   private Map<Pitch, List<Note>> pitches;
 
   /**
    * Default constructor.
    * Creates a new {@code Octave} object.
    */
-  Octave() {
+  protected Octave() {
     this.pitches = new TreeMap<>();
     for (Pitch p : Pitch.values()) {
       this.pitches.put(p, new ArrayList<>());
@@ -31,7 +31,7 @@ final class Octave {
    * @param other    the octave to be copied
    * @throws IllegalArgumentException if the given octave is uninitialized
    */
-  Octave(Octave other) throws IllegalArgumentException {
+  protected Octave(Octave other) throws IllegalArgumentException {
     if (other == null) {
       throw new IllegalArgumentException("Given octave is uninitialized.");
     }
@@ -131,7 +131,7 @@ final class Octave {
    *
    * @return true if this octave is empty, false otherwise
    */
-  boolean isEmpty() {
+  protected boolean isEmpty() {
     for (List<Note> list : this.pitches.values()) {
       if (list.size() != 0) {
         return false;
@@ -145,7 +145,7 @@ final class Octave {
    *
    * @return the length of this octave
    */
-  int length() {
+  protected int length() {
     if (this.isEmpty()) {
       return 0;
     }
@@ -172,8 +172,8 @@ final class Octave {
    *                                  position are negative, if the duration is zero, or if a note
    *                                  already exists at the given position
    */
-  void addNote(Pitch pitch, int position, int duration, int instrument, int volume) throws
-    IllegalArgumentException {
+  protected void addNote(Pitch pitch, int position, int duration, int instrument, int volume)
+      throws IllegalArgumentException {
     this.checkPitchException(pitch);
     this.addNoteInOrder(pitch, new Note(position, duration, instrument, volume));
   }
@@ -186,7 +186,7 @@ final class Octave {
    * @throws IllegalArgumentException if the given pitch is uninitialized, or if there is no note
    *                                  at the given position
    */
-  void removeNote(Pitch pitch, int position) throws IllegalArgumentException {
+  protected void removeNote(Pitch pitch, int position) throws IllegalArgumentException {
     this.checkPitchException(pitch);
     List<Note> pitchList = this.pitches.get(pitch);
     for (Note n : pitchList) {
@@ -207,7 +207,8 @@ final class Octave {
    * @throws IllegalArgumentException if either of the given pitches are uninitialized, or if
    *                                  there is no note at the given position
    */
-  void editPitch(Pitch pitch, int position, Pitch newPitch) throws IllegalArgumentException {
+  protected void editPitch(Pitch pitch, int position, Pitch newPitch)
+      throws IllegalArgumentException {
     this.checkPitchException(pitch);
     this.checkPitchException(newPitch);
     if (!pitch.equals(newPitch)) {
@@ -233,7 +234,8 @@ final class Octave {
    * @throws IllegalArgumentException if the given pitch is uninitialized, if there is no note at
    *                                  the given position, or if the new position is negative
    */
-  void editPosition(Pitch pitch, int position, int newPosition) throws IllegalArgumentException {
+  protected void editPosition(Pitch pitch, int position, int newPosition)
+      throws IllegalArgumentException {
     this.checkPitchException(pitch);
     if (position != newPosition) {
       List<Note> pitchList = this.pitches.get(pitch);
@@ -259,7 +261,8 @@ final class Octave {
    * @throws IllegalArgumentException if the given pitch is uninitialized, if there is no note at
    *                                  the given position, or if the new duration is negative or zero
    */
-  void editDuration(Pitch pitch, int position, int newDuration) throws IllegalArgumentException {
+  protected void editDuration(Pitch pitch, int position, int newDuration)
+      throws IllegalArgumentException {
     this.checkPitchException(pitch);
     List<Note> pitchList = this.pitches.get(pitch);
     for (Note n : pitchList) {
@@ -309,71 +312,71 @@ final class Octave {
     pitchList.add(addIndex, note);
   }
 
-  /**
-   * Creates copies of all of the notes from the given octave and adds them to this octave if a
-   * note does not already exist at the same position.
-   *
-   * @param other   the octave to be overlaid
-   * @throws IllegalArgumentException if given octave is uninitialized
-   */
-  void overlay(Octave other) throws IllegalArgumentException {
-    if (other == null) {
-      throw new IllegalArgumentException("Given octave is uninitialized.");
-    }
-    for (Pitch p : this.pitches.keySet()) {
-      for (Note n : other.pitches.get(p)) {
-        try {
-          this.addNoteInOrder(p, new Note(n));
-        } catch (IllegalArgumentException e) {
-          // Note already exists at same position in this octave, do not add it to overlay
-        }
-      }
-    }
-  }
-
-  /**
-   * Moves all notes in this octave a given distance, either positive or negative. If the
-   * distance is 0, it does not move anything.
-   *
-   * @param distance   the distance (measured in beats) to move all notes in the octave
-   * @throws IllegalArgumentException if moving a note the given distance results in a negative
-   *                                  position
-   */
-  void move(int distance) {
-    if (distance != 0) {
-      for (Pitch p : this.pitches.keySet()) {
-        List<Note> pitchList;
-        if (distance < 0) {
-          pitchList = this.pitches.get(p);
-        } else {
-          pitchList = Utils.reverse(this.pitches.get(p));
-        }
-        for (Note n : pitchList) {
-          n.setStartPos(n.getStartPos() + distance);
-        }
-      }
-    }
-  }
+//  /**
+//   * Creates copies of all of the notes from the given octave and adds them to this octave if a
+//   * note does not already exist at the same position.
+//   *
+//   * @param other   the octave to be overlaid
+//   * @throws IllegalArgumentException if given octave is uninitialized
+//   */
+//  protected void overlay(Octave other) throws IllegalArgumentException {
+//    if (other == null) {
+//      throw new IllegalArgumentException("Given octave is uninitialized.");
+//    }
+//    for (Pitch p : this.pitches.keySet()) {
+//      for (Note n : other.pitches.get(p)) {
+//        try {
+//          this.addNoteInOrder(p, new Note(n));
+//        } catch (IllegalArgumentException e) {
+//          // Note already exists at same position in this octave, do not add it to overlay
+//        }
+//      }
+//    }
+//  }
+//
+//  /**
+//   * Moves all notes in this octave a given distance, either positive or negative. If the
+//   * distance is 0, it does not move anything.
+//   *
+//   * @param distance   the distance (measured in beats) to move all notes in the octave
+//   * @throws IllegalArgumentException if moving a note the given distance results in a negative
+//   *                                  position
+//   */
+//  protected void move(int distance) {
+//    if (distance != 0) {
+//      for (Pitch p : this.pitches.keySet()) {
+//        List<Note> pitchList;
+//        if (distance < 0) {
+//          pitchList = this.pitches.get(p);
+//        } else {
+//          pitchList = Utils.reverse(this.pitches.get(p));
+//        }
+//        for (Note n : pitchList) {
+//          n.setStartPos(n.getStartPos() + distance);
+//        }
+//      }
+//    }
+//  }
 
   protected List<Integer[]> getNotes(int octave) {
     List<Integer[]> notes = new ArrayList<>();
     for (Pitch p : this.pitches.keySet()) {
       for (Note n : this.pitches.get(p)) {
         Integer[] arr = n.getArray();
-        arr[3] = MidiConversion.getMidiPitch(octave, p);
+        arr[MidiConversion.NOTE_PITCH] = MidiConversion.getMidiPitch(octave, p);
         notes.add(arr);
       }
     }
     return notes;
   }
 
-  public List<Integer[]> getNotesAtBeat(int octave, int beat) {
+  protected List<Integer[]> getNotesAtBeat(int octave, int beat) {
     List<Integer[]> notes = new ArrayList<>();
     for (Pitch p : this.pitches.keySet()) {
       for (Note n : this.pitches.get(p)) {
         if (n.getStartPos() <= beat && n.getEndPos() > beat) {
           Integer[] arr = n.getArray();
-          arr[3] = MidiConversion.getMidiPitch(octave, p);
+          arr[MidiConversion.NOTE_PITCH] = MidiConversion.getMidiPitch(octave, p);
           notes.add(arr);
         }
       }

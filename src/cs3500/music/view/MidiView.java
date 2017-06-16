@@ -14,13 +14,13 @@ public class MidiView implements MusicEditorView {
   MusicEditorOperations model;
   private final Sequencer sequencer;
 
-  public MidiView(MusicEditorOperations model) throws MidiUnavailableException {
+  protected MidiView(MusicEditorOperations model) throws MidiUnavailableException {
     this.model = model;
     this.sequencer = MidiSystem.getSequencer();
     this.sequencer.open();
   }
 
-  public void playNote(int tempo, List<Integer[]> notes, int length)
+  protected void playNote(int tempo, List<Integer[]> notes, int length)
       throws InvalidMidiDataException {
     this.sequencer.setSequence(createSequence(notes));
     this.sequencer.addMetaEventListener(new MetaEventListener() {

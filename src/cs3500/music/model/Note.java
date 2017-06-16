@@ -1,5 +1,7 @@
 package cs3500.music.model;
 
+import cs3500.music.util.MidiConversion;
+
 /**
  * Represents a note in a piece of music.
  */
@@ -22,7 +24,6 @@ public final class Note {
     throws IllegalArgumentException {
     this.setStartPos(startPos);
     this.setDuration(duration);
-    //this.setEndPos(endPos);
     this.setInstrument(instrument);
     this.setVolume(volume);
   }
@@ -40,7 +41,6 @@ public final class Note {
     }
     this.setStartPos(other.startPos);
     this.setDuration(other.duration);
-    //this.setEndPos(other.endPos);
     this.setInstrument(other.instrument);
     this.setVolume(other.volume);
   }
@@ -70,7 +70,7 @@ public final class Note {
    * //@param position the new position of this note
    * @throws IllegalArgumentException if the given position is negative
    */
-  void setStartPos(int startPos) throws IllegalArgumentException {
+  protected void setStartPos(int startPos) throws IllegalArgumentException {
     if (startPos < 0) {
       throw new IllegalArgumentException("Cannot set as negative position.");
     }
@@ -83,14 +83,6 @@ public final class Note {
    * This is used for checking where a note lies in between another note.
    */
   private void setEndPos() {
-    /*if (endPos < 0) {
-      throw new IllegalArgumentException("Cannot set as negative position.");
-    }
-    else if (this.startPos > endPos) {
-      throw new IllegalArgumentException("End position is before starting position.");
-    }
-    this.endPos = endPos;
-    this.setDuration();*/
     this.endPos = (this.startPos + this.duration) - 1;
   }
 
@@ -99,8 +91,7 @@ public final class Note {
    *
    * @throws IllegalArgumentException if the given duration is negative or zero
    */
-  void setDuration(int duration) throws IllegalArgumentException {
-    //this.duration = (this.startPos - this.endPos) + 1;
+  protected void setDuration(int duration) throws IllegalArgumentException {
     if (duration < 0 || duration == 0) {
       throw new IllegalArgumentException("Cannot set negative or zero duration.");
     }
@@ -108,14 +99,14 @@ public final class Note {
     this.setEndPos();
   }
 
-  void setInstrument(int instrument) throws IllegalArgumentException {
+  protected void setInstrument(int instrument) throws IllegalArgumentException {
     if (instrument < 0) {
       throw new IllegalArgumentException("Given instrument does not exist.");
     }
     this.instrument = instrument;
   }
 
-  void setVolume(int volume) throws IllegalArgumentException {
+  protected void setVolume(int volume) throws IllegalArgumentException {
     if (volume < 0 || volume > 127) {
       throw new IllegalArgumentException("Volume must be between 0 and 127 (inclusive).");
     }
@@ -127,7 +118,7 @@ public final class Note {
    *
    * @return the starting position of this note
    */
-  int getStartPos() {
+  protected int getStartPos() {
     return this.startPos;
   }
 
@@ -136,20 +127,20 @@ public final class Note {
    *
    * @return the ending position of this note
    */
-  int getEndPos() {
+  protected int getEndPos() {
     return this.endPos;
   }
 
-  int getInstrument() {
+  protected int getInstrument() {
     return this.instrument;
   }
 
   protected Integer[] getArray() {
     Integer[] arr = new Integer[5];
-    arr[0] = this.startPos;
-    arr[1] = this.endPos;
-    arr[2] = this.instrument;
-    arr[4] = this.volume;
+    arr[MidiConversion.NOTE_START] = this.startPos;
+    arr[MidiConversion.NOTE_END] = this.endPos;
+    arr[MidiConversion.NOTE_INSTRUMENT] = this.instrument;
+    arr[MidiConversion.NOTE_VOLUME] = this.volume;
     return arr;
   }
 }

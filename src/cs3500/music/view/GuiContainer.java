@@ -58,7 +58,7 @@ public class GuiContainer extends JPanel {
   private void updatePosition(KeyEvent e) {
     if (e.getKeyCode() == 39 || e.getKeyCode() == 37) {
       int beat = this.editorPanel.updateCursor(e.getKeyCode() == 39);
-      this.pianoPanel.updateNotes(this.model.getNotesAtBeat(beat));
+      this.pianoPanel.updateHighlights(this.model.getNotesAtBeat(beat));
       repaint();
     }
   }
