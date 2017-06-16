@@ -3,7 +3,8 @@ package cs3500.music.util;
 import cs3500.music.model.Pitch;
 
 /**
- * Created by Will on 6/14/2017.
+ * Utility functions for converting notes into pitches {@Link Pitch} and notes {@Link Note} as well a conversion
+ * functionality for midi software to use.
  */
 public class MidiConversion {
   public static final int NOTE_START = 0;
@@ -14,6 +15,12 @@ public class MidiConversion {
 
   private static final int MIDDLE_C = 60;
 
+  /**
+   * Calculates the pitch based off the given integer.
+   * @param pitch numerical representation of the pitch/octave
+   * @return {@Link Pitch} the corresponding pitch
+   * @throws IllegalArgumentException
+   */
   public static Pitch getPitch(int pitch) throws IllegalArgumentException {
     if (pitch < 0 || pitch > 127) {
       throw new IllegalArgumentException("Given pitch is not in range [0, 127].");
@@ -29,6 +36,12 @@ public class MidiConversion {
     return Pitch.values()[Math.abs(middle - pitch)];
   }
 
+  /**
+   * Calculates the corresponding octave given the int value
+   * @param pitch the numerical representation of the pitch/octave
+   * @return the octave number of that given pitch
+   * @throws IllegalArgumentException
+   */
   public static int getOctave(int pitch) throws IllegalArgumentException {
     if (pitch < 0 || pitch > 127) {
       throw new IllegalArgumentException("Given pitch is not in range [0, 127].");
@@ -44,6 +57,13 @@ public class MidiConversion {
     }
   }
 
+  /**
+   * Gets the duration given a start and end position of a note.
+   * @param start the place the note starts
+   * @param end the place the note ends
+   * @return the duration of the note, difference between the start and end.
+   * @throws IllegalArgumentException
+   */
   public static int getDuration(int start, int end) throws IllegalArgumentException {
     if (end < start) {
         throw new IllegalArgumentException("End cannot be before start.");
@@ -56,6 +76,12 @@ public class MidiConversion {
     return (end - start) + 1;
   }
 
+  /**
+   * Calculates the numerical equivalent of a pitch and octave combination.
+   * @param octave octave of the intended note
+   * @param pitch {@Link Pitch} pitch of the intended note
+   * @return the numerical representation for Midi of a pitch/octave combination
+   */
   public static int getMidiPitch(int octave, Pitch pitch) {
     if (pitch == null) {
       throw new IllegalArgumentException("Given pitch is uninitialized.");
