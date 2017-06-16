@@ -98,8 +98,8 @@ public class PianoPanel extends JPanel {
   protected void updateNotes(List<Integer[]> notes) {
     this.notes = new TreeMap<>();
     for (Integer[] note : notes) {
-      int octave = MidiConversion.getOctave(note[3]);
-      Pitch pitch = MidiConversion.getPitch(note[3]);
+      int octave = MidiConversion.getOctave(note[MidiConversion.NOTE_PITCH]);
+      Pitch pitch = MidiConversion.getPitch(note[MidiConversion.NOTE_PITCH]);
       if (this.notes.containsKey(octave)) {
         this.notes.get(octave).add(pitch);
       } else {

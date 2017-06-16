@@ -6,6 +6,12 @@ import cs3500.music.model.Pitch;
  * Created by Will on 6/14/2017.
  */
 public class MidiConversion {
+  public static final int NOTE_START = 0;
+  public static final int NOTE_END = 1;
+  public static final int NOTE_INSTRUMENT = 2;
+  public static final int NOTE_PITCH = 3;
+  public static final int NOTE_VOLUME = 4;
+
   private static final int MIDDLE_C = 60;
 
   public static Pitch getPitch(int pitch) throws IllegalArgumentException {
