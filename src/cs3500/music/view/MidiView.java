@@ -11,11 +11,13 @@ import java.util.List;
  * A skeleton for MIDI playback
  */
 public class MidiView implements MusicEditorView {
-  MusicEditorOperations model;
+  private StringBuilder log;
+  private MusicEditorOperations model;
   private final Sequencer sequencer;
 
   protected MidiView(MusicEditorOperations model) throws MidiUnavailableException {
     this.model = model;
+    this.log = new StringBuilder();
     this.sequencer = MidiSystem.getSequencer();
     this.sequencer.open();
   }
@@ -73,5 +75,10 @@ public class MidiView implements MusicEditorView {
       System.err.println("whhops, midi sucks: " + e.getMessage());
     }
 
+  }
+
+  @Override
+  public String getLog() {
+    return this.log.toString();
   }
 }

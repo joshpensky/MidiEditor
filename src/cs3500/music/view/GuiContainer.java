@@ -15,16 +15,27 @@ import java.awt.event.KeyListener;
  * editor panel (encapsulated in a scroll pane), as well as the piano panel.
  */
 public class GuiContainer extends JPanel {
+  private StringBuilder log;
   private final PianoPanel pianoPanel; // You may want to refine this to a subtype of JPanel
   private final EditorPanel editorPanel;
   private final MusicEditorOperations model;
 
-  protected GuiContainer(MusicEditorOperations model, int width) {
+  /**
+   * Constructs a new {@code GuiContainer} using the given model. Sets the width of the container
+   * to the given width.
+   *
+   * @param model   the model be represented in the panels held in the container
+   * @param width   the preferred width of the container
+   * @throws IllegalArgumentException if the given model is uninitialized, or the given width is
+   * negative or zero
+   */
+  protected GuiContainer(MusicEditorOperations model, int width) throws IllegalArgumentException {
     if (model == null) {
       throw new IllegalArgumentException("Given model is uninitialized.");
     } else if (width <= 0) {
       throw new IllegalArgumentException("Width cannot be negative or zero.");
     }
+    this.log = new StringBuilder();
     this.model = model;
     this.setLayout(new BorderLayout(0, 0));
     int contHeight = 500;
@@ -43,7 +54,9 @@ public class GuiContainer extends JPanel {
     this.requestFocusInWindow();
     this.addKeyListener(new KeyListener() {
       @Override
-      public void keyTyped(KeyEvent e) {}
+      public void keyTyped(KeyEvent e) {
+        // No actions to be taken on key type
+      }
 
       @Override
       public void keyPressed(KeyEvent e) {
@@ -51,15 +64,35 @@ public class GuiContainer extends JPanel {
       }
 
       @Override
-      public void keyReleased(KeyEvent e) {}
+      public void keyReleased(KeyEvent e) {
+        // No actions to be taken on key release
+      }
     });
   }
 
+  /**
+   * Updates the position of the cursor in the editor panel, as well as the keys highlighted in
+   * the piano panel, based on key press.
+   * Left arrow will move the cursor back one beat, while the right arrow will move the cursor
+   * forward one beat.
+   *
+   * @param e   the key event created from pressing a key on the keyboard
+   */
   private void updatePosition(KeyEvent e) {
     if (e.getKeyCode() == 39 || e.getKeyCode() == 37) {
       int beat = this.editorPanel.updateCursor(e.getKeyCode() == 39);
       this.pianoPanel.updateHighlights(this.model.getNotesAtBeat(beat));
       repaint();
     }
+  }
+
+  /**
+   * Gets the log of all drawing operations that have occurred in this container at the point of
+   * this method being called.
+   *
+   * @return the log of operations as a String
+   */
+  protected String getLog() {
+    return this.log.append(this.editorPanel.getLog()).append(this.pianoPanel.getLog()).toString();
   }
 }

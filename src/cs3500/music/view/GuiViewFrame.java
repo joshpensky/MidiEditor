@@ -3,7 +3,6 @@ package cs3500.music.view;
 import cs3500.music.model.MusicEditorOperations;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 import java.awt.Dimension;
 
@@ -14,11 +13,14 @@ import java.awt.Dimension;
 public class GuiViewFrame extends JFrame implements MusicEditorView {
   private static final int WIDTH = 1100;
 
-  private final JPanel container;
+  private final GuiContainer container;
   private final MusicEditorOperations model;
 
   /**
-   * Creates new GuiView
+   * Constructs a new {@code GuiViewFrame} using the given model to display notes in the
+   * different views contained in the window.
+   *
+   * @param model   the model to be represented in the view
    */
   protected GuiViewFrame(MusicEditorOperations model) {
     this.model = model;
@@ -33,6 +35,11 @@ public class GuiViewFrame extends JFrame implements MusicEditorView {
   public void initialize(){
     this.setVisible(true);
     this.setResizable(false);
+  }
+
+  @Override
+  public String getLog() {
+    return this.container.getLog();
   }
 }
 

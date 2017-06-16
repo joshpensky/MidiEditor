@@ -29,8 +29,21 @@ public class PianoPanel extends JPanel {
   private Map<Integer, List<Pitch>> highlights;
   private int numOctaves;
   private int numKeys;
+  private StringBuilder log;
 
-  protected PianoPanel(List<Integer[]> notes, int width) {
+  /**
+   * Constructs a new {@code PianoPanel} with the given width, and highlighting all of the given
+   * notes on the piano.
+   *
+   * @param notes   the notes to be highlighted on the piano
+   * @param width   the width of the panel
+   * @throws IllegalArgumentException if the given list of notes is or contains an null, or the
+   * given width is negative or zero
+   */
+  protected PianoPanel(List<Integer[]> notes, int width) throws IllegalArgumentException {
+    if (width <= 0) {
+      throw new IllegalArgumentException("Cannot pass negative or zero width.");
+    }
     this.updateHighlights(notes);
     this.numOctaves = 10;
     this.numKeys = 0;
@@ -40,35 +53,52 @@ public class PianoPanel extends JPanel {
       }
     }
     this.setPreferredSize(new Dimension(width, KEY_HEIGHT + 30));
+    this.log = new StringBuilder();
   }
 
   @Override
-  protected void paintComponent(Graphics g){
-    // Handle the default painting
+  protected void paintComponent(Graphics g) {
     super.paintComponent(g);
-    // Look for more documentation about the Graphics class,
-    // and methods on it that may be useful
     int position = getStartPos();
     for (int i = 0; i < 10; i++) {
       position = drawOctave(g, position, this.highlights.getOrDefault(i, new ArrayList<>()));
     }
   }
 
+  /**
+   * Gets the starting position of the piano drawing, so that the drawing of the piano would be
+   * centered in the panel.
+   *
+   * @return the starting position of the piano drawing
+   */
   private int getStartPos() {
     int windowWidth = getWidth();
     int pianoWidth = numOctaves * numKeys * KEY_WIDTH;
     return (windowWidth - pianoWidth) / 2;
   }
 
-  private int drawOctave(Graphics g, int startPos, List<Pitch> highlighted) {
+  /**
+   * Draws a single octave on a piano, starting at the given position on the x-axis. Highlights
+   * any keys in the octave if the respective pitches are in the given list.
+   *
+   * @param g             the graphics object to draw on.m
+   * @param startPos      the starting x-position of the drawing of this octave
+   * @param highlighted   the list of pitches to be highlighted in this octave
+   * @return the ending x-position of the draw
+   * @throws IllegalArgumentException if the given graphics is null, or the given list of pitches
+   * is or contains null
+   */
+  private int drawOctave(Graphics g, int startPos, List<Pitch> highlighted)
+      throws IllegalArgumentException{
+    if (g == null) {
+      throw new IllegalArgumentException("Given graphics is uninitialized.");
+    } else if (highlighted == null || highlighted.contains(null)) {
+      throw new IllegalArgumentException("Given list of pitches is or contains null.");
+    }
     int position = startPos;
     for (Pitch p : Pitch.values()) {
       if (!p.isSharp()) {
-        if (highlighted.contains(p)) {
-          g.setColor(COLOR_KEY_PRESS);
-        } else {
-          g.setColor(Color.white);
-        }
+        g.setColor(this.getKeyColor(false, highlighted.contains(p)));
         g.fillRect(position, 0, KEY_WIDTH, KEY_HEIGHT);
         g.setColor(COLOR_KEY_OUTLINE);
         g.drawRect(position, 0, KEY_WIDTH, KEY_HEIGHT);
@@ -80,11 +110,7 @@ public class PianoPanel extends JPanel {
     position = startPos;
     for (Pitch p : Pitch.values()) {
       if (p.isSharp()) {
-        if (highlighted.contains(p)) {
-          g.setColor(COLOR_KEY_PRESS);
-        } else {
-          g.setColor(Color.black);
-        }
+        g.setColor(this.getKeyColor(true, highlighted.contains(p)));
         g.fillRect(position - ((3 * sharpKeyWidth) / 4), 0, sharpKeyWidth, sharpKeyHeight);
         g.setColor(COLOR_KEY_OUTLINE);
         g.drawRect(position - ((3 * sharpKeyWidth) / 4), 0, sharpKeyWidth, sharpKeyHeight);
@@ -95,7 +121,35 @@ public class PianoPanel extends JPanel {
     return position;
   }
 
-  protected void updateHighlights(List<Integer[]> notes) {
+  /**
+   * Gets the color of a key on a keyboard, depending on whether or not it's a sharp key or that
+   * key is being played.
+   *
+   * @param isSharp       true if the key is sharp (or flat), false otherwise
+   * @param highlighted   true if the key is being played, false otherwise
+   * @return the color of the key
+   */
+  private Color getKeyColor(boolean isSharp, boolean highlighted) {
+    if (highlighted) {
+      return COLOR_KEY_PRESS;
+    } else if (isSharp) {
+      return Color.black;
+    } else {
+      return Color.white;
+    }
+  }
+
+  /**
+   * Updates the piano with the given notes, so that the pitches and octaves of the given notes
+   * are highlighted on the display.
+   *
+   * @param notes   all of the notes to be highlighted on the piano
+   * @throws IllegalArgumentException if the given list of notes is or contains null
+   */
+  protected void updateHighlights(List<Integer[]> notes) throws IllegalArgumentException {
+    if (notes == null || notes.contains(null)) {
+      throw new IllegalArgumentException("Cannot pass uninitialized note or list of notes.");
+    }
     this.highlights = new TreeMap<>();
     for (Integer[] note : notes) {
       int octave = MidiConversion.getOctave(note[MidiConversion.NOTE_PITCH]);
@@ -106,5 +160,14 @@ public class PianoPanel extends JPanel {
         this.highlights.put(octave, new ArrayList<>(Arrays.asList(pitch)));
       }
     }
+  }
+
+  /**
+   * Returns a log of all of the drawing necessary for the piano.
+   *
+   * @return the log of operations as a String
+   */
+  protected String getLog() {
+    return this.log.toString();
   }
 }

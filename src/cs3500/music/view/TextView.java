@@ -17,4 +17,9 @@ public class TextView implements MusicEditorView {
   public void initialize() {
     System.out.println(model.view());
   }
+
+  @Override
+  public String getLog() {
+    return "";
+  }
 }

@@ -40,6 +40,7 @@ public class EditorPanel extends JViewport {
   private int cursorPosition;
   private int offset;
   private boolean reachedEnd = false;
+  private StringBuilder log;
 
   protected EditorPanel(MusicEditorOperations model, int width, int height) {
     this.model = model;
@@ -50,9 +51,10 @@ public class EditorPanel extends JViewport {
     this.pieceLength = this.model.totalPieceLength();
     this.cursorPosition = 0;
     this.offset = 0;
-    this.cellHeight = getPitchHeight(height, this.numRows);
+    this.cellHeight = getCellHeight(height, this.numRows);
     this.setPreferredSize(new Dimension(width,
         START_HEIGHT + (this.numRows * this.cellHeight) + 5));
+    this.log = new StringBuilder();
   }
 
   @Override
@@ -62,9 +64,6 @@ public class EditorPanel extends JViewport {
     this.addAllNotes(g, highPitch, offsetX);
     this.constructGrid(g, highPitch, lowPitch, numRows, offsetX);
     this.drawCursor(g, numRows, offsetX);
-
-    //System.out.println(highPitch + "   " + lowPitch);
-    //System.out.println(this.model.getNotesAtBeat(20000).toString());
   }
 
   protected int updateCursor(boolean forward) {
@@ -98,8 +97,8 @@ public class EditorPanel extends JViewport {
   }
 
   private void constructGrid(Graphics g, int highest, int lowest, int numRows, int offsetX) {
-    // Measure lines
-    for (int i = 0; i <= pieceLength; i++) {
+    // Measure lines (vertical)
+    for (int i = 0; i <= this.pieceLength; i++) {
       if (i % 4 == 0) {
         g.setColor(COLOR_LINES_DARK);
         g.drawString(Integer.toString(i), START_WIDTH + (i * CELL_WIDTH) - offsetX,
@@ -110,7 +109,7 @@ public class EditorPanel extends JViewport {
       }
     }
 
-    // Pitch lines
+    // Pitch lines (horizontal)
     for (int i = 0; i <= numRows; i++) {
       if (i == 0 || i == numRows) {
         g.setColor(COLOR_LINES_DARK);
@@ -129,14 +128,21 @@ public class EditorPanel extends JViewport {
     g.drawLine(START_WIDTH, START_HEIGHT, START_WIDTH, START_HEIGHT + (numRows * this.cellHeight));
     g.setColor(COLOR_TEXT);
     for (int i = highest; i >= lowest; i--) {
-      g.drawString(this.getNoteName(i), 1,
-        (int) ((highest - i + 0.5) * this.cellHeight) + START_HEIGHT);
+      g.drawString(this.getPitchName(i), 1,
+          (int) ((highest - i + 0.5) * this.cellHeight) + START_HEIGHT);
     }
   }
 
-  private String getNoteName(int note) {
-    return MidiConversion.getPitch(note).toString()
-        + Integer.toString(MidiConversion.getOctave(note));
+  /**
+   * Gets the name of the midi pitch [0, 127] as a String. For example, 60 (middle-c) would
+   * return "C4".
+   *
+   * @param midiPitch   the pitch as given to the midi
+   * @return the name of the pitch converted to a string
+   */
+  private String getPitchName(int midiPitch) throws IllegalArgumentException {
+    return MidiConversion.getPitch(midiPitch).toString()
+        + Integer.toString(MidiConversion.getOctave(midiPitch));
   }
 
   private void drawCursor(Graphics g, int numRows, int offsetX) {
@@ -153,12 +159,15 @@ public class EditorPanel extends JViewport {
         START_HEIGHT - (headCutDiameter / 2), headCutDiameter, headCutDiameter);
   }
 
-  private int getPitchHeight(int height, int length) {
-    int cellHeight = (height - START_HEIGHT) / length;
-    if (cellHeight < 20) {
-      return 20;
-    }
-    return cellHeight;
+  /**
+   * Gets the height of all cells.
+   *
+   * @param height    the height of the window
+   * @param numRows   the number of rows in this piece
+   * @return the scaled height of a single cell
+   */
+  private int getCellHeight(int height, int numRows) {
+    return Math.min(20, (height - START_HEIGHT) / numRows);
   }
 
   private int getLowestPitch() {
@@ -191,5 +200,9 @@ public class EditorPanel extends JViewport {
           START_HEIGHT + (highNote - pitch) * this.cellHeight,
           CELL_WIDTH, this.cellHeight);
     }
+  }
+
+  protected String getLog() {
+    return this.log.toString();
   }
 }
