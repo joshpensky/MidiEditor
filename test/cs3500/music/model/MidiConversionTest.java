@@ -1,8 +1,5 @@
 package cs3500.music.model;
 
-import cs3500.music.model.EditorModel;
-import cs3500.music.model.MusicEditorOperations;
-import cs3500.music.model.Pitch;
 import cs3500.music.util.MidiConversion;
 import org.junit.Test;
 
@@ -14,7 +11,7 @@ import static org.junit.Assert.assertEquals;
  * Created by josh_jpeg on 6/14/17.
  */
 public class MidiConversionTest {
-  MusicEditorOperations op = new EditorModel();
+  MusicEditorOperations op = new MusicEditorModel();
 
   @Test
   public void addTest() {

@@ -7,13 +7,9 @@ import java.util.List;
  */
 public interface MusicEditorOperations {
   /**
-   * Creates a new piece of music with the given title, and opens it.
-   *
-   * @param title     the title of the new piece
-   * @throws IllegalArgumentException if the given title is uninitialized, or if a piece already
-   *                                  exists in memory with the given title
+   * Creates a new piece of music and opens it.
    */
-  void create() throws IllegalArgumentException;
+  void create();
 
   /**
    * Returns a String representation of the current state of the currently opened piece, or an
@@ -23,13 +19,6 @@ public interface MusicEditorOperations {
    * @throws IllegalStateException if there is no currently opened piece
    */
   String view() throws IllegalStateException;
-
-  /**
-   * Closes out of the piece currently being worked on.
-   *
-   * @throws IllegalStateException if there is no currently opened piece
-   */
-  void close() throws IllegalStateException;
 
   /**
    * Adds a new note to the currently opened piece in the given octave at the given pitch.
@@ -115,11 +104,62 @@ public interface MusicEditorOperations {
    */
   void setTempo(int tempo) throws IllegalStateException, IllegalArgumentException;
 
-  List<Integer[]> getNotes();
+  /**
+   * Gets the tempo of the currently opened piece.
+   *
+   * @return the tempo of the currently opened piece
+   * @throws IllegalStateException if there is no currently opened piece
+   */
+  int getTempo() throws IllegalStateException;
 
-  List<Integer[]> getNotesAtBeat(int beat);
+  /**
+   * Returns a list of note data for every note in the model. Note data is arranged as follows:
+   * <table>
+   *   <tr>
+   *     <th>INDEX</th>
+   *     <th>REPRESENTATION</th>
+   *   </tr>
+   *   <tr>
+   *     <th>0, or {@code MidiConversion.NOTE_START}</th>
+   *     <th>starting position</th>
+   *   </tr>
+   *   <tr>
+   *     <th>1, or {@code MidiConversion.NOTE_END}</th>
+   *     <th>ending position</th>
+   *   </tr>
+   *   <tr>
+   *     <th>2, or {@code MidiConversion.NOTE_INSTRUMENT}</th>
+   *     <th>instrument</th>
+   *   </tr>
+   *   <tr>
+   *     <th>3, or {@code MidiConversion.NOTE_PITCH}</th>
+   *     <th>pitch</th>
+   *   </tr>
+   *   <tr>
+   *     <th>4, or {@code MidiConversion.NOTE_VOLUME}</th>
+   *     <th>volume</th>
+   *   </tr>
+   * </table>
+   *
+   * @return a list of note data for every note in the currently opened piece
+   * @throws IllegalStateException if there is no currently opened piece
+   */
+  List<Integer[]> getNotes() throws IllegalStateException;
 
-  int totalPieceLength();
+  /**
+   * Returns a list of note data for every note in the model at the given beat. Data is arranged
+   * the same as described in {@link MusicEditorOperations#getNotes()}.
+   *
+   * @return a list of note data for every note in the currently opened piece at the given beat
+   * @throws IllegalStateException if there is no currently opened piece
+   */
+  List<Integer[]> getNotesAtBeat(int beat) throws IllegalStateException;
 
-  int getTempo();
+  /**
+   * Gets the length of the currently opened piece.
+   *
+   * @return the length of the currently opened piece
+   * @throws IllegalStateException if there is no currently opened piece
+   */
+  int getLength() throws IllegalStateException;
 }

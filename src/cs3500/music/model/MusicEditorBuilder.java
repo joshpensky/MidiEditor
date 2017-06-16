@@ -8,10 +8,14 @@ import cs3500.music.util.CompositionBuilder;
  * without needing to touch the model itself.
  */
 public class MusicEditorBuilder implements CompositionBuilder<MusicEditorOperations> {
-  MusicEditorOperations model;
+  private final MusicEditorOperations model;
 
+  /**
+   * Constructs a new {@code MusicEditorBuilder}. Initializes and creates a new piece in a
+   * private model.
+   */
   public MusicEditorBuilder() {
-    this.model = new EditorModel();
+    this.model = new MusicEditorModel();
     this.model.create();
   }
 

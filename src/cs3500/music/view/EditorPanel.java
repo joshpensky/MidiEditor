@@ -31,6 +31,7 @@ public class EditorPanel extends JViewport {
   private int cellHeight = 5;
 
   private final MusicEditorOperations model;
+  private final StringBuilder log;
   private List<Integer[]> notes;
   private int highPitch;
   private int lowPitch;
@@ -39,13 +40,14 @@ public class EditorPanel extends JViewport {
   private int cursorPosition;
   private int scrollOffset;
   private boolean reachedEnd = false;
-  private StringBuilder log;
 
   /**
+   * Constructs a new {@code EditorPanel} using the given model. Sets the width and height of the
+   * panel to the given width and height. Displays the notes that are currently in view.
    *
-   * @param model
-   * @param width
-   * @param height
+   * @param model    the model to be represented in the editor view
+   * @param width    the desired width for the panel
+   * @param height   the desired height for the panel
    * @throws IllegalArgumentException if the given model is uninitialized, or the width or height
    *                                  are negative or zero
    */
@@ -61,10 +63,10 @@ public class EditorPanel extends JViewport {
     this.highPitch = this.getHighestPitch();
     this.lowPitch = this.getLowestPitch();
     this.numRows = highPitch - lowPitch + 1;
-    this.pieceLength = this.model.totalPieceLength();
+    this.pieceLength = this.model.getLength();
     this.cursorPosition = 0;
     this.scrollOffset = 0;
-    this.cellHeight = getCellHeight(height, this.numRows);
+    this.cellHeight = getCellHeight(height);
     this.setPreferredSize(new Dimension(width,
         START_HEIGHT + (this.numRows * this.cellHeight) + 5));
     this.log = new StringBuilder();
@@ -75,17 +77,13 @@ public class EditorPanel extends JViewport {
    * minimum size of 20, or the maximum size of 50.
    *
    * @param height    the height of the window
-   * @param numRows   the number of rows in this piece
    * @return the scaled height of a single cell
-   * @throws IllegalArgumentException if the given number of rows is negative
    */
-  private int getCellHeight(int height, int numRows) throws IllegalArgumentException {
-    if (numRows < 0) {
-      throw new IllegalArgumentException("Cannot have negative amount of rows.");
-    } else if (numRows == 0) {
+  private int getCellHeight(int height) {
+    if (this.numRows == 0) {
       return 20;
     }
-    return Math.max(20, Math.min(50, (height - START_HEIGHT) / numRows));
+    return Math.max(20, Math.min(50, (height - START_HEIGHT) / this.numRows));
   }
 
   /**
@@ -187,10 +185,11 @@ public class EditorPanel extends JViewport {
   }
 
   /**
-   * Helper to the drawGrid method.
+   * Helper to the drawGrid method. Draws the pitch (horizontal) lines that form the rows for
+   * every pitch for note cells to be placed in.
    *
-   * @param g
-   * @param offsetX
+   * @param g         the graphics object to draw on
+   * @param offsetX   the current x-offset for scrolling of the piece
    */
   private void drawPitchLines(Graphics g, int offsetX) {
     for (int i = 0; i <= this.numRows; i++) {
@@ -218,22 +217,9 @@ public class EditorPanel extends JViewport {
     g.drawLine(START_WIDTH, START_HEIGHT, START_WIDTH, START_HEIGHT + (numRows * this.cellHeight));
     g.setColor(COLOR_TEXT);
     for (int i = this.highPitch; i >= this.lowPitch; i--) {
-      g.drawString(this.getPitchName(i), 1,
+      g.drawString(MidiConversion.getPitchName(i), 1,
           (int) ((this.highPitch - i + 0.5) * this.cellHeight) + START_HEIGHT);
     }
-  }
-
-  /**
-   * Helper to the drawPitchNames method. Gets the name of the a pitch [0, 127] as a String. For
-   * example, 60 (middle-c) would return "C4".
-   *
-   * @param midiPitch   the pitch as given to the midi
-   * @return the name of the pitch converted to a string
-   * @throws IllegalArgumentException if the given midi pitch is out of range [0, 127]
-   */
-  private String getPitchName(int midiPitch) throws IllegalArgumentException {
-    return MidiConversion.getPitch(midiPitch).toString()
-      + Integer.toString(MidiConversion.getOctave(midiPitch));
   }
 
   /**

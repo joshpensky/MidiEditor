@@ -7,8 +7,13 @@ import cs3500.music.model.MusicEditorOperations;
  * currently opened piece to the console.
  */
 public class TextView implements MusicEditorView {
-  MusicEditorOperations model;
+  private final MusicEditorOperations model;
 
+  /**
+   * Constructs a new {@code TextView} which represents the given model in the console.
+   *
+   * @param model   the model to be represented in the view
+   */
   protected TextView(MusicEditorOperations model) {
     this.model = model;
   }

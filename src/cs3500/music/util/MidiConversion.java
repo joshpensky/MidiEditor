@@ -73,4 +73,17 @@ public class MidiConversion {
       return (MIDDLE_C - ((4 - octave) * Pitch.values().length)) + pitchIndex;
     }
   }
+
+  /**
+   * Gets the name of the a pitch [0, 127] as a String. For example, 60 (middle-c) would return
+   * "C4".
+   *
+   * @param midiPitch   the pitch as given to the midi
+   * @return the name of the pitch converted to a string
+   * @throws IllegalArgumentException if the given midi pitch is out of range [0, 127]
+   */
+  public static String getPitchName(int midiPitch) throws IllegalArgumentException {
+    return MidiConversion.getPitch(midiPitch).toString()
+      + Integer.toString(MidiConversion.getOctave(midiPitch));
+  }
 }

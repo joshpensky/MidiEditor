@@ -1,15 +1,14 @@
 package cs3500.music.model;
 
-import cs3500.music.model.EditorModel;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import org.junit.Test;
 
 /**
- * Tests for the {@link EditorModel} class.
+ * Tests for the {@link MusicEditorModel} class.
  */
-public class EditorModelTest {
-  MusicEditorOperations model = new EditorModel();
+public class MusicEditorModelTest {
+  MusicEditorOperations model = new MusicEditorModel();
 
   // Tests for the default constructor
   @Test

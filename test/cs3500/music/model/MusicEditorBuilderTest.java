@@ -81,9 +81,9 @@ public class MusicEditorBuilderTest {
     @Test
     public void testAddNote1() {
         init();
-        assertEquals(meb.build().totalPieceLength(), 0);
+        assertEquals(meb.build().getLength(), 0);
         meb.addNote(0, 50, 1, 60, 100);
-        assertEquals(meb.build().totalPieceLength(), 50);
+        assertEquals(meb.build().getLength(), 50);
     }
 
     @Test

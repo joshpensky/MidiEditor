@@ -2,26 +2,26 @@ package cs3500.music.model;
 
 import cs3500.music.util.MidiConversion;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
- * Represents the model for a Midi Editor and an implementation of the MusicEditorOperations interface.
+ * Represents the model for the editor of a Music Editor.
  */
-public final class EditorModel implements MusicEditorOperations {
+public final class MusicEditorModel implements MusicEditorOperations {
   private List<Piece> pieces;
   private Piece opened;
 
   /**
-   * Creates a new {@code EditorModel} with no pieces in memory.
+   * Creates a new {@code MusicEditorModel} with no pieces in memory.
    */
-  protected EditorModel() {
+  protected MusicEditorModel() {
     this.pieces = new ArrayList<>();
     this.opened = null;
   }
 
   @Override
-  public void create() throws IllegalArgumentException {
+  public void create() {
     Piece next = new Piece();
     this.pieces.add(0, next);
     this.opened = next;
@@ -31,12 +31,6 @@ public final class EditorModel implements MusicEditorOperations {
   public String view() {
     this.openedPieceException();
     return this.opened.toString();
-  }
-
-  @Override
-  public void close() throws IllegalStateException {
-    this.openedPieceException();
-    this.opened = null;
   }
 
   @Override
@@ -120,7 +114,7 @@ public final class EditorModel implements MusicEditorOperations {
   }
 
   @Override
-  public int totalPieceLength() {
+  public int getLength() {
     this.openedPieceException();
     return this.opened.length();
   }
