@@ -15,7 +15,7 @@ import java.awt.event.KeyListener;
  * editor panel (encapsulated in a scroll pane), as well as the piano panel.
  */
 public class GuiContainer extends JPanel {
-  private StringBuilder log;
+  private final StringBuilder log;
   private final PianoPanel pianoPanel;
   private final EditorPanel editorPanel;
   private final MusicEditorOperations model;

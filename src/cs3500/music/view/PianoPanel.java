@@ -26,10 +26,10 @@ public class PianoPanel extends JPanel {
   private static final int KEY_WIDTH = 15;
   private static final int KEY_HEIGHT = 200;
 
+  private final StringBuilder log;
   private Map<Integer, List<Pitch>> highlights;
   private int numOctaves;
   private int numKeys;
-  private StringBuilder log;
 
   /**
    * Constructs a new {@code PianoPanel} with the given width, and highlighting all of the given

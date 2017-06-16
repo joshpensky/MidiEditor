@@ -8,45 +8,78 @@ import javax.sound.midi.*;
 import java.util.List;
 
 /**
- * A skeleton for MIDI playback
+ * Represents the MIDI view for a music editor, in which it stores and plays all of the notes of
+ * a model through the system's MIDI.
  */
 public class MidiView implements MusicEditorView {
-  private StringBuilder log;
-  private MusicEditorOperations model;
+  private final StringBuilder log;
+  private final MusicEditorOperations model;
   private final Sequencer sequencer;
 
+  /**
+   * Constructs a new {@code MidiView} using the given model to get notes to play.
+   *
+   * @param model   the model to be represented musically using MIDI
+   * @throws MidiUnavailableException if MIDI is currently unavailable for the system
+   */
   protected MidiView(MusicEditorOperations model) throws MidiUnavailableException {
     this.model = model;
     this.log = new StringBuilder();
     this.sequencer = MidiSystem.getSequencer();
-    this.sequencer.open();
   }
 
-  protected void playNote(int tempo, List<Integer[]> notes, int length)
-      throws InvalidMidiDataException {
+  @Override
+  public void initialize() {
+    try {
+      this.playSequence(this.model.getTempo(), this.model.getNotes(),
+          this.model.getLength());
+    } catch (InvalidMidiDataException e) {
+      this.log.append("Encountered fatal InvalidMidiDataException:\n" + e.getMessage() + "\n");
+    } catch (MidiUnavailableException e) {
+      this.log.append("Encountered fatal MidiUnavailableException:\n" + e.getMessage() + "\n");
+    }
+  }
+
+  @Override
+  public String getLog() {
+    return this.log.toString();
+  }
+
+  /**
+   * Opens the sequencer, then plays the sequence of notes currently in the model at the tempo
+   * specified in the model. Closes the sequencer after all notes have been played.
+   *
+   * @param tempo    the tempo of the piece currently in the model
+   * @param notes    the list of note data of the piece currently from the model
+   * @param length   the length of the piece currently in the model
+   * @throws InvalidMidiDataException if an invalid note or tempo in the model is passed to the MIDI
+   * @throws MidiUnavailableException if MIDI is currently unavailable for the system
+   */
+  private void playSequence(int tempo, List<Integer[]> notes, int length)
+      throws InvalidMidiDataException, MidiUnavailableException {
+    this.sequencer.open();
     this.sequencer.setSequence(createSequence(notes));
-    this.sequencer.addMetaEventListener(new MetaEventListener() {
-      @Override
-      public void meta(MetaMessage meta) {
-        if (meta.getType() == 47) {
-          try {
-            Thread.sleep(1000);
-            sequencer.close();
-          } catch (InterruptedException e) {
-            System.err.println("interrupted");
-          }
-        }
-      }
-    });
     this.sequencer.start();
     this.sequencer.setTempoInMPQ(tempo);
-    /*while (this.sequencer.isRunning()) {
-      if (this.sequencer.getTickPosition() == 1) {
-        this.sequencer.close();
+    while (this.sequencer.isRunning()) {
+      if (this.sequencer.getTickPosition() == length) {
+        try {
+          Thread.sleep(1000);
+          sequencer.close();
+        } catch (InterruptedException e) {
+          this.log.append("Encountered InterruptedException:\n" + e.getMessage() + "\n");
+        }
       }
-    }*/
+    }
   }
 
+  /**
+   * Creates a sequence from the list of note data currently in the model, to be sent to the
+   * sequencer.
+   *
+   * @param notes    the list of note data of the piece currently from the model
+   * @throws InvalidMidiDataException if an invalid note or tempo in the model is passed to the MIDI
+   */
   private Sequence createSequence(List<Integer[]> notes)
       throws InvalidMidiDataException {
     Sequence sequence = new Sequence(Sequence.PPQ, 1);
@@ -65,20 +98,5 @@ public class MidiView implements MusicEditorView {
       tr.add(new MidiEvent(stopMsg, end));
     }
     return sequence;
-  }
-
-  @Override
-  public void initialize() {
-    try {
-      playNote(model.getTempo(), model.getNotes(), model.totalPieceLength());
-    } catch (InvalidMidiDataException e) {
-      System.err.println("whhops, midi sucks: " + e.getMessage());
-    }
-
-  }
-
-  @Override
-  public String getLog() {
-    return this.log.toString();
   }
 }

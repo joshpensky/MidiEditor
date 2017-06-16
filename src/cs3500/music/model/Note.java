@@ -100,7 +100,7 @@ public final class Note {
   }
 
   protected void setInstrument(int instrument) throws IllegalArgumentException {
-    if (instrument < 0) {
+    if (instrument < 0 || instrument > 127) {
       throw new IllegalArgumentException("Given instrument does not exist.");
     }
     this.instrument = instrument;

@@ -18,7 +18,7 @@ public final class Piece {
    *
    * @throws IllegalArgumentException if the given title is uninitialized
    */
-  protected Piece() throws IllegalArgumentException {
+  protected Piece() {
     this.setTempo(0);
     this.octaves = new TreeMap<>();
     for (int i = 1; i <= 10; i++) {
