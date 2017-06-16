@@ -99,6 +99,11 @@ public final class Note {
     this.setEndPos();
   }
 
+  /**
+   * Sets the instrument of this note to the given one.
+   *
+   * @throws IllegalArgumentException if the given instrument is not in range [0, 127]
+   */
   protected void setInstrument(int instrument) throws IllegalArgumentException {
     if (instrument < 0 || instrument > 127) {
       throw new IllegalArgumentException("Given instrument does not exist.");
@@ -106,6 +111,11 @@ public final class Note {
     this.instrument = instrument;
   }
 
+  /**
+   * Sets the volume of this note to the given one.
+   *
+   * @throws IllegalArgumentException if the given volume is not in range [0, 127]
+   */
   protected void setVolume(int volume) throws IllegalArgumentException {
     if (volume < 0 || volume > 127) {
       throw new IllegalArgumentException("Volume must be between 0 and 127 (inclusive).");
@@ -131,6 +141,11 @@ public final class Note {
     return this.endPos;
   }
 
+  /**
+   * Gets the instrument of this note.
+   *
+   * @return the instrument of this note
+   */
   protected int getInstrument() {
     return this.instrument;
   }

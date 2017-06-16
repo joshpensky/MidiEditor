@@ -3,8 +3,8 @@ package cs3500.music.util;
 import cs3500.music.model.Pitch;
 
 /**
- * Utility functions for converting notes into pitches {@Link Pitch} and notes {@Link Note} as well a conversion
- * functionality for midi software to use.
+ * Utility functions for converting notes into pitches {@link Pitch} and octaves as
+ * well a conversion functionality for MIDI software to use.
  */
 public class MidiConversion {
   public static final int NOTE_START = 0;
@@ -16,10 +16,11 @@ public class MidiConversion {
   private static final int MIDDLE_C = 60;
 
   /**
-   * Calculates the pitch based off the given integer.
-   * @param pitch numerical representation of the pitch/octave
-   * @return {@Link Pitch} the corresponding pitch
-   * @throws IllegalArgumentException
+   * Calculates the corresponding pitch given the given MIDI representation of the pitch.
+   *
+   * @param pitch   the numerical representation of the pitch/octave as seen by the MIDI
+   * @return the corresponding pitch
+   * @throws IllegalArgumentException if the given pitch value is not in the range [0, 127]
    */
   public static Pitch getPitch(int pitch) throws IllegalArgumentException {
     if (pitch < 0 || pitch > 127) {
@@ -37,10 +38,11 @@ public class MidiConversion {
   }
 
   /**
-   * Calculates the corresponding octave given the int value
-   * @param pitch the numerical representation of the pitch/octave
+   * Calculates the corresponding octave given the given MIDI representation of the pitch.
+   *
+   * @param pitch   the numerical representation of the pitch/octave as seen by the MIDI
    * @return the octave number of that given pitch
-   * @throws IllegalArgumentException
+   * @throws IllegalArgumentException if the given pitch value is not in the range [0, 127]
    */
   public static int getOctave(int pitch) throws IllegalArgumentException {
     if (pitch < 0 || pitch > 127) {
@@ -59,32 +61,36 @@ public class MidiConversion {
 
   /**
    * Gets the duration given a start and end position of a note.
-   * @param start the place the note starts
-   * @param end the place the note ends
+   *
+   * @param start   the place the note starts
+   * @param end     the place the note ends
    * @return the duration of the note, difference between the start and end.
-   * @throws IllegalArgumentException
+   * @throws IllegalArgumentException if the given end is less than the start, or the end or
+   * start are negative
    */
   public static int getDuration(int start, int end) throws IllegalArgumentException {
     if (end < start) {
         throw new IllegalArgumentException("End cannot be before start.");
-    }
-
-    if (end < 0 || start < 0) {
+    } else if (end < 0 || start < 0) {
       throw new IllegalArgumentException("Cannot have negative start or end points.");
     }
-
     return (end - start) + 1;
   }
 
   /**
    * Calculates the numerical equivalent of a pitch and octave combination.
-   * @param octave octave of the intended note
-   * @param pitch {@Link Pitch} pitch of the intended note
+   *
+   * @param octave   the octave of the intended note
+   * @param pitch    the pitch of the intended note
    * @return the numerical representation for Midi of a pitch/octave combination
+   * @throws IllegalArgumentException if the given pitch is uninitialized, or the pitch is not in
+   * the range [1, 10]
    */
-  public static int getMidiPitch(int octave, Pitch pitch) {
+  public static int getMidiPitch(int octave, Pitch pitch) throws IllegalArgumentException {
     if (pitch == null) {
       throw new IllegalArgumentException("Given pitch is uninitialized.");
+    } else if (octave < 1 || octave > 10) {
+      throw new IllegalArgumentException("Given octave is not in range [1, 10].");
     }
     int pitchIndex = -1;
     for (int i = 0; i < Pitch.values().length; i++) {
@@ -101,8 +107,8 @@ public class MidiConversion {
   }
 
   /**
-   * Gets the name of the a pitch [0, 127] as a String. For example, 60 (middle-c) would return
-   * "C4".
+   * Gets the name of the a pitch [0, 127] as a String.
+   * For example, giving 60 (middle-c) would return "C4".
    *
    * @param midiPitch   the pitch as given to the midi
    * @return the name of the pitch converted to a string
