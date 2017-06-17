@@ -8,10 +8,10 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by Will on 6/17/2017.
+ * Tests for the {@link GuiContainer} class.
  */
 public class EditorPanelTest {
-    EditorPanel ep;
+    /*EditorPanel ep;
     MusicEditorBuilder m1;
     MusicEditorOperations model;
 
@@ -69,6 +69,6 @@ public class EditorPanelTest {
         ep.updateCursor(false);
         other.updateCursor(true);
         assertEquals(ep.updateCursor(true), other.updateCursor(false));
-    }
+    }*/
 
 }
