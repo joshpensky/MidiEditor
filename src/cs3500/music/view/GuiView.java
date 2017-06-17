@@ -21,8 +21,12 @@ public class GuiView extends JFrame implements MusicEditorView {
    * different views contained in the window.
    *
    * @param model   the model to be represented in the view
+   * @throws IllegalArgumentException given model is uninitialized
    */
-  protected GuiView(MusicEditorOperations model) {
+  protected GuiView(MusicEditorOperations model) throws IllegalArgumentException {
+    if (model == null) {
+      throw new IllegalArgumentException("Given model is uninitialized.");
+    }
     this.model = model;
     this.container = new GuiContainer(this.model, WIDTH);
     this.getContentPane().add(container);

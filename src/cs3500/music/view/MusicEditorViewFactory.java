@@ -33,7 +33,8 @@ public class MusicEditorViewFactory {
    * @param viewName   the name of the desired view (case-insensitive, see above table for details)
    * @param model      the model to be sent into the view
    * @return a new view object based on the desired view
-   * @throws IllegalArgumentException the given view name is uninitialized
+   * @throws IllegalArgumentException the given view name is uninitialized, or the given model is
+   *                                  uninitialized
    * @throws MidiUnavailableException if midi is currently unavailable when choosing the MIDI view
    */
   public static MusicEditorView getView(String viewName, MusicEditorOperations model)

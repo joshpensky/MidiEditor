@@ -14,9 +14,13 @@ public final class Note {
    * Default constructor.
    * Constructs a new {@code Note} object with the given parameters.
    *
-   * @param position the starting position of the note in a piece
-   * @param duration how long the note lasts (measured in beats)
-   * @throws IllegalArgumentException if the duration or position are negative
+   * @param startPos      the starting position of the note
+   * @param duration      the duration of the note (measured in beats)
+   * @param instrument    the instrument the note is played in [0, 127]
+   * @param volume        the volume at which the note is played [0, 127]
+   * @throws IllegalArgumentException if the duration or position are negative, if the duration
+   *                                  is zero, the instrument is out of range [0, 127], or the
+   *                                  volume is out of range [0, 127]
    */
   protected Note(int startPos, int duration, int instrument, int volume)
       throws IllegalArgumentException {
@@ -30,7 +34,7 @@ public final class Note {
    * Copy constructor.
    * Constructs a duplicate copy of the given {@code Note} object with different references.
    *
-   * @param other the note to be copied
+   * @param other   the note to be copied
    * @throws IllegalArgumentException if the given note is uninitialized
    */
   protected Note(Note other) throws IllegalArgumentException {
@@ -65,7 +69,7 @@ public final class Note {
   /**
    * Sets the position of the note to the given variable.
    *
-   * @param position the new position of this note
+   * @param startPos   the new starting position of this note
    * @throws IllegalArgumentException if the given position is negative
    */
   protected void setStartPos(int startPos) throws IllegalArgumentException {
@@ -87,6 +91,7 @@ public final class Note {
   /**
    * Sets the duration of the note to the given variable.
    *
+   * @param duration   the duration of the note
    * @throws IllegalArgumentException if the given duration is negative or zero
    */
   protected void setDuration(int duration) throws IllegalArgumentException {
@@ -100,6 +105,7 @@ public final class Note {
   /**
    * Sets the instrument of this note to the given one.
    *
+   * @param instrument  the instrument this note is played as, in range [0, 127]
    * @throws IllegalArgumentException if the given instrument is not in range [0, 127]
    */
   protected void setInstrument(int instrument) throws IllegalArgumentException {
@@ -112,6 +118,7 @@ public final class Note {
   /**
    * Sets the volume of this note to the given one.
    *
+   * @param volume   the volume this note is played at, in range [0, 127]
    * @throws IllegalArgumentException if the given volume is not in range [0, 127]
    */
   protected void setVolume(int volume) throws IllegalArgumentException {
