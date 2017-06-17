@@ -2,20 +2,75 @@ package cs3500.music.view;
 
 import cs3500.music.model.MusicEditorOperations;
 
+import java.io.OutputStreamWriter;
+
 /**
  * Represents the text view for a music editor model. Prints the String representation of the
  * currently opened piece to the console.
  */
 public class TextView implements MusicEditorView {
   private final MusicEditorOperations model;
+  private final Appendable app;
 
   /**
-   * Constructs a new {@code TextView} which represents the given model in the console.
-   *
-   * @param model   the model to be represented in the view
+   * Represents the builder class for a TextView. Defaults the appendable of the TextView to the
+   * console (System.out), but allows for the appendable to be changed.
    */
-  protected TextView(MusicEditorOperations model) {
-    this.model = model;
+  public static final class Builder {
+    private MusicEditorOperations model;
+    private Appendable app;
+
+    /**
+     * Constructs a new {@code Builder} for a TextView.
+     *
+     * @param model   the model to be represented musically using MIDI
+     * @throws IllegalArgumentException if the given model is uninitialized
+     */
+    public Builder(MusicEditorOperations model) throws IllegalArgumentException {
+      if (model == null) {
+        throw new IllegalArgumentException("Given model is uninitialized.");
+      }
+      this.model = model;
+      this.app = null;
+    }
+
+    /**
+     * Sets the appendable for a new TextView to the given one.
+     *
+     * @param app   the appendable to be set for the TextView
+     * @return this builder
+     * @throws IllegalArgumentException if the given appendable is uninitialized
+     */
+    public Builder setAppendable(Appendable app) throws IllegalArgumentException {
+      if (app == null) {
+        throw new IllegalArgumentException("Given appendable object is uninitialized.");
+      }
+      this.app = app;
+      return this;
+    }
+
+    /**
+     * Returns a new TextView with the given specifications set in this builder. If no appendable
+     * has been set, it is defaulted to the console (System.out).
+     *
+     * @return a new TextView with this builder's instructions
+     */
+    public TextView build() {
+      if (this.app == null) {
+        this.app = new OutputStreamWriter(System.out);
+      }
+      return new TextView(this);
+    }
+  }
+
+  /**
+   * Constructs a new {@code TextView} using an instance of the nested builder class.
+   *
+   * @param builder   the builder for this TextView
+   */
+  private TextView(Builder builder) {
+    this.model = builder.model;
+    this.app = builder.app;
   }
 
   @Override
