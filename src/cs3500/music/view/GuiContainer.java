@@ -11,7 +11,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 /**
- * Represents the main container panel in the {@link GuiViewFrame}. This panel contains the
+ * Represents the main container panel in the {@link GuiView}. This panel contains the
  * editor panel (encapsulated in a scroll pane), as well as the piano panel.
  */
 public class GuiContainer extends JPanel {

@@ -40,13 +40,12 @@ public class MidiView implements MusicEditorView {
      * @throws IllegalArgumentException if the given model is uninitialized
      * @throws MidiUnavailableException if MIDI is currently unavailable for the system
      */
-    protected Builder(MusicEditorOperations model) throws IllegalArgumentException,
-        MidiUnavailableException {
+    protected Builder(MusicEditorOperations model) throws IllegalArgumentException {
       if (model == null) {
         throw new IllegalArgumentException("Given model is uninitialized.");
       }
       this.model = model;
-      this.sequencer = MidiSystem.getSequencer();
+      this.sequencer = null;
     }
 
     /**
@@ -69,7 +68,10 @@ public class MidiView implements MusicEditorView {
      *
      * @return a new MidiView with this builder's instructions
      */
-    protected MidiView build() {
+    protected MidiView build() throws MidiUnavailableException {
+      if (this.sequencer == null) {
+        this.sequencer = MidiSystem.getSequencer();
+      }
       return new MidiView(this);
     }
   }

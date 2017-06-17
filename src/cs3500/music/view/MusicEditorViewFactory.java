@@ -22,7 +22,7 @@ public class MusicEditorViewFactory {
    *   </tr>
    *   <tr>
    *     <th>"visual"</th>
-   *     <th>{@link GuiViewFrame}</th>
+   *     <th>{@link GuiView}</th>
    *   </tr>
    *   <tr>
    *     <th>"midi"</th>
@@ -37,7 +37,7 @@ public class MusicEditorViewFactory {
    * @throws MidiUnavailableException if midi is currently unavailable when choosing the MIDI view
    */
   public static MusicEditorView getView(String viewName, MusicEditorOperations model)
-      throws IllegalArgumentException, MidiUnavailableException {
+      throws IllegalArgumentException {
     if (viewName == null) {
       throw new IllegalArgumentException();
     }
@@ -46,9 +46,13 @@ public class MusicEditorViewFactory {
       case "console":
         return new TextView(model);
       case "visual":
-        return new GuiViewFrame(model);
+        return new GuiView(model);
       case "midi":
-        return new MidiView.Builder(model).build();
+        try {
+          return new MidiView.Builder(model).build();
+        } catch (MidiUnavailableException e) {
+          System.err.println(e.getMessage());
+        }
       default:
         throw new IllegalArgumentException("Given view, " + viewName + ", does not exist.");
     }

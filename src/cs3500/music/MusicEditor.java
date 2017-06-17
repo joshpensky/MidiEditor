@@ -26,11 +26,7 @@ public class MusicEditor {
     String viewName = args[1];
     MusicEditorOperations model = MusicReader.parseFile(new FileReader(fileName),
         new MusicEditorBuilder());
-    try {
-      MusicEditorView view = MusicEditorViewFactory.getView(viewName, model);
-      view.initialize();
-    } catch (MidiUnavailableException e) {
-      throw new MidiUnavailableException("Midi is currently unavailable. Try again later.");
-    }
+    MusicEditorView view = MusicEditorViewFactory.getView(viewName, model);
+    view.initialize();
   }
 }
