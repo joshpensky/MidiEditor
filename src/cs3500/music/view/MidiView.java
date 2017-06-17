@@ -1,5 +1,6 @@
 package cs3500.music.view;
 
+import cs3500.music.model.MusicEditorModel;
 import cs3500.music.model.MusicEditorOperations;
 import cs3500.music.util.MidiConversion;
 
@@ -25,15 +26,64 @@ public class MidiView implements MusicEditorView {
   private final Sequencer sequencer;
 
   /**
-   * Constructs a new {@code MidiView} using the given model to get notes to play.
-   *
-   * @param model   the model to be represented musically using MIDI
-   * @throws MidiUnavailableException if MIDI is currently unavailable for the system
+   * Represents the builder class for a MidiView. Sets the sequencer of the MidiView to the
+   * MidiSystem's default sequencer, but allows for the sequencer to be changed.
    */
-  protected MidiView(MusicEditorOperations model) throws MidiUnavailableException {
-    this.model = model;
+  public static final class Builder {
+    private MusicEditorOperations model;
+    private Sequencer sequencer;
+
+    /**
+     * Constructs a new {@code Builder} for a MidiView. The sequencer is defaulted to the
+     * MidiSystem's sequencer.
+     *
+     * @param model   the model to be represented musically using MIDI
+     * @throws IllegalArgumentException if the given model is uninitialized
+     * @throws MidiUnavailableException if MIDI is currently unavailable for the system
+     */
+    public Builder(MusicEditorOperations model) throws IllegalArgumentException,
+        MidiUnavailableException {
+      if (model == null) {
+        throw new IllegalArgumentException("Given model is uninitialized.");
+      }
+      this.model = model;
+      this.sequencer = MidiSystem.getSequencer();
+    }
+
+    /**
+     * Sets the sequencer for a new MidiView to the given one.
+     *
+     * @param sequencer   the sequencer to be set for the MidiView
+     * @return this builder
+     * @throws IllegalArgumentException if the given sequencer is uninitialized
+     */
+    public Builder sequencer(Sequencer sequencer) throws IllegalArgumentException {
+      if (sequencer == null) {
+        throw new IllegalArgumentException("Sequencer is uninitialized.");
+      }
+      this.sequencer = sequencer;
+      return this;
+    }
+
+    /**
+     * Returns a new MidiView with the given specifications set in this builder.
+     *
+     * @return a new MidiView with this builder's instructions
+     */
+    public MidiView build() {
+      return new MidiView(this);
+    }
+  }
+
+  /**
+   * Constructs a new {@code MidiView} using an instance of the nested builder class.
+   *
+   * @param builder   the builder for this MidiView
+   */
+  private MidiView(Builder builder) {
     this.log = new StringBuilder();
-    this.sequencer = MidiSystem.getSequencer();
+    this.model = builder.model;
+    this.sequencer = builder.sequencer;
   }
 
   @Override

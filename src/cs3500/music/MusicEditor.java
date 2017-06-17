@@ -20,7 +20,7 @@ public class MusicEditor {
     if (args.length != 2) {
       throw new IllegalArgumentException("Must give two arguments:\n"
           + "1) the file name (ex.: \"mary-little-lamb.txt\")\n"
-          + "2) the desired view (either \"text\", \"audio\", or \"visual\")");
+          + "2) the desired view (either \"console\", \"visual\", or \"midi\")");
     }
     String fileName = args[0];
     String viewName = args[1];

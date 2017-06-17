@@ -17,7 +17,7 @@ public class MusicEditorViewFactory {
    *     <th>VIEW</th>
    *   </tr>
    *   <tr>
-   *     <th>"text"</th>
+   *     <th>"console"</th>
    *     <th>{@link TextView}</th>
    *   </tr>
    *   <tr>
@@ -25,7 +25,7 @@ public class MusicEditorViewFactory {
    *     <th>{@link GuiViewFrame}</th>
    *   </tr>
    *   <tr>
-   *     <th>"audio"</th>
+   *     <th>"midi"</th>
    *     <th>{@link MidiView}</th>
    *   </tr>
    * </table>
@@ -43,12 +43,12 @@ public class MusicEditorViewFactory {
     }
     viewName = viewName.toLowerCase();
     switch (viewName) {
-      case "text":
+      case "console":
         return new TextView(model);
       case "visual":
         return new GuiViewFrame(model);
-      case "audio":
-        return new MidiView(model);
+      case "midi":
+        return new MidiView.Builder(model).build();
       default:
         throw new IllegalArgumentException("Given view, " + viewName + ", does not exist.");
     }
