@@ -45,7 +45,7 @@ public class PianoPanel extends JPanel {
       throw new IllegalArgumentException("Cannot pass negative or zero width.");
     }
 
-    if (notes == null) {
+    if (notes == null || notes.contains(null)) {
       throw new IllegalArgumentException("Cannot pass null list of notes");
     }
 
@@ -69,6 +69,7 @@ public class PianoPanel extends JPanel {
       position = drawOctave(g, position, this.highlights.getOrDefault(i, new ArrayList<>()));
     }
   }
+
 
   /**
    * Gets the starting position of the piano drawing, so that the drawing of the piano would be
