@@ -466,4 +466,30 @@ public class MusicEditorModelTest {
   // Tests for the getNotesAtBeat method
 
   // Tests for the getLength method
+  @Test(expected = IllegalStateException.class)
+  public void getLengthNothingOpened() {
+    model.getLength();
+  }
+
+  @Test
+  public void getLengthEmpty() {
+    model.create();
+    assertEquals(0, model.getLength());
+  }
+
+  @Test
+  public void getLengthOneNote() {
+    model.create();
+    model.addNote(3, 45, 3, 60, 64);
+    assertEquals(45, model.getLength());
+  }
+
+  @Test
+  public void getLengthMultipleNotes() {
+    model.create();
+    model.addNote(3, 10, 3, 60, 64);
+    model.addNote(20, 24, 67, 92, 63);
+    model.addNote(4, 5, 16, 45, 120);
+    assertEquals(24, model.getLength());
+  }
 }

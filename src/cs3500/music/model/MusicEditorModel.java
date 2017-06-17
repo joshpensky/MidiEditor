@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.ArrayList;
 
 /**
- * Represents the model for the editor of a Music Editor.
+ * Represents the model for the editor of a Music Editor. Allows for creating pieces,
+ * adding/removing/editing notes, setting tempo, getting length of a piece, or getting note data.
  */
 public final class MusicEditorModel implements MusicEditorOperations {
   private List<Piece> pieces;

@@ -248,10 +248,9 @@ public final class Piece {
    * @param newPitch     the new pitch of the note
    * @throws IllegalArgumentException if the given octave is not in range [1, 10], the pitch
    *                                  is uninitialized, the starting position is negative, the
-   *                                  duration is 0 or negative, the instrument is not in range
-   *                                  [0, 127], the volume is not in range [0, 127], or if no note
-   *                                  exists at the given position in the same pitch
-   *                                  played on the same instrument
+   *                                  instrument is not in range [0, 127], the new pitch is
+   *                                  uninitialized, if no note exists at the given position, or
+   *                                  a note already exists at the given position in the new pitch
    */
   protected void editPitch(int octave, Pitch pitch, int position, int instrument, Pitch newPitch)
       throws IllegalArgumentException {
@@ -262,9 +261,16 @@ public final class Piece {
   /**
    * Edits the position of a given note from the piece, if possible.
    *
-   * @param position   the new position of the note
-   * @throws IllegalArgumentException if the given note is uninitialized, the position is
-   *                                  negative, or if the note does not exist in the piece
+   * @param octave        the octave of the note
+   * @param pitch         the pitch of the note
+   * @param position      the starting position of the note (measured in beats)
+   * @param instrument    the instrument the note is played in [0, 127]
+   * @param newPosition   the new starting position of the note (measured in beats)
+   * @throws IllegalArgumentException if the given octave is not in range [1, 10], the pitch
+   *                                  is uninitialized, the starting position is negative, the
+   *                                  instrument is not in range [0, 127], the new position is
+   *                                  negative, if no note exists at the given position, or a
+   *                                  note already exists at the new position in the given pitch
    */
   protected void editPosition(int octave, Pitch pitch, int position, int instrument,
                               int newPosition)
@@ -276,8 +282,15 @@ public final class Piece {
   /**
    * Edits the duration of a given note from the piece, if possible.
    *
-   * @throws IllegalArgumentException if the given note is uninitialized, the duration is
-   *                                  negative, or if the note does not exist in the piece
+   * @param octave        the octave of the note
+   * @param pitch         the pitch of the note
+   * @param position      the starting position of the note (measured in beats)
+   * @param instrument    the instrument the note is played in [0, 127]
+   * @param newDuration   the new duration of the note (measured in beats)
+   * @throws IllegalArgumentException if the given octave is not in range [1, 10], the pitch
+   *                                  is uninitialized, the starting position is negative, the
+   *                                  instrument is not in range [0, 127], the new duration is
+   *                                  zero or negative, or if no note exists at the given position
    */
   protected void editDuration(int octave, Pitch pitch, int position, int instrument,
                               int newDuration)
@@ -320,6 +333,12 @@ public final class Piece {
     return this.tempo;
   }
 
+  /**
+   * Returns a list of note data for every note in this piece. Note data is arranged the same as
+   * described in {@link MusicEditorOperations#getNotes()}.
+   *
+   * @return a list of note data for every note in this piece
+   */
   protected List<Integer[]> getNotes() {
     List<List<Integer[]>> allOctaves = new ArrayList<>();
     for (Integer i : this.octaves.keySet()) {
@@ -334,6 +353,13 @@ public final class Piece {
     return allNotes;
   }
 
+  /**
+   * Returns a list of note data for every note in this piece at the given beat. Data is arranged
+   * the same as described in {@link MusicEditorOperations#getNotes()}.
+   *
+   * @param beat   the beat to check for notes
+   * @return a list of note data for every note in this piece at the given beat
+   */
   protected List<Integer[]> getNotesAtBeat(int beat) {
     List<List<Integer[]>> allOctaves = new ArrayList<>();
     for (Integer i : this.octaves.keySet()) {

@@ -168,9 +168,13 @@ public final class Octave {
    * @param pitch      the pitch of the note
    * @param position   the starting position of the note
    * @param duration   the duration of the note (measured in beats)
+   * @param instrument    the instrument the note is played in [0, 127]
+   * @param volume       the volume at which the note is played [0, 127]
    * @throws IllegalArgumentException if the given pitch is uninitialized, if the duration or
-   *                                  position are negative, if the duration is zero, or if a note
-   *                                  already exists at the given position
+   *                                  position are negative, if the duration is zero, the
+   *                                  instrument is out of range [0, 127], the volume is out of
+   *                                  range [0, 127], or if a note already exists at the given
+   *                                  position
    */
   protected void addNote(Pitch pitch, int position, int duration, int instrument, int volume)
       throws IllegalArgumentException {
@@ -183,8 +187,10 @@ public final class Octave {
    *
    * @param pitch      the pitch of the note to be removed
    * @param position   the starting position of the note to be removed
-   * @throws IllegalArgumentException if the given pitch is uninitialized, or if there is no note
-   *                                  at the given position
+   * @param instrument    the instrument the note is played in [0, 127]
+   * @throws IllegalArgumentException if the given pitch is uninitialized, the position is
+   *                                  negative, the instrument is out of range [0, 127], or if
+   *                                  there is no note at the given position
    */
   protected void removeNote(Pitch pitch, int position, int instrument)
       throws IllegalArgumentException {
@@ -205,9 +211,13 @@ public final class Octave {
    *
    * @param pitch      the pitch of the note to be edited
    * @param position   the starting position of the note to be edited
+   * @param instrument    the instrument the note is played in [0, 127]
    * @param newPitch   the new pitch of the edited note
-   * @throws IllegalArgumentException if either of the given pitches are uninitialized, or if
-   *                                  there is no note at the given position
+   * @throws IllegalArgumentException if either of the given pitches are uninitialized, the
+   *                                  position is negative, the instrument is out of range
+   *                                  [0, 127], there is no note at the given position, or a note
+   *                                  already exists at the given position in the new pitch with
+   *                                  the same instrument
    */
   protected void editPitch(Pitch pitch, int position, int instrument, Pitch newPitch)
       throws IllegalArgumentException {
@@ -233,9 +243,12 @@ public final class Octave {
    *
    * @param pitch         the pitch of the note to be edited
    * @param position      the starting position of the note to be edited
+   * @param instrument    the instrument the note is played in [0, 127]
    * @param newPosition   the new position of the edited note
-   * @throws IllegalArgumentException if the given pitch is uninitialized, if there is no note at
-   *                                  the given position, or if the new position is negative
+   * @throws IllegalArgumentException if the given pitch is uninitialized, the position is
+   *                                  negative, the instrument is out of range [0, 127], there is
+   *                                  no note at the given position, or a note already exists at
+   *                                  the new position in the given pitch with the same instrument
    */
   protected void editPosition(Pitch pitch, int position, int instrument, int newPosition)
       throws IllegalArgumentException {
@@ -261,9 +274,12 @@ public final class Octave {
    *
    * @param pitch         the pitch of the note to be edited
    * @param position      the starting position of the note to be edited
+   * @param instrument    the instrument the note is played in [0, 127]
    * @param newDuration   the new duration of the edited note
-   * @throws IllegalArgumentException if the given pitch is uninitialized, if there is no note at
-   *                                  the given position, or if the new duration is negative or zero
+   * @throws IllegalArgumentException if the given pitch is uninitialized, the position is
+   *                                  negative, the instrument is out of range [0, 127], the new
+   *                                  duration is negative or zero, or if there is no note at the
+   *                                  given position
    */
   protected void editDuration(Pitch pitch, int position, int instrument, int newDuration)
       throws IllegalArgumentException {
@@ -317,6 +333,13 @@ public final class Octave {
     pitchList.add(addIndex, note);
   }
 
+  /**
+   * Returns a list of note data for every note in this octave. Note data is arranged the same as
+   * described in {@link MusicEditorOperations#getNotes()}.
+   *
+   * @param octave   this octave's number, to be used for setting the MIDI pitch
+   * @return a list of note data for every note in this piece
+   */
   protected List<Integer[]> getNotes(int octave) {
     List<Integer[]> notes = new ArrayList<>();
     for (Pitch p : this.pitches.keySet()) {
@@ -329,6 +352,14 @@ public final class Octave {
     return notes;
   }
 
+  /**
+   * Returns a list of note data for every note in this octave at the given beat. Data is arranged
+   * the same as described in {@link MusicEditorOperations#getNotes()}.
+   *
+   * @param octave   this octave's number, to be used for setting the MIDI pitch
+   * @param beat     the beat to check for notes
+   * @return a list of note data for every note in this octave at the given beat
+   */
   protected List<Integer[]> getNotesAtBeat(int octave, int beat) {
     List<Integer[]> notes = new ArrayList<>();
     for (Pitch p : this.pitches.keySet()) {

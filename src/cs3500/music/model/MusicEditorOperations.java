@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * Represents all of the operations that the model of a Midi Editor should have, including
  * creating new pieces, adding/removing/editing notes, setting tempo, getting the length of a
- * piece, getting notes, and creating a String representation of the currently opened piece.
+ * piece, getting note data, and creating a String representation of the currently opened piece.
  */
 public interface MusicEditorOperations {
   /**
@@ -162,6 +162,7 @@ public interface MusicEditorOperations {
    * Returns a list of note data for every note in the model at the given beat. Data is arranged
    * the same as described in {@link MusicEditorOperations#getNotes()}.
    *
+   * @param beat   the beat to check for notes
    * @return a list of note data for every note in the currently opened piece at the given beat
    * @throws IllegalStateException if there is no currently opened piece
    */
