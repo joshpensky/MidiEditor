@@ -2,6 +2,7 @@ package cs3500.music.view;
 
 import cs3500.music.model.MusicEditorOperations;
 
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 
 /**
@@ -11,6 +12,7 @@ import java.io.OutputStreamWriter;
 public class TextView implements MusicEditorView {
   private final MusicEditorOperations model;
   private final Appendable app;
+  private final StringBuilder log;
 
   /**
    * Represents the builder class for a TextView. Defaults the appendable of the TextView to the
@@ -71,15 +73,20 @@ public class TextView implements MusicEditorView {
   private TextView(Builder builder) {
     this.model = builder.model;
     this.app = builder.app;
+    this.log = new StringBuilder();
   }
 
   @Override
   public void initialize() {
-    System.out.println(model.view());
+    try {
+      this.app.append(model.view());
+    } catch (IOException e) {
+      this.log.append("Encountered fatal IOException: " + e.getMessage() + "\n");
+    }
   }
 
   @Override
   public String getLog() {
-    return "";
+    return this.log.toString();
   }
 }

@@ -2,25 +2,32 @@ package cs3500.music.view;
 
 import cs3500.music.model.MusicEditorBuilder;
 import cs3500.music.model.MusicEditorOperations;
+
+import javax.sound.midi.MidiUnavailableException;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-import javax.sound.midi.MidiUnavailableException;
-
 /**
- * Created by josh_jpeg on 6/17/17.
+ * Tests for the {@link MidiView} class, using the {@link MockSequencer} to test how the MidiView
+ * sends signals to the midi's sequencer.
  */
 public class MidiViewTest {
   private final MusicEditorBuilder builder = new MusicEditorBuilder();
   private final MockSequencer seq = new MockSequencer();
   private MidiView view;
 
+  /**
+   * Initializes the MidiView to the given model, using the mock sequencer.
+   *
+   * @param model   the model to set the view to
+   */
   public void init(MusicEditorOperations model) {
     try {
-      view = new MidiView.Builder(model).setSequencer(this.seq).build();
+      this.view = new MidiView.Builder(model).setSequencer(this.seq).build();
     } catch (MidiUnavailableException e) {
-
+      // Should not happen because sequencer is set to the mock one
     }
   }
 
@@ -66,18 +73,18 @@ public class MidiViewTest {
   @Test
   public void initializeMaryLittleLamb() {
     init(builder.setTempo(200000)
-      .addNote(0, 2, 1, 64, 72).addNote(0, 7, 1, 55, 70).addNote(2, 4, 1, 62, 72)
-      .addNote(4, 6, 1, 60, 71).addNote(6, 8, 1, 62, 79).addNote(8, 15, 1, 55, 79)
-      .addNote(8, 10, 1, 64, 85).addNote(10, 12, 1, 64, 78).addNote(12, 15, 1, 64, 74)
-      .addNote(16, 24, 1, 55, 77).addNote(16, 18, 1, 62, 75).addNote(18, 20, 1, 62, 77)
-      .addNote(20, 24, 1, 62, 75).addNote(24, 26, 1, 55, 79).addNote(24, 26, 1, 64, 82)
-      .addNote(26, 28, 1, 67, 84).addNote(28, 32, 1, 67, 75).addNote(32, 40, 1, 55, 78)
-      .addNote(32, 34, 1, 64, 73).addNote(34, 36, 1, 62, 69).addNote(36, 38, 1, 60, 71)
-      .addNote(38, 40, 1, 62, 80).addNote(40, 48, 1, 55, 79).addNote(40, 42, 1, 64, 84)
-      .addNote(42, 44, 1, 64, 76).addNote(44, 46, 1, 64, 74).addNote(46, 48, 1, 64, 77)
-      .addNote(48, 56, 1, 55, 78).addNote(48, 50, 1, 62, 75).addNote(50, 52, 1, 62, 74)
-      .addNote(52, 54, 1, 64, 81).addNote(54, 56, 1, 62, 70).addNote(56, 64, 1, 52, 72)
-      .addNote(56, 64, 1, 60, 73).build());
+        .addNote(0, 2, 1, 64, 72).addNote(0, 7, 1, 55, 70).addNote(2, 4, 1, 62, 72)
+        .addNote(4, 6, 1, 60, 71).addNote(6, 8, 1, 62, 79).addNote(8, 15, 1, 55, 79)
+        .addNote(8, 10, 1, 64, 85).addNote(10, 12, 1, 64, 78).addNote(12, 15, 1, 64, 74)
+        .addNote(16, 24, 1, 55, 77).addNote(16, 18, 1, 62, 75).addNote(18, 20, 1, 62, 77)
+        .addNote(20, 24, 1, 62, 75).addNote(24, 26, 1, 55, 79).addNote(24, 26, 1, 64, 82)
+        .addNote(26, 28, 1, 67, 84).addNote(28, 32, 1, 67, 75).addNote(32, 40, 1, 55, 78)
+        .addNote(32, 34, 1, 64, 73).addNote(34, 36, 1, 62, 69).addNote(36, 38, 1, 60, 71)
+        .addNote(38, 40, 1, 62, 80).addNote(40, 48, 1, 55, 79).addNote(40, 42, 1, 64, 84)
+        .addNote(42, 44, 1, 64, 76).addNote(44, 46, 1, 64, 74).addNote(46, 48, 1, 64, 77)
+        .addNote(48, 56, 1, 55, 78).addNote(48, 50, 1, 62, 75).addNote(50, 52, 1, 62, 74)
+        .addNote(52, 54, 1, 64, 81).addNote(54, 56, 1, 62, 70).addNote(56, 64, 1, 52, 72)
+        .addNote(56, 64, 1, 60, 73).build());
     this.view.initialize();
     assertEquals("tempo 200000\n"
         + "note 0 2 1 64 72\n"
