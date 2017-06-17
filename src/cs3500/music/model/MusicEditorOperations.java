@@ -3,7 +3,9 @@ package cs3500.music.model;
 import java.util.List;
 
 /**
- * Represents all of the operations that the model of a Midi Editor should have.
+ * Represents all of the operations that the model of a Midi Editor should have, including
+ * creating new pieces, adding/removing/editing notes, setting tempo, getting the length of a
+ * piece, getting notes, and creating a String representation of the currently opened piece.
  */
 public interface MusicEditorOperations {
   /**
@@ -23,14 +25,17 @@ public interface MusicEditorOperations {
   /**
    * Adds a new note to the currently opened piece in the given octave at the given pitch.
    *
-   * @param octave     the octave of the pitch
-   * @param pitch      the pitch at which the note is played
-   * @param position   the starting position of the new note
-   * @param duration   the duration of the note (measured in beats), including the onset
+   * @param start        the starting position of the note (measured in beats)
+   * @param end          the ending position of the note (measured in beats)
+   * @param instrument   the instrument the note is played in [0, 127]
+   * @param pitch        the pitch at which the note is played [0, 127]
+   * @param volume       the volume at which the note is played [0, 127]
    * @throws IllegalStateException if there is no currently opened piece
-   * @throws IllegalArgumentException if the given octave isn't between 1 and 10 (inclusive), the
-   *                                  given pitch is uninitialized, the position or duration are
-   *                                  negative, or the duration is zero
+   * @throws IllegalArgumentException if the given start is negative, the end is negative or
+   *                                  less than the given start position, the instrument isn't in
+   *                                  the range [0, 127], the pitch isn't in range [0, 127], the
+   *                                  volume isn't in range [0, 127], or if a note already exists
+   *                                  at the start position with the same pitch and instrument
    */
   void addNote(int start, int end, int instrument, int pitch, int volume)
       throws IllegalStateException, IllegalArgumentException;
@@ -38,13 +43,14 @@ public interface MusicEditorOperations {
   /**
    * Removes a note from the currently opened piece at the given location details.
    *
-   * @param octave     the octave of the pitch
-   * @param pitch      the pitch at which the note is played
-   * @param position   the starting position of the note to be removed
+   * @param start          the starting position of the note (measured in beats)
+   * @param instrument     the instrument the note is played in [0, 127]
+   * @param pitch          the pitch at which the note is played [0, 127]
    * @throws IllegalStateException if there is no currently opened piece
-   * @throws IllegalArgumentException if the given octave isn't between 1 and 10 (inclusive), the
-   *                                  given pitch is uninitialized, the position is negative, or if
-   *                                  there is no note at the given location
+   * @throws IllegalArgumentException if the given start is negative, the instrument isn't in the
+   *                                  range [0, 127], the pitch isn't in range [0, 127], or if no
+   *                                  note exists at the start position with the same instrument
+   *                                  and pitch
    */
   void removeNote(int start, int instrument, int pitch)
       throws IllegalStateException, IllegalArgumentException;
@@ -52,14 +58,17 @@ public interface MusicEditorOperations {
   /**
    * Changes the pitch of a note from the currently opened piece at the given location details.
    *
-   * @param octave     the octave of the pitch the note is in
-   * @param pitch      the pitch at which the note is played
-   * @param position   the starting position of the note
-   * @param newPitch   the new pitch the note will be played at
+   * @param start          the starting position of the note (measured in beats)
+   * @param instrument     the instrument the note is played in [0, 127]
+   * @param pitch          the pitch at which the note is played [0, 127]
+   * @param editedPitch    the new pitch of the note [0, 127]
    * @throws IllegalStateException if there is no currently opened piece
-   * @throws IllegalArgumentException if the given octave isn't between 1 and 10 (inclusive), either
-   *                                  of the given pitches are uninitialized, the position is
-   *                                  negative, or there is no note at the given location
+   * @throws IllegalArgumentException if the given start is negative, the instrument isn't in the
+   *                                  range [0, 127], the pitch isn't in range [0, 127], the
+   *                                  edited pitch is not in the same octave as the existing, if
+   *                                  no note exists at the specified location, or a note of the
+   *                                  same instrument already exists with the same start at the
+   *                                  new pitch location
    */
   void editNotePitch(int start, int instrument, int pitch, int editedPitch)
       throws IllegalStateException, IllegalArgumentException;
@@ -67,14 +76,17 @@ public interface MusicEditorOperations {
   /**
    * Changes the position of a note from the currently opened piece at the given location details.
    *
-   * @param octave        the octave of the pitch the note is in
-   * @param pitch         the pitch at which the note is played
-   * @param position      the starting position of the note
-   * @param newPosition   the new starting position of the note
+   * @param start          the starting position of the note (measured in beats)
+   * @param instrument     the instrument the note is played in [0, 127]
+   * @param pitch          the pitch at which the note is played [0, 127]
+   * @param editedStart    the new start position of the note (measured in beats)
    * @throws IllegalStateException if there is no currently opened piece
-   * @throws IllegalArgumentException if the given octave isn't between 1 and 10 (inclusive), the
-   *                                  given pitch is uninitialized, either of the positions are
-   *                                  negative, or there is no note at the given location
+   * @throws IllegalArgumentException if the given start is negative, the instrument isn't in the
+   *                                  range [0, 127], the pitch isn't in range [0, 127], the
+   *                                  edited start position is negative or greater than the end
+   *                                  position of the existing note, if no note exists at the
+   *                                  specified location, or a note of the same instrument and
+   *                                  pitch already exists with the same new start
    */
   void editNotePosition(int start, int instrument, int pitch, int editedStart)
       throws IllegalStateException, IllegalArgumentException;
@@ -82,15 +94,15 @@ public interface MusicEditorOperations {
   /**
    * Changes the position of a note from the currently opened piece at the given location details.
    *
-   * @param octave        the octave of the pitch the note is in
-   * @param pitch         the pitch at which the note is played
-   * @param position      the starting position of the note
-   * @param newDuration   the new duration of the note (measured in beats), including the onset
+   * @param start        the starting position of the note (measured in beats)
+   * @param instrument   the instrument the note is played in [0, 127]
+   * @param pitch        the pitch at which the note is played [0, 127]
+   * @param editedEnd    the new end position of the note (measured in beats)
    * @throws IllegalStateException if there is no currently opened piece
-   * @throws IllegalArgumentException if the given octave isn't between 1 and 10 (inclusive), the
-   *                                  given pitch is uninitialized, the position or new duration are
-   *                                  negative, the new duration is zero, or there is no note at
-   *                                  the given location
+   * @throws IllegalArgumentException if the given start is negative, the instrument isn't in the
+   *                                  range [0, 127], the pitch isn't in range [0, 127], the
+   *                                  edited end position is negative or less than the start
+   *                                  position, or if no note exists at the specified location
    */
   void editNoteDuration(int start, int instrument, int pitch, int editedEnd)
       throws IllegalStateException, IllegalArgumentException;

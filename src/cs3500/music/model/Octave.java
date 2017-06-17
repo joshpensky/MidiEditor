@@ -186,16 +186,18 @@ public final class Octave {
    * @throws IllegalArgumentException if the given pitch is uninitialized, or if there is no note
    *                                  at the given position
    */
-  protected void removeNote(Pitch pitch, int position) throws IllegalArgumentException {
+  protected void removeNote(Pitch pitch, int position, int instrument)
+      throws IllegalArgumentException {
     this.checkPitchException(pitch);
     List<Note> pitchList = this.pitches.get(pitch);
     for (Note n : pitchList) {
-      if (n.getStartPos() == position) {
+      if (n.getStartPos() == position && n.getInstrument() == instrument) {
         pitchList.remove(n);
         return;
       }
     }
-    throw new IllegalArgumentException("There is no note at position " + position + ".");
+    throw new IllegalArgumentException("There is no note at position " + position + " played "
+        + "on instrument " + instrument + ".");
   }
 
   /**
@@ -207,21 +209,22 @@ public final class Octave {
    * @throws IllegalArgumentException if either of the given pitches are uninitialized, or if
    *                                  there is no note at the given position
    */
-  protected void editPitch(Pitch pitch, int position, Pitch newPitch)
+  protected void editPitch(Pitch pitch, int position, int instrument, Pitch newPitch)
       throws IllegalArgumentException {
     this.checkPitchException(pitch);
     this.checkPitchException(newPitch);
     if (!pitch.equals(newPitch)) {
       List<Note> pitchList = this.pitches.get(pitch);
       for (Note n : pitchList) {
-        if (n.getStartPos() == position) {
+        if (n.getStartPos() == position && n.getInstrument() == instrument) {
           Note test = new Note(n);
           this.addNoteInOrder(newPitch, test);
           pitchList.remove(n);
           return;
         }
       }
-      throw new IllegalArgumentException("Note does not exist at given position.");
+      throw new IllegalArgumentException("There is no note at position " + position + " played "
+          + "on instrument " + instrument + ".");
     }
   }
 
@@ -234,13 +237,13 @@ public final class Octave {
    * @throws IllegalArgumentException if the given pitch is uninitialized, if there is no note at
    *                                  the given position, or if the new position is negative
    */
-  protected void editPosition(Pitch pitch, int position, int newPosition)
+  protected void editPosition(Pitch pitch, int position, int instrument, int newPosition)
       throws IllegalArgumentException {
     this.checkPitchException(pitch);
     if (position != newPosition) {
       List<Note> pitchList = this.pitches.get(pitch);
       for (Note n : pitchList) {
-        if (n.getStartPos() == position) {
+        if (n.getStartPos() == position && n.getInstrument() == instrument) {
           Note test = new Note(n);
           test.setStartPos(newPosition);
           this.addNoteInOrder(pitch, test);
@@ -248,7 +251,8 @@ public final class Octave {
           return;
         }
       }
-      throw new IllegalArgumentException("Note does not exist at given position.");
+      throw new IllegalArgumentException("There is no note at position " + position + " played "
+          + "on instrument " + instrument + ".");
     }
   }
 
@@ -261,17 +265,18 @@ public final class Octave {
    * @throws IllegalArgumentException if the given pitch is uninitialized, if there is no note at
    *                                  the given position, or if the new duration is negative or zero
    */
-  protected void editDuration(Pitch pitch, int position, int newDuration)
+  protected void editDuration(Pitch pitch, int position, int instrument, int newDuration)
       throws IllegalArgumentException {
     this.checkPitchException(pitch);
     List<Note> pitchList = this.pitches.get(pitch);
     for (Note n : pitchList) {
-      if (n.getStartPos() == position) {
+      if (n.getStartPos() == position && n.getInstrument() == instrument) {
         n.setDuration(newDuration);
         return;
       }
     }
-    throw new IllegalArgumentException("Note does not exist at given position.");
+    throw new IllegalArgumentException("There is no note at position " + position + " played "
+        + "on instrument " + instrument + ".");
   }
 
   /**
@@ -316,8 +321,8 @@ public final class Octave {
     List<Integer[]> notes = new ArrayList<>();
     for (Pitch p : this.pitches.keySet()) {
       for (Note n : this.pitches.get(p)) {
-        Integer[] arr = n.getArray();
-        arr[MidiConversion.NOTE_PITCH] = MidiConversion.getMidiPitch(octave, p);
+        Integer[] arr = {n.getStartPos(), n.getEndPos(), n.getInstrument(),
+          MidiConversion.getMidiPitch(octave, p), n.getVolume()};
         notes.add(arr);
       }
     }
@@ -329,8 +334,8 @@ public final class Octave {
     for (Pitch p : this.pitches.keySet()) {
       for (Note n : this.pitches.get(p)) {
         if (n.getStartPos() <= beat && n.getEndPos() > beat) {
-          Integer[] arr = n.getArray();
-          arr[MidiConversion.NOTE_PITCH] = MidiConversion.getMidiPitch(octave, p);
+          Integer[] arr = {n.getStartPos(), n.getEndPos(), n.getInstrument(),
+              MidiConversion.getMidiPitch(octave, p), n.getVolume()};
           notes.add(arr);
         }
       }

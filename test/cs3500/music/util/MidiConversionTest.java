@@ -1,117 +1,163 @@
 package cs3500.music.util;
 
 import cs3500.music.model.Pitch;
+
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
 /**
- * Tests for the dopest group this side of the quadrant.
+ * Tests for the {@link MidiConversion} class.
  */
 public class MidiConversionTest {
-  private MidiConversion mc;
+  private final MidiConversion mc = new MidiConversion();
 
+  // Tests for the getPitch method
   @Test(expected = IllegalArgumentException.class)
-  public void testGetPitchInvalidArgument1() {
+  public void getPitchTooLow() {
     mc.getPitch(-1);
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void testGetPitchInvalidArgument2() {
+  public void getPitchTooHigh() {
     mc.getPitch(128);
   }
 
   @Test
-  public void testGetPitch1() {
-    assertEquals(mc.getPitch(60).toString(), "C");
+  public void getPitchMiddleC() {
+    assertEquals(Pitch.C, mc.getPitch(60));
   }
 
   @Test
-  public void testGetPitch2() {
-    assertEquals(mc.getPitch(61).toString(), "C#");
+  public void getPitchLowEnd() {
+    assertEquals(Pitch.GSHARP, mc.getPitch(32));
   }
 
   @Test
-  public void testGetPitch3() {
-    assertEquals(mc.getPitch(72).toString(), "C");
+  public void getPitchHighEnd() {
+    assertEquals(Pitch.F, mc.getPitch(125));
   }
 
+  // Tests for the getOctave method
   @Test(expected = IllegalArgumentException.class)
-  public void testGetOctaveIllegalArgument1() {
+  public void getOctaveTooLow() {
     mc.getOctave(-1);
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void testGetOctaveIllegalArgument2() {
+  public void getOctaveTooHigh() {
     mc.getOctave(128);
   }
 
   @Test
-  public void testGetOctave1() {
-    assertEquals(mc.getOctave(60), 4);
+  public void getOctaveMiddleC() {
+    assertEquals(4, mc.getOctave(60));
   }
 
   @Test
-  public void testGetOctave2() {
-    assertEquals(mc.getOctave(48), 3);
+  public void getOctaveLowEnd() {
+    assertEquals(2, mc.getOctave(42));
   }
 
   @Test
-  public void testGetOctave3() {
-    assertEquals(mc.getOctave(72), 5);
+  public void getOctaveHighEnd() {
+    assertEquals(5, mc.getOctave(72));
   }
 
-  @Test
-  public void testGetOctave4() {
-    assertEquals(mc.getOctave(61), 4);
-  }
-
+  // Tests for the getDuration method
   @Test(expected = IllegalArgumentException.class)
-  public void testGetDurationIllegalArgument1() {
+  public void getDurationEndBeforeStart() {
     mc.getDuration(31, 15);
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void testGetDurationIllegalArgument2() {
+  public void getDurationNegativeStart() {
     mc.getDuration(-2, 4);
   }
 
   @Test(expected = IllegalArgumentException.class)
-  public void testGetDurationIllegalArgument3() {
+  public void getDurationNegativeEnd() {
     mc.getDuration(-4, -2);
   }
 
   @Test
-  public void testGetDuration1() {
-    assertEquals(mc.getDuration(0, 3), 4);
+  public void getDurationSameStartEnd() {
+    assertEquals(1, mc.getDuration(3, 3));
   }
 
   @Test
-  public void testGetDuration2() {
-    assertEquals(mc.getDuration(15, 16), 2);
+  public void getDurationValid() {
+    assertEquals(mc.getDuration(12, 16), 5);
   }
 
+  // Tests for the getMidiPitch method d
   @Test(expected = IllegalArgumentException.class)
-  public void testGetMidiPitchIllegalArgument() {
+  public void getMidiPitchNullPitch() {
     mc.getMidiPitch(3, null);
   }
 
-  @Test
-  public void testGetMidiPitch1() {
-    assertEquals(mc.getMidiPitch(4, Pitch.C), 60);
+  @Test(expected = IllegalArgumentException.class)
+  public void getMidiPitchLowOctave() {
+    mc.getMidiPitch(0, Pitch.B);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void getMidiPitchHighOctave() {
+    mc.getMidiPitch(11, Pitch.C);
   }
 
   @Test
-  public void testGetMidiPitch2() {
-    assertEquals(mc.getMidiPitch(3, Pitch.C), 48);
+  public void getMidiPitchMiddleC() {
+    assertEquals(60, mc.getMidiPitch(4, Pitch.C));
   }
 
   @Test
-  public void testRingAroundTheRosie() {
-    int pitch = mc.getMidiPitch(4, Pitch.C);
-    assertEquals(Pitch.C, mc.getPitch(pitch));
-    assertEquals(4, mc.getOctave(pitch));
-    assertEquals(pitch, mc.getMidiPitch(mc.getOctave(pitch), mc.getPitch(pitch)));
+  public void getMidiPitchLowEnd() {
+    assertEquals(35, mc.getMidiPitch(1, Pitch.B));
   }
 
+  @Test
+  public void getMidiPitchHighEnd() {
+    assertEquals(116, mc.getMidiPitch(8, Pitch.GSHARP));
+  }
+
+  @Test
+  public void getMidiPitchRoundaboutMiddleC() {
+    assertEquals(Pitch.C, mc.getPitch(60));
+    assertEquals(4, mc.getOctave(60));
+    assertEquals(60, mc.getMidiPitch(mc.getOctave(60), mc.getPitch(60)));
+  }
+
+  @Test
+  public void getMidiPitchRoundabout77() {
+    assertEquals(Pitch.F, mc.getPitch(77));
+    assertEquals(5, mc.getOctave(77));
+    assertEquals(77, mc.getMidiPitch(mc.getOctave(77), mc.getPitch(77)));
+  }
+
+  // Tests for the getPitchName method
+  @Test(expected = IllegalArgumentException.class)
+  public void getPitchNameTooLow() {
+    mc.getPitchName(-1);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void getPitchNameTooHigh() {
+    mc.getPitchName(128);
+  }
+
+  @Test
+  public void getPitchNameMiddleC() {
+    assertEquals("C4", mc.getPitchName(60));
+  }
+
+  @Test
+  public void getPitchNameLowEnd() {
+    assertEquals("A1", mc.getPitchName(33));
+  }
+
+  @Test
+  public void getPitchNameHighEnd() {
+    assertEquals("E9", mc.getPitchName(124));
+  }
 }

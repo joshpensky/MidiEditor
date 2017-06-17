@@ -18,43 +18,43 @@ public class MidiConversion {
   /**
    * Calculates the corresponding pitch given the given MIDI representation of the pitch.
    *
-   * @param pitch   the numerical representation of the pitch/octave as seen by the MIDI
+   * @param midiPitch   the numerical representation of the pitch/octave as seen by the MIDI
    * @return the corresponding pitch
    * @throws IllegalArgumentException if the given pitch value is not in the range [0, 127]
    */
-  public static Pitch getPitch(int pitch) throws IllegalArgumentException {
-    if (pitch < 0 || pitch > 127) {
+  public static Pitch getPitch(int midiPitch) throws IllegalArgumentException {
+    if (midiPitch < 0 || midiPitch > 127) {
       throw new IllegalArgumentException("Given pitch is not in range [0, 127].");
     }
     int pitches = Pitch.values().length;
     int middle = MIDDLE_C;
-    int octave = getOctave(pitch);
+    int octave = getOctave(midiPitch);
     if (octave >= 4) {
       middle += (pitches * (octave - 4));
     } else {
       middle -= (pitches * (4 - octave));
     }
-    return Pitch.values()[Math.abs(middle - pitch)];
+    return Pitch.values()[Math.abs(middle - midiPitch)];
   }
 
   /**
    * Calculates the corresponding octave given the given MIDI representation of the pitch.
    *
-   * @param pitch   the numerical representation of the pitch/octave as seen by the MIDI
+   * @param midiPitch   the numerical representation of the pitch/octave as seen by the MIDI
    * @return the octave number of that given pitch
    * @throws IllegalArgumentException if the given pitch value is not in the range [0, 127]
    */
-  public static int getOctave(int pitch) throws IllegalArgumentException {
-    if (pitch < 0 || pitch > 127) {
+  public static int getOctave(int midiPitch) throws IllegalArgumentException {
+    if (midiPitch < 0 || midiPitch > 127) {
       throw new IllegalArgumentException("Given pitch is not in range [0, 127].");
     }
     int pitches = Pitch.values().length;
     int middle = MIDDLE_C;
-    if (pitch > middle) {
-      int up = (int) Math.floor((pitch - middle) / (double) pitches);
+    if (midiPitch > middle) {
+      int up = (int) Math.floor((midiPitch - middle) / (double) pitches);
       return 4 + up;
     } else {
-      int down = (int) Math.ceil((middle - pitch) / (double) pitches);
+      int down = (int) Math.ceil((middle - midiPitch) / (double) pitches);
       return 4 - down;
     }
   }
@@ -116,6 +116,6 @@ public class MidiConversion {
    */
   public static String getPitchName(int midiPitch) throws IllegalArgumentException {
     return MidiConversion.getPitch(midiPitch).toString()
-      + Integer.toString(MidiConversion.getOctave(midiPitch));
+        + Integer.toString(MidiConversion.getOctave(midiPitch));
   }
 }

@@ -25,14 +25,16 @@ public class MusicEditorBuilder implements CompositionBuilder<MusicEditorOperati
   }
 
   @Override
-  public CompositionBuilder<MusicEditorOperations> setTempo(int tempo) {
+  public CompositionBuilder<MusicEditorOperations> setTempo(int tempo)
+      throws IllegalArgumentException {
     this.model.setTempo(tempo);
     return this;
   }
 
   @Override
   public CompositionBuilder<MusicEditorOperations> addNote(int start, int end, int instrument,
-                                                           int pitch, int volume) {
+                                                           int pitch, int volume)
+      throws IllegalArgumentException {
     this.model.addNote(start, end, instrument, pitch, volume);
     return this;
   }

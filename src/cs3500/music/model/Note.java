@@ -150,12 +150,12 @@ public final class Note {
     return this.instrument;
   }
 
-  protected Integer[] getArray() {
-    Integer[] arr = new Integer[5];
-    arr[MidiConversion.NOTE_START] = this.startPos;
-    arr[MidiConversion.NOTE_END] = this.endPos;
-    arr[MidiConversion.NOTE_INSTRUMENT] = this.instrument;
-    arr[MidiConversion.NOTE_VOLUME] = this.volume;
-    return arr;
+  /**
+   * Gets the volume of this note.
+   *
+   * @return the volume of this note
+   */
+  protected int getVolume() {
+    return this.instrument;
   }
 }

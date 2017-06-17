@@ -14,9 +14,7 @@ public final class Piece {
 
   /**
    * Default constructor.
-   * Constructs a new {@code Piece} object with a title and a measure.
-   *
-   * @throws IllegalArgumentException if the given title is uninitialized
+   * Constructs a new {@code Piece} object.
    */
   protected Piece() {
     this.setTempo(0);
@@ -215,9 +213,10 @@ public final class Piece {
    * @throws IllegalArgumentException if the given note is uninitialized, or if the note does not
    *                                  exist in the piece
    */
-  protected void removeNote(int octave, Pitch pitch, int position) throws IllegalArgumentException {
+  protected void removeNote(int octave, Pitch pitch, int position, int instrument)
+      throws IllegalArgumentException {
     checkOctaveException(octave);
-    this.octaves.get(octave).removeNote(pitch, position);
+    this.octaves.get(octave).removeNote(pitch, position, instrument);
   }
 
   /**
@@ -228,10 +227,10 @@ public final class Piece {
    * @throws IllegalArgumentException if the given note or pitch are uninitialized, or if the note
    *                                  does not exist in the piece
    */
-  protected void editPitch(int octave, Pitch pitch, int position, Pitch newPitch)
+  protected void editPitch(int octave, Pitch pitch, int position, int instrument, Pitch newPitch)
       throws IllegalArgumentException {
     checkOctaveException(octave);
-    this.octaves.get(octave).editPitch(pitch, position, newPitch);
+    this.octaves.get(octave).editPitch(pitch, position, instrument, newPitch);
   }
 
   /**
@@ -241,10 +240,11 @@ public final class Piece {
    * @throws IllegalArgumentException if the given note is uninitialized, the position is
    *                                  negative, or if the note does not exist in the piece
    */
-  protected void editPosition(int octave, Pitch pitch, int position, int newPosition)
+  protected void editPosition(int octave, Pitch pitch, int position, int instrument,
+                              int newPosition)
       throws IllegalArgumentException {
     checkOctaveException(octave);
-    this.octaves.get(octave).editPosition(pitch, position, newPosition);
+    this.octaves.get(octave).editPosition(pitch, position, instrument, newPosition);
   }
 
   /**
@@ -253,10 +253,11 @@ public final class Piece {
    * @throws IllegalArgumentException if the given note is uninitialized, the duration is
    *                                  negative, or if the note does not exist in the piece
    */
-  protected void editDuration(int octave, Pitch pitch, int position, int newDuration)
+  protected void editDuration(int octave, Pitch pitch, int position, int instrument,
+                              int newDuration)
       throws IllegalArgumentException {
     checkOctaveException(octave);
-    this.octaves.get(octave).editDuration(pitch, position, newDuration);
+    this.octaves.get(octave).editDuration(pitch, position, instrument, newDuration);
   }
 
   /**

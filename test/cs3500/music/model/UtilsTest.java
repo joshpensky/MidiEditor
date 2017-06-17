@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import cs3500.music.model.Utils;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

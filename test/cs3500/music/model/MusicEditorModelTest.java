@@ -8,7 +8,7 @@ import static org.junit.Assert.assertEquals;
  * Tests for the {@link MusicEditorModel} class.
  */
 public class MusicEditorModelTest {
-  MusicEditorOperations model = new MusicEditorModel();
+  private final MusicEditorOperations model = new MusicEditorModel();
 
   // Tests for the default constructor
   @Test
@@ -423,4 +423,47 @@ public class MusicEditorModelTest {
     assertEquals(view, model.view());
   }
 
+  // Tests for the setTempo method
+  @Test(expected = IllegalStateException.class)
+  public void setTempoNothingOpened() {
+    model.setTempo(30);
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void setTempoNegative() {
+    model.create();
+    model.setTempo(-5);
+  }
+
+  @Test
+  public void setTempoValid() {
+    model.create();
+    model.setTempo(400);
+    assertEquals(400, model.getTempo());
+  }
+
+  // Tests for the getTempo method
+  @Test
+  public void getTempoNothingOpened() {
+    model.getTempo();
+  }
+
+  @Test
+  public void getTempoInit() {
+    model.create();
+    assertEquals(0, model.getTempo());
+  }
+
+  @Test
+  public void getTempoAfterSetting() {
+    model.create();
+    model.setTempo(5342);
+    assertEquals(5342, model.getTempo());
+  }
+
+  // Tests for the getNotes method
+
+  // Tests for the getNotesAtBeat method
+
+  // Tests for the getLength method
 }

@@ -45,7 +45,8 @@ public final class MusicEditorModel implements MusicEditorOperations {
   public void removeNote(int start, int instrument, int pitch)
       throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
-    this.opened.removeNote(MidiConversion.getOctave(pitch), MidiConversion.getPitch(pitch), start);
+    this.opened.removeNote(MidiConversion.getOctave(pitch), MidiConversion.getPitch(pitch),
+      start, instrument);
   }
 
   @Override
@@ -56,7 +57,7 @@ public final class MusicEditorModel implements MusicEditorOperations {
     if (octave != MidiConversion.getOctave(editedPitch)) {
       throw new IllegalArgumentException("Cannot edit octave, only pitch.");
     }
-    this.opened.editPitch(octave, MidiConversion.getPitch(pitch), start,
+    this.opened.editPitch(octave, MidiConversion.getPitch(pitch), start, instrument,
         MidiConversion.getPitch(editedPitch));
   }
 
@@ -64,34 +65,52 @@ public final class MusicEditorModel implements MusicEditorOperations {
   public void editNotePosition(int start, int instrument, int pitch, int editedStart)
       throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
-    this.opened.editPosition(MidiConversion.getOctave(pitch), MidiConversion.getPitch(pitch), start,
-        editedStart);
+    this.opened.editPosition(MidiConversion.getOctave(pitch), MidiConversion.getPitch(pitch),
+        start, instrument, editedStart);
   }
 
   @Override
   public void editNoteDuration(int start, int instrument, int pitch, int editedEnd)
       throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
-    this.opened.editDuration(MidiConversion.getOctave(pitch), MidiConversion.getPitch(pitch), start,
-        editedEnd);
+    this.opened.editDuration(MidiConversion.getOctave(pitch), MidiConversion.getPitch(pitch),
+        start, instrument, editedEnd);
   }
 
   @Override
-  public void setTempo(int tempo) {
+  public void setTempo(int tempo) throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
     this.opened.setTempo(tempo);
   }
 
   @Override
-  public int getTempo() {
+  public int getTempo() throws IllegalStateException {
     this.openedPieceException();
     return this.opened.getTempo();
   }
 
+  @Override
+  public List<Integer[]> getNotes() throws IllegalStateException {
+    this.openedPieceException();
+    return this.opened.getNotes();
+  }
+
+  @Override
+  public List<Integer[]> getNotesAtBeat(int beat) throws IllegalStateException {
+    this.openedPieceException();
+    return this.opened.getNotesAtBeat(beat);
+  }
+
+  @Override
+  public int getLength() throws IllegalStateException {
+    this.openedPieceException();
+    return this.opened.length();
+  }
+
   /**
    * Helper to the print, close, addNote, removeNote, editNotePitch, editNotePosition,
-   * editNoteDuration, and overlay methods. Checks if there is currently a piece opened, and if
-   * not throws an exception.
+   * editNoteDuration, setTempo, getTempo, getNotes, getNotesAtBeat, and getLength methods. Checks
+   * if there is currently a piece opened, and if not throws an exception.
    *
    * @throws IllegalStateException if there is currently no piece opened
    */
@@ -99,23 +118,5 @@ public final class MusicEditorModel implements MusicEditorOperations {
     if (this.opened == null) {
       throw new IllegalStateException("There is no piece currently open.");
     }
-  }
-
-  @Override
-  public List<Integer[]> getNotes() {
-    this.openedPieceException();
-    return this.opened.getNotes();
-  }
-
-  @Override
-  public List<Integer[]> getNotesAtBeat(int beat) {
-    this.openedPieceException();
-    return this.opened.getNotesAtBeat(beat);
-  }
-
-  @Override
-  public int getLength() {
-    this.openedPieceException();
-    return this.opened.length();
   }
 }
