@@ -30,7 +30,7 @@ public class EditorPanel extends JViewport {
   private static final int CELL_WIDTH = 30;
   private int cellHeight = 5;
 
-  private final MusicEditorOperations model;
+
   private final StringBuilder log;
   private List<Integer[]> notes;
   private int highPitch;
@@ -58,12 +58,12 @@ public class EditorPanel extends JViewport {
     } else if (width <= 0 || height <= 0) {
       throw new IllegalArgumentException("Width and height must be positive and non-zero.");
     }
-    this.model = model;
-    this.notes = this.model.getNotes();
+
+    this.notes = model.getNotes();
     this.highPitch = this.getHighestPitch();
     this.lowPitch = this.getLowestPitch();
     this.numRows = highPitch - lowPitch + 1;
-    this.pieceLength = this.model.getLength();
+    this.pieceLength = model.getLength();
     this.cursorPosition = 0;
     this.scrollOffset = 0;
     this.cellHeight = getCellHeight(height);

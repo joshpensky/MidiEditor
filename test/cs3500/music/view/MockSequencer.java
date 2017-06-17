@@ -28,7 +28,7 @@ public class MockSequencer implements Sequencer {
 
   /**
    * Gets the log of the mock sequencer, created in the call to start().
-   * @return
+   * @return log of sequencer events
    */
   public String getLog() {
     return this.log.toString();
@@ -69,7 +69,7 @@ public class MockSequencer implements Sequencer {
                 break;
               case ShortMessage.NOTE_ON:
                 notes.add(new Integer[]{(int) event.getTick(), m.getData1(),
-                  m.getData2()});
+                    m.getData2()});
                 break;
               case ShortMessage.NOTE_OFF:
                 for (Integer[] note : notes) {
@@ -85,11 +85,12 @@ public class MockSequencer implements Sequencer {
                     }
                     this.maxLength = Math.max(this.maxLength, tick);
                     this.log.append("note " + note[0] + " " + tick + " " + instrum
-                      + " " + note[1] + " " + note[2] + "\n");
+                        + " " + note[1] + " " + note[2] + "\n");
                     notes.remove(note);
                     break;
                   }
                 }
+                break;
               default:
                 break;
             }
@@ -111,12 +112,12 @@ public class MockSequencer implements Sequencer {
 
   @Override
   public void setSequence(InputStream stream) throws IOException, InvalidMidiDataException {
-
+    //does nothing for mock sequencer
   }
 
   @Override
   public void stop() {
-
+    //does nothing for mock sequencer
   }
 
   @Override
@@ -126,12 +127,12 @@ public class MockSequencer implements Sequencer {
 
   @Override
   public void startRecording() {
-
+    //does nothing for mock sequencer
   }
 
   @Override
   public void stopRecording() {
-
+    //does nothing for mock sequencer
   }
 
   @Override
@@ -146,7 +147,7 @@ public class MockSequencer implements Sequencer {
 
   @Override
   public void recordDisable(Track track) {
-
+    //does nothing for mock sequencer
   }
 
   @Override
@@ -156,7 +157,7 @@ public class MockSequencer implements Sequencer {
 
   @Override
   public void setTempoInBPM(float bpm) {
-
+    //does nothing for mock sequencer
   }
 
   @Override
@@ -166,7 +167,7 @@ public class MockSequencer implements Sequencer {
 
   @Override
   public void setTempoFactor(float factor) {
-
+    //does nothing for mock sequencer
   }
 
   @Override
@@ -181,7 +182,7 @@ public class MockSequencer implements Sequencer {
 
   @Override
   public void setTickPosition(long tick) {
-
+    //does nothing for mock sequencer
   }
 
   @Override
@@ -196,12 +197,12 @@ public class MockSequencer implements Sequencer {
 
   @Override
   public void open() throws MidiUnavailableException {
-
+    //does nothing for mock sequencer
   }
 
   @Override
   public void close() {
-
+    //does nothing for mock sequencer
   }
 
   @Override
@@ -246,12 +247,12 @@ public class MockSequencer implements Sequencer {
 
   @Override
   public void setMicrosecondPosition(long microseconds) {
-
+    //does nothing for mock sequencer
   }
 
   @Override
   public void setMasterSyncMode(SyncMode sync) {
-
+    //does nothing for mock sequencer
   }
 
   @Override
@@ -266,7 +267,7 @@ public class MockSequencer implements Sequencer {
 
   @Override
   public void setSlaveSyncMode(SyncMode sync) {
-
+    //does nothing for mock sequencer
   }
 
   @Override
@@ -281,7 +282,7 @@ public class MockSequencer implements Sequencer {
 
   @Override
   public void setTrackMute(int track, boolean mute) {
-
+    //does nothing for mock sequencer
   }
 
   @Override
@@ -291,7 +292,7 @@ public class MockSequencer implements Sequencer {
 
   @Override
   public void setTrackSolo(int track, boolean solo) {
-
+    //does nothing for mock sequencer
   }
 
   @Override
@@ -306,7 +307,7 @@ public class MockSequencer implements Sequencer {
 
   @Override
   public void removeMetaEventListener(MetaEventListener listener) {
-
+    //does nothing for mock sequencer
   }
 
   @Override
@@ -321,7 +322,7 @@ public class MockSequencer implements Sequencer {
 
   @Override
   public void setLoopStartPoint(long tick) {
-
+    //does nothing for mock sequencer
   }
 
   @Override
@@ -331,7 +332,7 @@ public class MockSequencer implements Sequencer {
 
   @Override
   public void setLoopEndPoint(long tick) {
-
+    //does nothing for mock sequencer
   }
 
   @Override
@@ -341,7 +342,7 @@ public class MockSequencer implements Sequencer {
 
   @Override
   public void setLoopCount(int count) {
-
+    //does nothing for mock sequencer
   }
 
   @Override

@@ -47,7 +47,7 @@ public final class MusicEditorModel implements MusicEditorOperations {
       throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();
     this.opened.removeNote(MidiConversion.getOctave(pitch), MidiConversion.getPitch(pitch),
-      start, instrument);
+        start, instrument);
   }
 
   @Override

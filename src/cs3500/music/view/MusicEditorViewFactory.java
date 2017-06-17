@@ -54,6 +54,7 @@ public class MusicEditorViewFactory {
         } catch (MidiUnavailableException e) {
           System.err.println(e.getMessage());
         }
+        break;
       default:
         throw new IllegalArgumentException("Given view, " + viewName + ", does not exist.");
     }

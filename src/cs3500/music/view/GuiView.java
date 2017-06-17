@@ -14,7 +14,7 @@ public class GuiView extends JFrame implements MusicEditorView {
   private static final int WIDTH = 1100;
 
   private final GuiContainer container;
-  private final MusicEditorOperations model;
+
 
   /**
    * Constructs a new {@code GuiView} using the given model to display notes in the
@@ -27,8 +27,7 @@ public class GuiView extends JFrame implements MusicEditorView {
     if (model == null) {
       throw new IllegalArgumentException("Given model is uninitialized.");
     }
-    this.model = model;
-    this.container = new GuiContainer(this.model, WIDTH);
+    this.container = new GuiContainer(model, WIDTH);
     this.getContentPane().add(container);
     this.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
     this.pack();

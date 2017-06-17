@@ -7,7 +7,8 @@ import cs3500.music.util.CompositionBuilder;
 import cs3500.music.util.MidiConversion;
 import org.junit.Test;
 
-import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 
