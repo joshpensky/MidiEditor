@@ -18,7 +18,6 @@ public class EditorPanelTest {
     void init() {
         m1 = new MusicEditorBuilder();
         model = m1.build();
-        model.create();
         model.addNote(0, 30, 1, 60, 100);
         ep = new EditorPanel(model, 20, 20);
     }
@@ -61,7 +60,6 @@ public class EditorPanelTest {
         init();
         MusicEditorBuilder temp = new MusicEditorBuilder();
         MusicEditorOperations m2 = temp.build();
-        m2.create();
         m2.addNote(0, 30, 1, 60, 100);
         EditorPanel other = new EditorPanel(m2, 20, 20);
         ep.updateCursor(true);

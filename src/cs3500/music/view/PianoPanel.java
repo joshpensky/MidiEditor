@@ -44,6 +44,11 @@ public class PianoPanel extends JPanel {
     if (width <= 0) {
       throw new IllegalArgumentException("Cannot pass negative or zero width.");
     }
+
+    if (notes == null) {
+      throw new IllegalArgumentException("Cannot pass null list of notes");
+    }
+
     this.updateHighlights(notes);
     this.numOctaves = 10;
     this.numKeys = 0;

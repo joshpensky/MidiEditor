@@ -17,7 +17,6 @@ public class GuiContainerTest {
     void init() {
         m1 = new MusicEditorBuilder();
         model = m1.build();
-        model.create();
         gc = new GuiContainer(model, 20);
     }
 
