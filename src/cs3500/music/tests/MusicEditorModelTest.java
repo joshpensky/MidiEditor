@@ -4,7 +4,10 @@ import cs3500.music.model.MusicEditorBuilder;
 import cs3500.music.model.MusicEditorModel;
 import cs3500.music.model.MusicEditorOperations;
 import cs3500.music.util.CompositionBuilder;
+import cs3500.music.util.MidiConversion;
 import org.junit.Test;
+
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -429,8 +432,113 @@ public class MusicEditorModelTest {
   }
 
   // Tests for the getNotes method
+  @Test
+  public void getNotesOnEmptyPiece() {
+    model.create();
+    assertEquals(model.getNotes().size(), 0);
+  }
+
+  @Test
+  public void getNotesWithNotesThere1() {
+    model.create();
+    model.addNote(0, 1, 1, 60, 100);
+    model.addNote(0, 2, 1, 70, 100);
+    assertEquals(model.getNotes().size(), 2);
+    assertEquals(model.getNotes().get(0)[MidiConversion.NOTE_START] == 0, true);
+    assertEquals(model.getNotes().get(0)[MidiConversion.NOTE_END] == 1, true);
+    assertEquals(model.getNotes().get(0)[MidiConversion.NOTE_INSTRUMENT] == 1, true);
+    assertEquals(model.getNotes().get(0)[MidiConversion.NOTE_PITCH] == 60, true);
+    assertEquals(model.getNotes().get(0)[MidiConversion.NOTE_VOLUME] == 100, true);
+    assertEquals(model.getNotes().get(1)[MidiConversion.NOTE_START] == 0, true);
+    assertEquals(model.getNotes().get(1)[MidiConversion.NOTE_END] == 2, true);
+    assertEquals(model.getNotes().get(1)[MidiConversion.NOTE_INSTRUMENT] == 1, true);
+    assertEquals(model.getNotes().get(1)[MidiConversion.NOTE_PITCH] == 70, true);
+    assertEquals(model.getNotes().get(1)[MidiConversion.NOTE_VOLUME] == 100, true);
+  }
+
+  @Test
+  public void getNotesWithNotesThere2() {
+    model.create();
+    model.addNote(0, 1, 1, 60, 100);
+    model.addNote(0, 2, 1, 70, 100);
+    model.removeNote(0, 1, 60);
+    assertEquals(model.getNotes().size(), 1);
+    assertEquals(model.getNotes().get(0)[MidiConversion.NOTE_START] == 0, true);
+    assertEquals(model.getNotes().get(0)[MidiConversion.NOTE_END] == 2, true);
+    assertEquals(model.getNotes().get(0)[MidiConversion.NOTE_INSTRUMENT] == 1, true);
+    assertEquals(model.getNotes().get(0)[MidiConversion.NOTE_PITCH] == 70, true);
+    assertEquals(model.getNotes().get(0)[MidiConversion.NOTE_VOLUME] == 100, true);
+  }
+
+  @Test
+  public void getNotesWithNotesThere3() {
+    model.create();
+    model.addNote(0, 1, 1, 60, 100);
+    model.addNote(0, 2, 1, 70, 100);
+    model.editNoteDuration(0, 1, 60, 5);
+    assertEquals(model.getNotes().get(0)[MidiConversion.NOTE_START] == 0, true);
+    assertEquals(model.getNotes().get(0)[MidiConversion.NOTE_END] == 4, true);
+    assertEquals(model.getNotes().get(0)[MidiConversion.NOTE_INSTRUMENT] == 1, true);
+    assertEquals(model.getNotes().get(0)[MidiConversion.NOTE_PITCH] == 60, true);
+    assertEquals(model.getNotes().get(0)[MidiConversion.NOTE_VOLUME] == 100, true);
+    assertEquals(model.getNotes().get(1)[MidiConversion.NOTE_START] == 0, true);
+    assertEquals(model.getNotes().get(1)[MidiConversion.NOTE_END] == 2, true);
+    assertEquals(model.getNotes().get(1)[MidiConversion.NOTE_INSTRUMENT] == 1, true);
+    assertEquals(model.getNotes().get(1)[MidiConversion.NOTE_PITCH] == 70, true);
+    assertEquals(model.getNotes().get(1)[MidiConversion.NOTE_VOLUME] == 100, true);
+  }
 
   // Tests for the getNotesAtBeat method
+  @Test
+  public void getNoteThatIsTooFar() {
+    model.create();
+    model.addNote(0, 1, 1, 60, 100);
+    model.getNotesAtBeat(3);
+    assertEquals(model.getNotesAtBeat(3).size(), 0);
+  }
+
+  @Test
+  public void getNotesThatIsBadIndex() {
+    model.create();
+    model.addNote(0, 1, 1, 60, 100);
+    assertEquals(model.getNotesAtBeat(-1).size(), 0);
+  }
+
+  @Test
+  public void getNotesAtBeatValid() {
+    model.create();
+    model.addNote(0, 1, 1, 60, 100);
+    assertEquals(model.getNotesAtBeat(0).get(0)[MidiConversion.NOTE_START] == 0, true);
+    assertEquals(model.getNotesAtBeat(0).get(0)[MidiConversion.NOTE_END] == 1, true);
+    assertEquals(model.getNotesAtBeat(0).get(0)[MidiConversion.NOTE_INSTRUMENT] == 1, true);
+    assertEquals(model.getNotesAtBeat(0).get(0)[MidiConversion.NOTE_PITCH] == 60, true);
+    assertEquals(model.getNotesAtBeat(0).get(0)[MidiConversion.NOTE_VOLUME] == 100, true);
+  }
+
+  @Test
+  public void getNotesAtBeatValid2() {
+    model.create();
+    model.addNote(0, 1, 1, 60, 100);
+    model.addNote(0, 2, 1, 70, 100);
+    assertEquals(model.getNotesAtBeat(0).get(0)[MidiConversion.NOTE_START] == 0, true);
+    assertEquals(model.getNotesAtBeat(0).get(0)[MidiConversion.NOTE_END] == 1, true);
+    assertEquals(model.getNotesAtBeat(0).get(0)[MidiConversion.NOTE_INSTRUMENT] == 1, true);
+    assertEquals(model.getNotesAtBeat(0).get(0)[MidiConversion.NOTE_PITCH] == 60, true);
+    assertEquals(model.getNotesAtBeat(0).get(0)[MidiConversion.NOTE_VOLUME] == 100, true);
+    assertEquals(model.getNotesAtBeat(0).get(1)[MidiConversion.NOTE_START] == 0, true);
+    assertEquals(model.getNotesAtBeat(0).get(1)[MidiConversion.NOTE_END] == 2, true);
+    assertEquals(model.getNotesAtBeat(0).get(1)[MidiConversion.NOTE_INSTRUMENT] == 1, true);
+    assertEquals(model.getNotesAtBeat(0).get(1)[MidiConversion.NOTE_PITCH] == 70, true);
+    assertEquals(model.getNotesAtBeat(0).get(1)[MidiConversion.NOTE_VOLUME] == 100, true);
+  }
+
+  @Test
+  public void getNotesAtBeatValid3() {
+    model.create();
+    model.addNote(2, 4, 1, 60, 100);
+    List<Integer[]> temp = new ArrayList<>();
+    assertEquals(temp, model.getNotesAtBeat(0));
+  }
 
   // Tests for the getLength method
   @Test
@@ -454,4 +562,7 @@ public class MusicEditorModelTest {
     model.addNote(4, 5, 16, 45, 120);
     assertEquals(24, model.getLength());
   }
+
+
+
 }
