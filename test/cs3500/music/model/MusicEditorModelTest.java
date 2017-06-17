@@ -443,7 +443,7 @@ public class MusicEditorModelTest {
   }
 
   // Tests for the getTempo method
-  @Test
+  @Test(expected = IllegalStateException.class)
   public void getTempoNothingOpened() {
     model.getTempo();
   }

@@ -4,6 +4,8 @@ import cs3500.music.model.Pitch;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Tests for the {@link Pitch} enumeration.
@@ -68,5 +70,66 @@ public class PitchTest {
   @Test
   public void toStringB() {
     assertEquals("B", Pitch.B.toString());
+  }
+
+  // Tests for the isSharp method
+  @Test
+  public void isSharpC() {
+    assertFalse(Pitch.C.isSharp());
+  }
+
+  @Test
+  public void isSharpCSharp() {
+    assertTrue(Pitch.CSHARP.isSharp());
+  }
+
+  @Test
+  public void isSharpD() {
+    assertFalse(Pitch.D.isSharp());
+  }
+
+  @Test
+  public void isSharpDSharp() {
+    assertTrue(Pitch.DSHARP.isSharp());
+  }
+
+  @Test
+  public void isSharpE() {
+    assertFalse(Pitch.E.isSharp());
+  }
+
+  @Test
+  public void isSharpF() {
+    assertFalse(Pitch.F.isSharp());
+  }
+
+  @Test
+  public void isSharpFSharp() {
+    assertTrue(Pitch.FSHARP.isSharp());
+  }
+
+  @Test
+  public void isSharpG() {
+    assertFalse(Pitch.G.isSharp());
+  }
+
+  @Test
+  public void isSharpGSharp() {
+    assertTrue(Pitch.GSHARP.isSharp());
+  }
+
+  @Test
+  public void isSharpA() {
+    assertFalse(Pitch.A.isSharp());
+  }
+
+  @Test
+  public void isSharpASharp() {
+    assertTrue(Pitch.ASHARP.isSharp());
+  }
+
+  @Test
+  public void isSharpB() {
+    assertFalse(Pitch.B.isSharp());
   }
 }

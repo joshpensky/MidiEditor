@@ -23,7 +23,7 @@ public interface MusicEditorOperations {
   String view() throws IllegalStateException;
 
   /**
-   * Adds a new note to the currently opened piece in the given octave at the given pitch.
+   * Adds a new note to the currently opened piece at the given location details.
    *
    * @param start        the starting position of the note (measured in beats)
    * @param end          the ending position of the note (measured in beats)

@@ -197,9 +197,20 @@ public final class Piece {
   }
 
   /**
-   * Adds a new note to the piece.
+   * Adds a new note to the piece at the given location details.
    *
-   * @throws IllegalArgumentException if the given note is uninitialized
+   * @param octave       the octave of the note
+   * @param pitch        the pitch of the note
+   * @param position     the starting position of the note (measured in beats)
+   * @param duration     the duration of the note (measured in beats)
+   * @param instrument   the instrument the note is played in [0, 127]
+   * @param volume       the volume at which the note is played [0, 127]
+   * @throws IllegalArgumentException if the given octave is not in range [1, 10], the pitch
+   *                                  is uninitialized, the starting position is negative, the
+   *                                  duration is 0 or negative, the instrument is not in range
+   *                                  [0, 127], the volume is not in range [0, 127], or if a note
+   *                                  already exists at the given position in the same pitch
+   *                                  played on the same instrument
    */
   protected void addNote(int octave, Pitch pitch, int position, int duration, int instrument,
                          int volume) throws IllegalArgumentException {
@@ -210,8 +221,16 @@ public final class Piece {
   /**
    * Removes the given note from the piece, if possible.
    *
-   * @throws IllegalArgumentException if the given note is uninitialized, or if the note does not
-   *                                  exist in the piece
+   * @param octave       the octave of the note
+   * @param pitch        the pitch of the note
+   * @param position     the starting position of the note (measured in beats)
+   * @param instrument   the instrument the note is played in [0, 127]
+   * @throws IllegalArgumentException if the given octave is not in range [1, 10], the pitch
+   *                                  is uninitialized, the starting position is negative, the
+   *                                  duration is 0 or negative, the instrument is not in range
+   *                                  [0, 127], the volume is not in range [0, 127], or if no note
+   *                                  exists at the given position in the same pitch
+   *                                  played on the same instrument
    */
   protected void removeNote(int octave, Pitch pitch, int position, int instrument)
       throws IllegalArgumentException {
@@ -222,10 +241,17 @@ public final class Piece {
   /**
    * Edits the pitch of a given note from the piece, if possible.
    *
-   * @param pitch   the new pitch of the note
-   * @param octave  the octave of the new pitch
-   * @throws IllegalArgumentException if the given note or pitch are uninitialized, or if the note
-   *                                  does not exist in the piece
+   * @param octave       the octave of the note
+   * @param pitch        the pitch of the note
+   * @param position     the starting position of the note (measured in beats)
+   * @param instrument   the instrument the note is played in [0, 127]
+   * @param newPitch     the new pitch of the note
+   * @throws IllegalArgumentException if the given octave is not in range [1, 10], the pitch
+   *                                  is uninitialized, the starting position is negative, the
+   *                                  duration is 0 or negative, the instrument is not in range
+   *                                  [0, 127], the volume is not in range [0, 127], or if no note
+   *                                  exists at the given position in the same pitch
+   *                                  played on the same instrument
    */
   protected void editPitch(int octave, Pitch pitch, int position, int instrument, Pitch newPitch)
       throws IllegalArgumentException {
@@ -272,15 +298,26 @@ public final class Piece {
     }
   }
 
-  protected int getTempo() {
-    return this.tempo;
-  }
-
-  public void setTempo(int tempo) {
+  /**
+   * Sets the tempo of this piece.
+   *
+   * @param tempo   the tempo to set the piece
+   * @throws IllegalArgumentException if the given tempo is negative
+   */
+  public void setTempo(int tempo) throws IllegalArgumentException {
     if (tempo < 0) {
       throw new IllegalArgumentException("Cannot set negative tempo.");
     }
     this.tempo = tempo;
+  }
+
+  /**
+   * Gets the tempo of this piece.
+   *
+   * @return the tempo of this piece
+   */
+  protected int getTempo() {
+    return this.tempo;
   }
 
   protected List<Integer[]> getNotes() {

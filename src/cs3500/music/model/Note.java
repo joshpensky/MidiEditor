@@ -1,7 +1,5 @@
 package cs3500.music.model;
 
-import cs3500.music.util.MidiConversion;
-
 /**
  * Represents a note in a piece of music.
  */
@@ -156,6 +154,6 @@ public final class Note {
    * @return the volume of this note
    */
   protected int getVolume() {
-    return this.instrument;
+    return this.volume;
   }
 }
