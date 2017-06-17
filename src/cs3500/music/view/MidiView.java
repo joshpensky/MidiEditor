@@ -33,12 +33,10 @@ public class MidiView implements MusicEditorView {
     private Sequencer sequencer;
 
     /**
-     * Constructs a new {@code Builder} for a MidiView. The sequencer is defaulted to the
-     * MidiSystem's sequencer.
+     * Constructs a new {@code Builder} for a MidiView.
      *
      * @param model   the model to be represented musically using MIDI
      * @throws IllegalArgumentException if the given model is uninitialized
-     * @throws MidiUnavailableException if MIDI is currently unavailable for the system
      */
     protected Builder(MusicEditorOperations model) throws IllegalArgumentException {
       if (model == null) {
@@ -64,9 +62,11 @@ public class MidiView implements MusicEditorView {
     }
 
     /**
-     * Returns a new MidiView with the given specifications set in this builder.
+     * Returns a new MidiView with the given specifications set in this builder. If no sequencer
+     * has been set, it is defaulted to the MidiSystem's sequencer.
      *
      * @return a new MidiView with this builder's instructions
+     * @throws MidiUnavailableException if MIDI is currently unavailable for the system
      */
     protected MidiView build() throws MidiUnavailableException {
       if (this.sequencer == null) {
