@@ -15,6 +15,14 @@ import javax.sound.midi.MidiUnavailableException;
  * The main class for the music editor that (currently) handles model and view.
  */
 public class MusicEditor {
+
+  /**
+   * Main for Music Editor. Runs and directs flow for program.
+   * @param args arguments for program to be run. need to be in format: textFileName desiredViewType
+   * @throws IOException appendable/readable not initialized correctly
+   * @throws InvalidMidiDataException data given to midi player not correctly formatted
+   * @throws MidiUnavailableException midi is unavailable for system at this time
+   */
   public static void main(String[] args) throws IOException, InvalidMidiDataException,
       MidiUnavailableException {
     if (args.length != 2) {

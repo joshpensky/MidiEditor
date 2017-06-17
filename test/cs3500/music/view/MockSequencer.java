@@ -1,5 +1,6 @@
 package cs3500.music.view;
 
+
 import javax.sound.midi.*;
 import java.io.IOException;
 import java.io.InputStream;
@@ -142,7 +143,7 @@ public class MockSequencer implements Sequencer {
 
   @Override
   public void recordEnable(Track track, int channel) {
-
+    //does nothing for mock sequencer
   }
 
   @Override

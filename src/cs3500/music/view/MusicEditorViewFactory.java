@@ -54,7 +54,8 @@ public class MusicEditorViewFactory {
         } catch (MidiUnavailableException e) {
           System.err.println(e.getMessage());
         }
-        break;
+        throw new IllegalArgumentException("Midi player error");
+
       default:
         throw new IllegalArgumentException("Given view, " + viewName + ", does not exist.");
     }

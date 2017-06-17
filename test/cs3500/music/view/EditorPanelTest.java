@@ -4,7 +4,7 @@ import cs3500.music.model.MusicEditorBuilder;
 import cs3500.music.model.MusicEditorOperations;
 import org.junit.Test;
 
-import java.awt.*;
+import java.awt.Dimension;
 
 import static org.junit.Assert.assertEquals;
 
