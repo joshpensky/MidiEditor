@@ -6,12 +6,12 @@ import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Created by josh_jpeg on 6/17/17.
+ * Tests for the {@link MusicEditorViewFactory} class.
  */
 public class MusicEditorViewFactoryTest {
   private final MusicEditorBuilder builder = new MusicEditorBuilder();
 
-  /*@Test(expected = IllegalArgumentException.class)
+  @Test(expected = IllegalArgumentException.class)
   public void getViewNullName() {
     MusicEditorViewFactory.getView(null, builder.build());
   }
@@ -34,5 +34,5 @@ public class MusicEditorViewFactoryTest {
   @Test
   public void getViewMidi() {
     assertTrue(MusicEditorViewFactory.getView("midi", builder.build()) instanceof MidiView);
-  }*/
+  }
 }

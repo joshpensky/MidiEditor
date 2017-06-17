@@ -4,39 +4,54 @@ import cs3500.music.model.MusicEditorBuilder;
 import cs3500.music.model.MusicEditorOperations;
 import org.junit.Test;
 
+import java.awt.Dimension;
+
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by Will on 6/17/2017.
+ * Tests for the {@link GuiContainer} class.
  */
 public class GuiContainerTest {
-    GuiContainer gc;
-    MusicEditorBuilder m1;
-    MusicEditorOperations model;
+  private GuiContainer gc;
+  private final MusicEditorBuilder m1 = new MusicEditorBuilder();
+  private MusicEditorOperations model;
 
-    void init() {
-        m1 = new MusicEditorBuilder();
-        model = m1.build();
-        gc = new GuiContainer(model, 20);
-    }
+  void init() {
+    model = m1.build();
+    model.create();
+    gc = new GuiContainer(model, 20);
+  }
 
-    //Tests for argument handling for GuiContainer
-    @Test(expected = IllegalArgumentException.class)
-    public void testNullModelInConstructor() {
-        gc = new GuiContainer(null, 5);
-    }
+  // Tests for the constructor
+  @Test(expected = IllegalArgumentException.class)
+  public void constructorNullModel() {
+    this.gc = new GuiContainer(null, 5);
+  }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testBadWidth() {
-        init();
-        gc = new GuiContainer(model, -1);
-    }
+  @Test(expected = IllegalArgumentException.class)
+  public void constructorNegativeWidth() {
+    init();
+    this.gc = new GuiContainer(this.model, -1);
+  }
 
+  @Test(expected = IllegalArgumentException.class)
+  public void constructorZeroWidth() {
+    init();
+    this.gc = new GuiContainer(this.model, 0);
+  }
 
-   @Test
-    public void getLogTest() {
-        init();
-        assertEquals(gc.getLog(), "");
-   }
+  @Test
+  public void constructorValidInputs() {
+    init();
+    this.gc = new GuiContainer(this.model, 200);
+    assertEquals(new Dimension(200, 730), this.gc.getPreferredSize());
+  }
+
+  // Tests for the getLog method
+  @Test
+  public void getLogTest() {
+    init();
+    assertEquals(gc.getLog(), "");
+  }
 
 }

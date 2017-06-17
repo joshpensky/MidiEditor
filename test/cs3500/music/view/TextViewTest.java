@@ -8,7 +8,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Created by josh_jpeg on 6/17/17.
+ * Tests for the {@link TextView} class.
  */
 public class TextViewTest {
   private final MusicEditorBuilder builder = new MusicEditorBuilder();
@@ -22,6 +22,29 @@ public class TextViewTest {
    */
   public void init(MusicEditorOperations model) {
     this.view = new TextView.Builder(model).setAppendable(this.app).build();
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void builderNullModel() {
+    TextView view = new TextView.Builder(null).build();
+  }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void builderNullAppendable() {
+    TextView view = new TextView.Builder(builder.build()).setAppendable(null).build();
+  }
+
+  @Test
+  public void builderValid() {
+    TextView view = new TextView.Builder(builder.addNote(0, 3, 4, 60, 64).build())
+        .setAppendable(this.app).build();
+    view.initialize();
+    assertEquals(""
+        + "     C4 \n"
+        + "0    X  \n"
+        + "1    |  \n"
+        + "2    |  \n"
+        + "3    |  \n", this.app.toString());
   }
 
   @Test
