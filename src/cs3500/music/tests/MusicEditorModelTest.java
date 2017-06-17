@@ -1,5 +1,9 @@
-package cs3500.music.model;
+package cs3500.music.tests;
 
+import cs3500.music.model.MusicEditorBuilder;
+import cs3500.music.model.MusicEditorModel;
+import cs3500.music.model.MusicEditorOperations;
+import cs3500.music.util.CompositionBuilder;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -8,22 +12,20 @@ import static org.junit.Assert.assertEquals;
  * Tests for the {@link MusicEditorModel} class.
  */
 public class MusicEditorModelTest {
-  private final MusicEditorOperations model = new MusicEditorModel();
+  private final CompositionBuilder<MusicEditorOperations> builder = new MusicEditorBuilder();
+  private final MusicEditorOperations model = builder.build();
+
 
   // Tests for the default constructor
   @Test
   public void defaultConstructor() {
     model.create();
     assertEquals("", model.view());
+    assertEquals(0, model.getNotes().size());
+    assertEquals(0, model.getTempo());
   }
-
 
   // Tests for the view method
-  @Test(expected = IllegalStateException.class)
-  public void viewNothingOpen() {
-    model.view();
-  }
-
   @Test
   public void viewEmptyPiece() {
     model.create();
@@ -169,11 +171,6 @@ public class MusicEditorModelTest {
   }
 
   // Tests for the addNote method
-  @Test(expected = IllegalStateException.class)
-  public void addNoteNothingOpened() {
-    model.addNote(0, 1, 1, 60, 100);
-  }
-
   @Test(expected = IllegalArgumentException.class)
   public void addNoteInvalidOctane() {
     model.create();
@@ -215,11 +212,6 @@ public class MusicEditorModelTest {
   }
 
   // Tests for the removeNote method
-  @Test(expected = IllegalStateException.class)
-  public void removeNoteNothingOpened() {
-    model.removeNote(1, 2, 60);
-  }
-
   @Test(expected = IllegalArgumentException.class)
   public void removeNoteInvalidOctave() {
     model.create();
@@ -248,11 +240,6 @@ public class MusicEditorModelTest {
   }
 
   // Tests for the editNotePitch method
-  @Test(expected = IllegalStateException.class)
-  public void editNotePitchNothingOpened() {
-    model.editNotePitch(0, 1, 60, 59);
-  }
-
   @Test(expected = IllegalArgumentException.class)
   public void editNotePitchInvalidOctave() {
     model.create();
@@ -301,11 +288,6 @@ public class MusicEditorModelTest {
   }
 
   // Tests for the editNotePosition method
-  @Test(expected = IllegalStateException.class)
-  public void editNotePositionNothingOpened() {
-    model.editNotePosition(2, 2, 40, 60);
-  }
-
   @Test(expected = IllegalArgumentException.class)
   public void editNotePositionInvalidOctave() {
     model.create();
@@ -367,11 +349,6 @@ public class MusicEditorModelTest {
   }
 
   // Tests for the editNoteDuration method
-  @Test(expected = IllegalStateException.class)
-  public void editNoteDurationNothingOpened() {
-    model.editNoteDuration(0, 1, 60, 2);
-  }
-
   @Test(expected = IllegalArgumentException.class)
   public void editNoteDurationInvalidOctave() {
     model.create();
@@ -424,11 +401,6 @@ public class MusicEditorModelTest {
   }
 
   // Tests for the setTempo method
-  @Test(expected = IllegalStateException.class)
-  public void setTempoNothingOpened() {
-    model.setTempo(30);
-  }
-
   @Test(expected = IllegalArgumentException.class)
   public void setTempoNegative() {
     model.create();
@@ -443,11 +415,6 @@ public class MusicEditorModelTest {
   }
 
   // Tests for the getTempo method
-  @Test(expected = IllegalStateException.class)
-  public void getTempoNothingOpened() {
-    model.getTempo();
-  }
-
   @Test
   public void getTempoInit() {
     model.create();
@@ -466,11 +433,6 @@ public class MusicEditorModelTest {
   // Tests for the getNotesAtBeat method
 
   // Tests for the getLength method
-  @Test(expected = IllegalStateException.class)
-  public void getLengthNothingOpened() {
-    model.getLength();
-  }
-
   @Test
   public void getLengthEmpty() {
     model.create();

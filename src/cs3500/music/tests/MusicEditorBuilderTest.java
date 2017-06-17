@@ -1,5 +1,6 @@
-package cs3500.music.model;
+package cs3500.music.tests;
 
+import cs3500.music.model.MusicEditorBuilder;
 import cs3500.music.util.MidiConversion;
 
 import org.junit.Test;

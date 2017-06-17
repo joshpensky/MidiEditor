@@ -7,7 +7,7 @@ import java.util.List;
  * A utilities class containing static methods for use throughout the project.
  */
 public final class Utils {
-  protected enum Alignment { LEFT, CENTER, RIGHT }
+  public enum Alignment { LEFT, CENTER, RIGHT }
 
   /**
    * Pads the given String with spaces, until the length of the given String matches or is
@@ -20,7 +20,7 @@ public final class Utils {
    * @return the new space-padded String
    * @throws IllegalArgumentException if the given string or Alignment are null
    */
-  protected static String padString(String str, int length, Alignment align)
+  public static String padString(String str, int length, Alignment align)
       throws IllegalArgumentException {
     if (str == null) {
       throw new IllegalArgumentException("Cannot pad uninitialized string.");
@@ -52,7 +52,7 @@ public final class Utils {
    * @return the last element
    * @throws IllegalArgumentException if the given {@code List} is or contains null
    */
-  protected static <T> List<T> reverse(List<T> list) throws IllegalArgumentException {
+  public static <T> List<T> reverse(List<T> list) throws IllegalArgumentException {
     if (list == null || list.contains(null)) {
       throw new IllegalArgumentException("Cannot give a list that is or contains null.");
     } else if (list.size() > 1) {
