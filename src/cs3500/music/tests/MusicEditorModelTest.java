@@ -490,18 +490,18 @@ public class MusicEditorModelTest {
 
   // Tests for the getNotesAtBeat method
   @Test
-  public void getNoteThatIsTooFar() {
+  public void getNotesAtBeatIndexGreaterThanLength() {
     model.create();
     model.addNote(0, 1, 1, 60, 100);
     model.getNotesAtBeat(3);
-    assertEquals(model.getNotesAtBeat(3).size(), 0);
+    assertEquals(0, model.getNotesAtBeat(model.getLength() + 1).size());
   }
 
   @Test
-  public void getNotesThatIsBadIndex() {
+  public void getNotesAtBeatNegativeIndex() {
     model.create();
     model.addNote(0, 1, 1, 60, 100);
-    assertEquals(model.getNotesAtBeat(-1).size(), 0);
+    assertEquals(0, model.getNotesAtBeat(-1).size());
   }
 
   @Test
@@ -562,7 +562,4 @@ public class MusicEditorModelTest {
     model.addNote(4, 5, 16, 45, 120);
     assertEquals(24, model.getLength());
   }
-
-
-
 }
