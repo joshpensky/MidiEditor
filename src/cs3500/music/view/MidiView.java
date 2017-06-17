@@ -1,6 +1,5 @@
 package cs3500.music.view;
 
-import cs3500.music.model.MusicEditorModel;
 import cs3500.music.model.MusicEditorOperations;
 import cs3500.music.util.MidiConversion;
 
@@ -41,7 +40,7 @@ public class MidiView implements MusicEditorView {
      * @throws IllegalArgumentException if the given model is uninitialized
      * @throws MidiUnavailableException if MIDI is currently unavailable for the system
      */
-    public Builder(MusicEditorOperations model) throws IllegalArgumentException,
+    protected Builder(MusicEditorOperations model) throws IllegalArgumentException,
         MidiUnavailableException {
       if (model == null) {
         throw new IllegalArgumentException("Given model is uninitialized.");
@@ -57,7 +56,7 @@ public class MidiView implements MusicEditorView {
      * @return this builder
      * @throws IllegalArgumentException if the given sequencer is uninitialized
      */
-    public Builder sequencer(Sequencer sequencer) throws IllegalArgumentException {
+    protected Builder setSequencer(Sequencer sequencer) throws IllegalArgumentException {
       if (sequencer == null) {
         throw new IllegalArgumentException("Sequencer is uninitialized.");
       }
@@ -70,7 +69,7 @@ public class MidiView implements MusicEditorView {
      *
      * @return a new MidiView with this builder's instructions
      */
-    public MidiView build() {
+    protected MidiView build() {
       return new MidiView(this);
     }
   }
@@ -98,14 +97,10 @@ public class MidiView implements MusicEditorView {
     }
   }
 
-  @Override
-  public String getLog() {
-    return this.log.toString();
-  }
-
   /**
-   * Opens the sequencer, then plays the sequence of notes currently in the model at the tempo
-   * specified in the model. Closes the sequencer after all notes have been played.
+   * Helper to the initialize method. Opens the sequencer, then plays the sequence of notes
+   * currently in the model at the tempo specified in the model. Closes the sequencer after all
+   * notes have been played.
    *
    * @param tempo    the tempo of the piece currently in the model
    * @param notes    the list of note data of the piece currently from the model
@@ -117,6 +112,7 @@ public class MidiView implements MusicEditorView {
       throws InvalidMidiDataException, MidiUnavailableException {
     this.sequencer.open();
     this.sequencer.setSequence(createSequence(notes));
+    this.sequencer.setTempoInMPQ(tempo);
     this.sequencer.start();
     this.sequencer.setTempoInMPQ(tempo);
     while (this.sequencer.isRunning()) {
@@ -132,8 +128,8 @@ public class MidiView implements MusicEditorView {
   }
 
   /**
-   * Creates a sequence from the list of note data currently in the model, to be sent to the
-   * sequencer.
+   * Helper to the playSequence method. Creates a sequence from the list of note data currently in
+   * the model, to be sent to the sequencer.
    *
    * @param notes    the list of note data of the piece currently from the model
    * @throws InvalidMidiDataException if an invalid note or tempo in the model is passed to the MIDI
@@ -156,5 +152,10 @@ public class MidiView implements MusicEditorView {
       tr.add(new MidiEvent(stopMsg, end));
     }
     return sequence;
+  }
+
+  @Override
+  public String getLog() {
+    return this.log.toString();
   }
 }
