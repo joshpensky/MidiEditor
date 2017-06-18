@@ -17,11 +17,12 @@ The `MusicEditor` class contains the main method to run the project. The main me
 $ java -jar MusicEditor.jar mystery-1.txt visual
 ~~~~
 The different types of views are representing as Strings as follows:
-| View    | String      |
-| ------- | ----------- |
-| text    | `"console"` |
-| gui     | `"visual"`  |
-| audio   | `"midi"`    |
+
+| View | String |
+| --- | --- |
+| text | `"console"` |
+| gui  | `"visual"` |
+| audio | `"midi"` |
 
 ### The View
 
