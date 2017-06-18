@@ -18,7 +18,9 @@ public class MusicEditor {
 
   /**
    * Main for Music Editor. Runs and directs flow for program.
-   * @param args arguments for program to be run. need to be in format: textFileName desiredViewType
+   *
+   * @param args   arguments for program to be run, needs to be in format: textFileName
+   *              desiredViewType
    * @throws IOException appendable/readable not initialized correctly
    * @throws InvalidMidiDataException data given to midi player not correctly formatted
    * @throws MidiUnavailableException midi is unavailable for system at this time

@@ -1,9 +1,21 @@
 package cs3500.music.view;
 
+import javax.sound.midi.Sequencer;
+import javax.sound.midi.Sequence;
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiUnavailableException;
+import javax.sound.midi.MidiEvent;
+import javax.sound.midi.MidiMessage;
+import javax.sound.midi.ShortMessage;
+import javax.sound.midi.Track;
+import javax.sound.midi.Transmitter;
+import javax.sound.midi.Receiver;
+import javax.sound.midi.MetaEventListener;
+import javax.sound.midi.ControllerEventListener;
 
-import javax.sound.midi.*;
 import java.io.IOException;
 import java.io.InputStream;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +53,11 @@ public class MockSequencer implements Sequencer {
       throw new InvalidMidiDataException("Given sequence is uninitialized.");
     }
     this.sequence = sequence;
+  }
+
+  @Override
+  public void setSequence(InputStream stream) throws IOException, InvalidMidiDataException {
+    //does nothing for mock sequencer
   }
 
   @Override
@@ -109,11 +126,6 @@ public class MockSequencer implements Sequencer {
   @Override
   public long getTickPosition() {
     return this.maxLength;
-  }
-
-  @Override
-  public void setSequence(InputStream stream) throws IOException, InvalidMidiDataException {
-    //does nothing for mock sequencer
   }
 
   @Override
