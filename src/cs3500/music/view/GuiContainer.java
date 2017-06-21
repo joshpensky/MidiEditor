@@ -70,21 +70,30 @@ public class GuiContainer extends JPanel {
 //    });
   }
 
-//  /**
-//   * Updates the position of the cursor in the editor panel, as well as the keys highlighted in
-//   * the piano panel, based on key press.
-//   * Left arrow will move the cursor back one beat, while the right arrow will move the cursor
-//   * forward one beat.
-//   *
-//   * @param e   the key event created from pressing a key on the keyboard
-//   */
-//  private void updatePosition(KeyEvent e) {
-//    if (e.getKeyCode() == 39 || e.getKeyCode() == 37) {
-//      int beat = this.editorPanel.updateCursor(e.getKeyCode() == 39);
-//      this.pianoPanel.updateHighlights(this.model.getNotesAtBeat(beat));
-//      repaint();
-//    }
-//  }
+  /**
+   * Updates the position of the cursor in the editor panel, as well as the keys highlighted in
+   * the piano panel, based on key press.
+   * Left arrow will move the cursor back one beat, while the right arrow will move the cursor
+   * forward one beat.
+   *
+   * @param e   the key event created from pressing a key on the keyboard
+   */
+  protected void updatePosition(boolean e) {
+      int beat = this.editorPanel.updateCursor(e);
+      this.pianoPanel.updateHighlights(this.model.getNotesAtBeat(beat));
+      repaint();
+  }
+
+  protected void goToBegining() {
+    this.editorPanel.cursorToBegining();
+    this.pianoPanel.updateHighlights(this.model.getNotesAtBeat(0));
+    repaint();
+  }
+
+  protected void goToEnd() {
+    this.editorPanel.cursorToEnd();
+    this.pianoPanel.updateHighlights(this.model.getNotesAtBeat(this.model.getLength() - 1));
+  }
 
   /**
    * Gets the log of all drawing operations that have occurred in this container at the point of

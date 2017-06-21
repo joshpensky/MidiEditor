@@ -2,9 +2,11 @@ package cs3500.music.view;
 
 import cs3500.music.model.MusicEditorOperations;
 
+import java.awt.event.KeyEvent;
+import java.util.Map;
 import javax.swing.JFrame;
-
 import java.awt.Dimension;
+import java.util.TreeMap;
 
 /**
  * Represents the frame for the GUI view. Holds the {@link GuiContainer} to display both the
@@ -12,9 +14,8 @@ import java.awt.Dimension;
  */
 public class GuiView extends JFrame implements MusicEditorView {
   private static final int WIDTH = 1100;
-
   private final GuiContainer container;
-
+  private Map<Integer, Runnable> runs;
 
   /**
    * Constructs a new {@code GuiView} using the given model to display notes in the
@@ -32,6 +33,7 @@ public class GuiView extends JFrame implements MusicEditorView {
     this.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
     this.pack();
     this.setPreferredSize(new Dimension(WIDTH, this.container.getHeight()));
+    setRunnable();
   }
 
   @Override
@@ -43,6 +45,33 @@ public class GuiView extends JFrame implements MusicEditorView {
   @Override
   public String getLog() {
     return this.container.getLog();
+  }
+
+//  @Override
+//  public AMEKeyListener getKeyListener() {
+//    return this.runs;
+//  }
+//
+//  @Override
+//  public AMEMouseListener getMouseListener() {
+//    return null;
+//  }
+
+  private void setRunnable() {
+    this.runs = new TreeMap<>();
+    this.runs.put(39, () -> {container.updatePosition(true);});
+    this.runs.put(37, () -> {container.updatePosition(false);});
+    this.runs.put(36, () -> {container.goToBegining();});
+    this.runs.put(35, () -> {container.goToEnd();});
+  }
+
+  @Override
+  public void doKeyEvent(KeyEvent e) {
+    int code  = e.getKeyCode();
+    Runnable r = runs.getOrDefault(code, null);
+    if (r != null) {
+      r.run();
+    }
   }
 }
 

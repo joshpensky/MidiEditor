@@ -2,6 +2,7 @@ package cs3500.music.view;
 
 import cs3500.music.model.MusicEditorOperations;
 
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
@@ -88,5 +89,10 @@ public class TextView implements MusicEditorView {
   @Override
   public String getLog() {
     return this.log.toString();
+  }
+
+  @Override
+  public void doKeyEvent(KeyEvent e) {
+    //do nothing for now
   }
 }

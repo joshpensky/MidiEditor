@@ -13,6 +13,10 @@ import java.io.IOException;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
 
+import static java.awt.event.KeyEvent.VK_COLON;
+import static java.awt.event.KeyEvent.VK_END;
+import static java.awt.event.KeyEvent.VK_HOME;
+
 /**
  * The main class for the music editor that (currently) handles model and view.
  */
@@ -34,13 +38,16 @@ public class MusicEditor {
           + "1) the file name (ex.: \"mary-little-lamb.txt\")\n"
           + "2) the desired view (either \"console\", \"visual\", or \"midi\")");
     }
+
+
+
     MusicEditorController mec = new MusicEditorController(args[0], args[1]);
 
-//    String fileName = args[0];
-//    String viewName = args[1];
-//    MusicEditorOperations model = MusicReader.parseFile(new FileReader(fileName),
-//        new MusicEditorBuilder());
-//    MusicEditorView view = MusicEditorViewFactory.getView(viewName, model);
-//    view.initialize();
+    String fileName = args[0];
+    String viewName = args[1];
+    MusicEditorOperations model = MusicReader.parseFile(new FileReader(fileName),
+        new MusicEditorBuilder());
+    MusicEditorView view = MusicEditorViewFactory.getView(viewName, model);
+    view.initialize();
   }
 }
