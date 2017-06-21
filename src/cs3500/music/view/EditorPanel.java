@@ -24,7 +24,7 @@ public class EditorPanel extends JViewport {
   private static final Color COLOR_LINES_DARK = Color.decode("#95989A");
   private static final Color COLOR_TEXT = Color.decode("#5E6162");
 
-  private static final int SCROLL_PADDING = 3;
+  private static final int SCROLL_PADDING = 5;
   private static final int START_HEIGHT = 30;
   private static final int START_WIDTH = 40;
   private static final int CELL_WIDTH = 30;
@@ -307,5 +307,9 @@ public class EditorPanel extends JViewport {
    */
   protected String getLog() {
     return this.log.toString();
+  }
+
+  protected int getCursorPosition() {
+    return this.cursorPosition;
   }
 }

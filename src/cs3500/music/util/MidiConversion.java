@@ -23,9 +23,9 @@ public class MidiConversion {
    * @throws IllegalArgumentException if the given pitch value is not in the range [0, 127]
    */
   public static Pitch getPitch(int midiPitch) throws IllegalArgumentException {
-    if (midiPitch < 0 || midiPitch > 127) {
+    /*if (midiPitch < 0 || midiPitch > 127) {
       throw new IllegalArgumentException("Given pitch is not in range [0, 127].");
-    }
+    }*/
     int pitches = Pitch.values().length;
     int middle = MIDDLE_C;
     int octave = getOctave(midiPitch);
@@ -45,9 +45,9 @@ public class MidiConversion {
    * @throws IllegalArgumentException if the given pitch value is not in the range [0, 127]
    */
   public static int getOctave(int midiPitch) throws IllegalArgumentException {
-    if (midiPitch < 0 || midiPitch > 127) {
+    /*if (midiPitch < 0 || midiPitch > 127) {
       throw new IllegalArgumentException("Given pitch is not in range [0, 127].");
-    }
+    }*/
     int pitches = Pitch.values().length;
     int middle = MIDDLE_C;
     if (midiPitch > middle) {

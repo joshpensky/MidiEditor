@@ -44,5 +44,9 @@ public class GuiView extends JFrame implements MusicEditorView {
   public String getLog() {
     return this.container.getLog();
   }
+
+  protected void updateCursor(boolean forward) {
+    this.container.updatePosition(forward);
+  }
 }
 

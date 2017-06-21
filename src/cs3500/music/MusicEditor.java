@@ -3,6 +3,7 @@ package cs3500.music;
 import cs3500.music.model.MusicEditorOperations;
 import cs3500.music.model.MusicEditorBuilder;
 import cs3500.music.util.MusicReader;
+import cs3500.music.view.MidiView;
 import cs3500.music.view.MusicEditorView;
 import cs3500.music.view.MusicEditorViewFactory;
 

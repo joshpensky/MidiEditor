@@ -1,14 +1,18 @@
 package cs3500.music.view;
 
 import cs3500.music.model.MusicEditorOperations;
+import cs3500.music.util.MidiConversion;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Represents the main container panel in the {@link GuiView}. This panel contains the
@@ -53,19 +57,68 @@ public class GuiContainer extends JPanel {
     this.setFocusable(true);
     this.requestFocusInWindow();
     this.addKeyListener(new KeyListener() {
+      Map<Integer, Runnable> runs;
+
+      private void init() {
+        runs = new TreeMap<>();
+        runs.put(39, () -> {updatePosition(true);});
+        runs.put(37, () -> {updatePosition(false);});
+      }
+
       @Override
       public void keyTyped(KeyEvent e) {
+        init();
         // No actions to be taken on key type
       }
 
       @Override
       public void keyPressed(KeyEvent e) {
-        updatePosition(e);
+        init();
+        Runnable r = runs.getOrDefault(e.getKeyCode(), null);
+        if (r != null) {
+          r.run();
+        }
       }
 
       @Override
       public void keyReleased(KeyEvent e) {
         // No actions to be taken on key release
+      }
+    });
+    this.addMouseListener(new MouseListener() {
+
+      @Override
+      public void mouseClicked(MouseEvent e) {
+      }
+
+      @Override
+      public void mousePressed(MouseEvent e) {
+        int x = e.getX();
+        int y = e.getY() - editorContainer.getHeight();
+        int pit = pianoPanel.getPitch(x, y);
+        System.out.println(x + " " + y);
+        if (pit > 0) {
+          int start = editorPanel.getCursorPosition();
+          System.out.print("note " + start + " " + (start + 1) + " " + 1 + " ");
+          System.out.println(pit + " " + 64);
+        } else {
+          System.out.println("Nope");
+        }
+      }
+
+      @Override
+      public void mouseReleased(MouseEvent e) {
+
+      }
+
+      @Override
+      public void mouseEntered(MouseEvent e) {
+
+      }
+
+      @Override
+      public void mouseExited(MouseEvent e) {
+
       }
     });
   }
@@ -78,12 +131,10 @@ public class GuiContainer extends JPanel {
    *
    * @param e   the key event created from pressing a key on the keyboard
    */
-  private void updatePosition(KeyEvent e) {
-    if (e.getKeyCode() == 39 || e.getKeyCode() == 37) {
-      int beat = this.editorPanel.updateCursor(e.getKeyCode() == 39);
-      this.pianoPanel.updateHighlights(this.model.getNotesAtBeat(beat));
-      repaint();
-    }
+  protected void updatePosition(boolean forward) {
+    int beat = this.editorPanel.updateCursor(forward);
+    this.pianoPanel.updateHighlights(this.model.getNotesAtBeat(beat));
+    repaint();
   }
 
   /**

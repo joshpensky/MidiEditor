@@ -25,6 +25,7 @@ public class PianoPanel extends JPanel {
 
   private static final int KEY_WIDTH = 15;
   private static final int KEY_HEIGHT = 200;
+  private static final double SHARP_KEY_MULTIPLIER = 0.5;
 
   private final StringBuilder log;
   private Map<Integer, List<Pitch>> highlights;
@@ -111,8 +112,8 @@ public class PianoPanel extends JPanel {
         position += KEY_WIDTH;
       }
     }
-    int sharpKeyWidth = (int) (KEY_WIDTH * 0.5);
-    int sharpKeyHeight = (int) (KEY_HEIGHT * 0.6);
+    int sharpKeyWidth = (int) (KEY_WIDTH * SHARP_KEY_MULTIPLIER);
+    int sharpKeyHeight = (int) (KEY_HEIGHT * SHARP_KEY_MULTIPLIER);
     position = startPos;
     for (Pitch p : Pitch.values()) {
       if (p.isSharp()) {
@@ -125,6 +126,49 @@ public class PianoPanel extends JPanel {
       }
     }
     return position;
+  }
+
+  protected int getPitch(int mX, int mY) {
+    int position = getStartPos();
+    for (int i = 0; i < 10; i++) {
+      Pitch p = getPitchHelp(position, mX, mY);
+      if (p != null) {
+        return MidiConversion.getMidiPitch(i + 1, p);
+      }
+      for (Pitch x : Pitch.values()) {
+        if (!x.isSharp()) {
+          position += KEY_WIDTH;
+        }
+      }
+    }
+    return -1;
+  }
+
+  private Pitch getPitchHelp(int startPos, int mX, int mY) {
+    int pos = startPos;
+    int sharpKeyWidth = (int) (KEY_WIDTH * SHARP_KEY_MULTIPLIER);
+    int sharpKeyHeight = (int) (KEY_HEIGHT * SHARP_KEY_MULTIPLIER);
+    for (Pitch p : Pitch.values()) {
+      if (p.isSharp()) {
+        if ((mX > pos - (3 * sharpKeyWidth) / 4) && (mX < pos + (sharpKeyWidth / 4))
+            && (mY > 0) && (mY < sharpKeyHeight)) {
+          return p;
+        }
+      } else {
+        pos += KEY_WIDTH;
+      }
+    }
+    pos = startPos;
+    for (Pitch p : Pitch.values()) {
+      if (!p.isSharp()) {
+        if ((mX > pos) && (mX < pos + KEY_WIDTH)
+          && (mY > 0) && (mY < KEY_HEIGHT)) {
+          return p;
+        }
+        pos += KEY_WIDTH;
+      }
+    }
+    return null;
   }
 
   /**
@@ -158,7 +202,7 @@ public class PianoPanel extends JPanel {
     }
     this.highlights = new TreeMap<>();
     for (Integer[] note : notes) {
-      int octave = MidiConversion.getOctave(note[MidiConversion.NOTE_PITCH]);
+      int octave = MidiConversion.getOctave(note[MidiConversion.NOTE_PITCH]) - 1;
       Pitch pitch = MidiConversion.getPitch(note[MidiConversion.NOTE_PITCH]);
       if (this.highlights.containsKey(octave)) {
         this.highlights.get(octave).add(pitch);

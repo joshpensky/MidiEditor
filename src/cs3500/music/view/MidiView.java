@@ -23,6 +23,8 @@ public class MidiView implements MusicEditorView {
   private final StringBuilder log;
   private final MusicEditorOperations model;
   private final Sequencer sequencer;
+  private Sequence sequence;
+  private int tickPosition;
 
   /**
    * Represents the builder class for a MidiView. Sets the sequencer of the MidiView to the
@@ -85,13 +87,15 @@ public class MidiView implements MusicEditorView {
     this.log = new StringBuilder();
     this.model = builder.model;
     this.sequencer = builder.sequencer;
+    this.sequence = null;
+    this.tickPosition = 0;
   }
 
   @Override
   public void initialize() {
     try {
-      this.playSequence(this.model.getTempo(), this.model.getNotes(),
-          this.model.getLength());
+      this.sequence = this.createSequence(this.model.getNotes());
+      this.playSequence(this.model.getTempo(), this.model.getLength());
     } catch (InvalidMidiDataException e) {
       this.log.append("Encountered fatal InvalidMidiDataException:\n" + e.getMessage() + "\n");
     } catch (MidiUnavailableException e) {
@@ -105,28 +109,46 @@ public class MidiView implements MusicEditorView {
    * notes have been played.
    *
    * @param tempo    the tempo of the piece currently in the model
-   * @param notes    the list of note data of the piece currently from the model
    * @param length   the length of the piece currently in the model
    * @throws InvalidMidiDataException if an invalid note or tempo in the model is passed to the MIDI
    * @throws MidiUnavailableException if MIDI is currently unavailable for the system
    */
-  private void playSequence(int tempo, List<Integer[]> notes, int length)
+  private void playSequence(int tempo, int length)
       throws InvalidMidiDataException, MidiUnavailableException {
     this.sequencer.open();
-    this.sequencer.setSequence(createSequence(notes));
+    this.sequencer.setSequence(this.sequence);
     this.sequencer.setTempoInMPQ(tempo);
     this.sequencer.start();
+    //this.sequencer.setTickPosition(this.tickPosition);
     this.sequencer.setTempoInMPQ(tempo);
     while (this.sequencer.isRunning()) {
+      this.setTickPosition((int) this.sequencer.getTickPosition(), length);
       if (this.sequencer.getTickPosition() == length) {
         try {
           Thread.sleep(1000);
-          sequencer.close();
+          this.pause(length);
         } catch (InterruptedException e) {
           this.log.append("Encountered InterruptedException:\n" + e.getMessage() + "\n");
         }
       }
     }
+  }
+
+  private void pause(int length) {
+    this.setTickPosition((int) this.sequencer.getTickPosition(), length);
+    this.sequencer.close();
+  }
+
+  private void setTickPosition(int tickPosition, int length) {
+    this.tickPosition = Math.min(Math.max(0, tickPosition), length);
+  }
+
+  protected int getTickPosition() {
+    return this.tickPosition;
+  }
+
+  protected boolean isRunning() {
+    return this.sequencer.isRunning();
   }
 
   /**
@@ -136,8 +158,7 @@ public class MidiView implements MusicEditorView {
    * @param notes    the list of note data of the piece currently from the model
    * @throws InvalidMidiDataException if an invalid note or tempo in the model is passed to the MIDI
    */
-  private Sequence createSequence(List<Integer[]> notes)
-      throws InvalidMidiDataException {
+  private Sequence createSequence(List<Integer[]> notes) throws InvalidMidiDataException {
     Sequence sequence = new Sequence(Sequence.PPQ, 1);
     Track tr = sequence.createTrack();
     for (Integer[] note : notes) {
@@ -146,12 +167,14 @@ public class MidiView implements MusicEditorView {
       int instrum = note[MidiConversion.NOTE_INSTRUMENT];
       int pitch = note[MidiConversion.NOTE_PITCH];
       int volume = note[MidiConversion.NOTE_VOLUME];
-      MidiMessage startMsg = new ShortMessage(ShortMessage.NOTE_ON, 0, pitch, volume);
-      MidiMessage stopMsg = new ShortMessage(ShortMessage.NOTE_OFF, 0, pitch, volume);
-      MidiMessage addInstrum = new ShortMessage(ShortMessage.PROGRAM_CHANGE, 0, instrum, 0);
-      tr.add(new MidiEvent(addInstrum, start));
-      tr.add(new MidiEvent(startMsg, start));
-      tr.add(new MidiEvent(stopMsg, end));
+      if (pitch >= 0 && pitch <= 127) {
+        MidiMessage startMsg = new ShortMessage(ShortMessage.NOTE_ON, 0, pitch, volume);
+        MidiMessage stopMsg = new ShortMessage(ShortMessage.NOTE_OFF, 0, pitch, volume);
+        MidiMessage addInstrum = new ShortMessage(ShortMessage.PROGRAM_CHANGE, 0, instrum, 0);
+        tr.add(new MidiEvent(addInstrum, start));
+        tr.add(new MidiEvent(startMsg, start));
+        tr.add(new MidiEvent(stopMsg, end));
+      }
     }
     return sequence;
   }
