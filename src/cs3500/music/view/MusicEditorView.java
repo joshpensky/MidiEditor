@@ -1,6 +1,9 @@
 package cs3500.music.view;
 
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
+import java.util.Map;
 
 /**
  * Represents a single view for the music editor.
@@ -19,7 +22,9 @@ public interface MusicEditorView {
    */
   String getLog();
 
-  void doKeyEvent(KeyEvent e);
+  Map<Integer, Runnable> getKeyEvents();
 //
 //  AMEMouseListener getMouseListener();
+
+  void setListeners(MouseListener clicks, KeyListener keys);
 }

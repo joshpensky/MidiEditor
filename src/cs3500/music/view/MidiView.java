@@ -14,7 +14,10 @@ import javax.sound.midi.MidiMessage;
 import javax.sound.midi.ShortMessage;
 
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Represents the MIDI view for a music editor, in which it stores and plays all of the notes of
@@ -115,7 +118,7 @@ public class MidiView implements MusicEditorView {
    * @throws MidiUnavailableException if MIDI is currently unavailable for the system
    */
   private void playSequence(int tempo, int length)
-      throws InvalidMidiDataException, MidiUnavailableException {
+          throws InvalidMidiDataException, MidiUnavailableException {
     this.sequencer.open();
     this.sequencer.setSequence(this.sequence);
     this.sequencer.setTempoInMPQ(tempo);
@@ -186,7 +189,13 @@ public class MidiView implements MusicEditorView {
   }
 
   @Override
-  public void doKeyEvent(KeyEvent e) {
+  public Map<Integer, Runnable> getKeyEvents() {
+    //does nothing for now
+    return null;
+  }
+
+  @Override
+  public void setListeners(MouseListener clicks, KeyListener keys) {
     //does nothing for now
   }
 }

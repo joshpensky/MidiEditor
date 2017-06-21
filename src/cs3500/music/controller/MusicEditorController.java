@@ -25,17 +25,26 @@ public class MusicEditorController implements KeyListener, MouseListener {
   public MusicEditorController(String model, String view)  throws IOException{
     this.model = MusicReader.parseFile(new FileReader(model), new MusicEditorBuilder());
     this.view = MusicEditorViewFactory.getView(view, this.model);
+    this.view.setListeners(this, this);
     this.view.initialize();
   }
 
 
   @Override
   public void keyTyped(KeyEvent e) {
-    view.doKeyEvent(e);
+
   }
 
   @Override
   public void keyPressed(KeyEvent e) {
+    Runnable r = view.getKeyEvents().getOrDefault(e.getKeyCode(), null);
+    System.out.println(e.getKeyCode());
+    if (r != null) {
+      r.run();
+      System.out.println("typed");
+    } else {
+      System.out.println("null");
+    }
 
   }
 

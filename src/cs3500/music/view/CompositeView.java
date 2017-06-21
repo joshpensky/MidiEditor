@@ -4,6 +4,9 @@ import cs3500.music.model.MusicEditorOperations;
 
 import javax.sound.midi.MidiUnavailableException;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
+import java.util.Map;
 
 /**
  * Created by josh_jpeg on 6/21/17.
@@ -49,7 +52,12 @@ public class CompositeView implements MusicEditorView {
   }
 
   @Override
-  public void doKeyEvent(KeyEvent e) {
+  public Map<Integer, Runnable> getKeyEvents() {
+return null;
+  }
 
+  @Override
+  public void setListeners(MouseListener clicks, KeyListener keys) {
+    //do nothing for now
   }
 }

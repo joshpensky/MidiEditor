@@ -3,6 +3,8 @@ package cs3500.music.view;
 import cs3500.music.model.MusicEditorOperations;
 
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
 import java.util.Map;
 import javax.swing.JFrame;
 import java.awt.Dimension;
@@ -21,7 +23,7 @@ public class GuiView extends JFrame implements MusicEditorView {
    * Constructs a new {@code GuiView} using the given model to display notes in the
    * different views contained in the window.
    *
-   * @param model   the model to be represented in the view
+   * @param model the model to be represented in the view
    * @throws IllegalArgumentException given model is uninitialized
    */
   protected GuiView(MusicEditorOperations model) throws IllegalArgumentException {
@@ -33,7 +35,9 @@ public class GuiView extends JFrame implements MusicEditorView {
     this.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
     this.pack();
     this.setPreferredSize(new Dimension(WIDTH, this.container.getHeight()));
-    setRunnable();
+    this.setRunnable();
+    this.setFocusable(true);
+    this.requestFocus();
   }
 
   @Override
@@ -62,19 +66,29 @@ public class GuiView extends JFrame implements MusicEditorView {
 
   private void setRunnable() {
     this.runs = new TreeMap<>();
-    this.runs.put(39, () -> {container.updatePosition(true);});
-    this.runs.put(37, () -> {container.updatePosition(false);});
-    this.runs.put(36, () -> {container.goToBegining();});
-    this.runs.put(35, () -> {container.goToEnd();});
+    this.runs.put(39, () -> {
+      container.updatePosition(true);
+    });
+    this.runs.put(37, () -> {
+      container.updatePosition(false);
+    });
+    this.runs.put(36, () -> {
+      container.goToBegining();
+    });
+    this.runs.put(35, () -> {
+      container.goToEnd();
+    });
   }
 
   @Override
-  public void doKeyEvent(KeyEvent e) {
-    int code  = e.getKeyCode();
-    Runnable r = runs.getOrDefault(code, null);
-    if (r != null) {
-      r.run();
-    }
+  public Map<Integer, Runnable> getKeyEvents() {
+    return this.runs;
   }
-}
 
+  @Override
+  public void setListeners(MouseListener clicks, KeyListener keys) {
+    this.addKeyListener(keys);
+    this.addMouseListener(clicks);
+  }
+
+}
