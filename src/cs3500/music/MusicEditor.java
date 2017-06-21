@@ -1,7 +1,9 @@
 package cs3500.music;
 
+import cs3500.music.controller.MusicEditorController;
 import cs3500.music.model.MusicEditorOperations;
 import cs3500.music.model.MusicEditorBuilder;
+import cs3500.music.tests.MusicEditorBuilderTest;
 import cs3500.music.util.MusicReader;
 import cs3500.music.view.MusicEditorView;
 import cs3500.music.view.MusicEditorViewFactory;
@@ -32,11 +34,13 @@ public class MusicEditor {
           + "1) the file name (ex.: \"mary-little-lamb.txt\")\n"
           + "2) the desired view (either \"console\", \"visual\", or \"midi\")");
     }
-    String fileName = args[0];
-    String viewName = args[1];
-    MusicEditorOperations model = MusicReader.parseFile(new FileReader(fileName),
-        new MusicEditorBuilder());
-    MusicEditorView view = MusicEditorViewFactory.getView(viewName, model);
-    view.initialize();
+    MusicEditorController mec = new MusicEditorController(args[0], args[1]);
+
+//    String fileName = args[0];
+//    String viewName = args[1];
+//    MusicEditorOperations model = MusicReader.parseFile(new FileReader(fileName),
+//        new MusicEditorBuilder());
+//    MusicEditorView view = MusicEditorViewFactory.getView(viewName, model);
+//    view.initialize();
   }
 }

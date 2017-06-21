@@ -52,39 +52,39 @@ public class GuiContainer extends JPanel {
     // Adds the key listener to the container for moving the cursor
     this.setFocusable(true);
     this.requestFocusInWindow();
-    this.addKeyListener(new KeyListener() {
-      @Override
-      public void keyTyped(KeyEvent e) {
-        // No actions to be taken on key type
-      }
-
-      @Override
-      public void keyPressed(KeyEvent e) {
-        updatePosition(e);
-      }
-
-      @Override
-      public void keyReleased(KeyEvent e) {
-        // No actions to be taken on key release
-      }
-    });
+//    this.addKeyListener(new KeyListener() {
+//      @Override
+//      public void keyTyped(KeyEvent e) {
+//        // No actions to be taken on key type
+//      }
+//
+//      @Override
+//      public void keyPressed(KeyEvent e) {
+//        updatePosition(e);
+//      }
+//
+//      @Override
+//      public void keyReleased(KeyEvent e) {
+//        // No actions to be taken on key release
+//      }
+//    });
   }
 
-  /**
-   * Updates the position of the cursor in the editor panel, as well as the keys highlighted in
-   * the piano panel, based on key press.
-   * Left arrow will move the cursor back one beat, while the right arrow will move the cursor
-   * forward one beat.
-   *
-   * @param e   the key event created from pressing a key on the keyboard
-   */
-  private void updatePosition(KeyEvent e) {
-    if (e.getKeyCode() == 39 || e.getKeyCode() == 37) {
-      int beat = this.editorPanel.updateCursor(e.getKeyCode() == 39);
-      this.pianoPanel.updateHighlights(this.model.getNotesAtBeat(beat));
-      repaint();
-    }
-  }
+//  /**
+//   * Updates the position of the cursor in the editor panel, as well as the keys highlighted in
+//   * the piano panel, based on key press.
+//   * Left arrow will move the cursor back one beat, while the right arrow will move the cursor
+//   * forward one beat.
+//   *
+//   * @param e   the key event created from pressing a key on the keyboard
+//   */
+//  private void updatePosition(KeyEvent e) {
+//    if (e.getKeyCode() == 39 || e.getKeyCode() == 37) {
+//      int beat = this.editorPanel.updateCursor(e.getKeyCode() == 39);
+//      this.pianoPanel.updateHighlights(this.model.getNotesAtBeat(beat));
+//      repaint();
+//    }
+//  }
 
   /**
    * Gets the log of all drawing operations that have occurred in this container at the point of
