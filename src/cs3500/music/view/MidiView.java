@@ -130,7 +130,7 @@ public class MidiView implements MusicEditorView {
       if (this.sequencer.getTickPosition() == length) {
         try {
           Thread.sleep(1000);
-          this.pause(length);
+          this.pause();
         } catch (InterruptedException e) {
           this.log.append("Encountered InterruptedException:\n" + e.getMessage() + "\n");
         }
@@ -138,10 +138,11 @@ public class MidiView implements MusicEditorView {
     }
   }
 
-  private void pause(int length) {
-    this.setTickPosition((int) this.sequencer.getTickPosition(), length);
+  protected void pause() {
     this.sequencer.close();
   }
+
+
 
   private void setTickPosition(int tickPosition, int length) {
     this.tickPosition = Math.min(Math.max(0, tickPosition), length);
