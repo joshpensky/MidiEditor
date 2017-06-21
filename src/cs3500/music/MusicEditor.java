@@ -43,12 +43,5 @@ public class MusicEditor {
 
 
     MusicEditorController mec = new MusicEditorController(args[0], args[1]);
-
-    String fileName = args[0];
-    String viewName = args[1];
-    MusicEditorOperations model = MusicReader.parseFile(new FileReader(fileName),
-        new MusicEditorBuilder());
-    MusicEditorView view = MusicEditorViewFactory.getView(viewName, model);
-    view.initialize();
   }
 }

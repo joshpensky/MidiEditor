@@ -3,6 +3,7 @@ package cs3500.music.view;
 import cs3500.music.model.MusicEditorOperations;
 
 import javax.sound.midi.MidiUnavailableException;
+import java.awt.event.KeyEvent;
 
 /**
  * Created by josh_jpeg on 6/21/17.
@@ -45,5 +46,10 @@ public class CompositeView implements MusicEditorView {
   @Override
   public String getLog() {
     return null;
+  }
+
+  @Override
+  public void doKeyEvent(KeyEvent e) {
+
   }
 }
