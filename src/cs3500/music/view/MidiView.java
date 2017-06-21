@@ -18,6 +18,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Represents the MIDI view for a music editor, in which it stores and plays all of the notes of
@@ -29,6 +30,7 @@ public class MidiView implements MusicEditorView {
   private final Sequencer sequencer;
   private Sequence sequence;
   private int tickPosition;
+  private Map<Integer, Runnable> runs;
 
   /**
    * Represents the builder class for a MidiView. Sets the sequencer of the MidiView to the
@@ -50,6 +52,7 @@ public class MidiView implements MusicEditorView {
       }
       this.model = model;
       this.sequencer = null;
+      
     }
 
     /**
@@ -192,11 +195,13 @@ public class MidiView implements MusicEditorView {
   @Override
   public Map<Integer, Runnable> getKeyEvents() {
     //does nothing for now
-    return null;
+    return this.runs;
   }
 
   @Override
   public void setListeners(MouseListener clicks, KeyListener keys) {
     //does nothing for now
   }
+
+
 }
