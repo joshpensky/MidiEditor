@@ -2,7 +2,6 @@ package cs3500.music.view;
 
 import cs3500.music.model.MusicEditorOperations;
 
-import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.util.Map;
@@ -73,10 +72,10 @@ public class GuiView extends JFrame implements MusicEditorView {
       container.updatePosition(false);
     });
     this.runs.put(36, () -> {
-      container.goToBegining();
+      container.jumpToBeginning();
     });
     this.runs.put(35, () -> {
-      container.goToEnd();
+      container.jumpToEnd();
     });
   }
 

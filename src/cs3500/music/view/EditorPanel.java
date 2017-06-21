@@ -278,20 +278,6 @@ public class EditorPanel extends JViewport {
     return this.cursorPosition;
   }
 
-  protected int cursorToBegining() {
-    int startPos = cursorPosition;
-    this.cursorPosition = 0;
-    this.updateScrollOffset(this.cursorPosition - startPos);
-    return this.cursorPosition;
-  }
-
-  protected int cursorToEnd() {
-    int startPos = cursorPosition;
-    this.cursorPosition = this.pieceLength - 1;
-    this.updateScrollOffset(this.cursorPosition - startPos);
-    return this.cursorPosition;
-  }
-
   /**
    * Updates the scroll offset of the window when the cursor position has changed. If the last
    * note is in view of the window, the scroll offset will remain the same until the cursor moves

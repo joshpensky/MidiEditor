@@ -100,7 +100,7 @@ public class GuiContainer extends JPanel {
    * Left arrow will move the cursor back one beat, while the right arrow will move the cursor
    * forward one beat.
    *
-   * @param e   the key event created from pressing a key on the keyboard
+   * @param forward   the key event created from pressing a key on the keyboard
    */
   protected void updatePosition(boolean forward) {
     int beat = this.editorPanel.updateCursor(forward);
@@ -108,15 +108,20 @@ public class GuiContainer extends JPanel {
     repaint();
   }
 
-  protected void goToBegining() {
-    this.editorPanel.cursorToBegining();
+  protected void jumpToBeginning() {
+    while (this.editorPanel.getCursorPosition() > 0) {
+      this.editorPanel.updateCursor(false);
+    }
     this.pianoPanel.updateHighlights(this.model.getNotesAtBeat(0));
     repaint();
   }
 
-  protected void goToEnd() {
-    this.editorPanel.cursorToEnd();
+  protected void jumpToEnd() {
+    while (this.editorPanel.getCursorPosition() < this.model.getLength()) {
+      this.editorPanel.updateCursor(true);
+    }
     this.pianoPanel.updateHighlights(this.model.getNotesAtBeat(this.model.getLength() - 1));
+    repaint();
   }
 
   /**
