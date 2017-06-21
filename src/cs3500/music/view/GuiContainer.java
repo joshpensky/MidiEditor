@@ -56,35 +56,6 @@ public class GuiContainer extends JPanel {
     // Adds the key listener to the container for moving the cursor
     this.setFocusable(true);
     this.requestFocusInWindow();
-    this.addKeyListener(new KeyListener() {
-      Map<Integer, Runnable> runs;
-
-      private void init() {
-        runs = new TreeMap<>();
-        runs.put(39, () -> {updatePosition(true);});
-        runs.put(37, () -> {updatePosition(false);});
-      }
-
-      @Override
-      public void keyTyped(KeyEvent e) {
-        init();
-        // No actions to be taken on key type
-      }
-
-      @Override
-      public void keyPressed(KeyEvent e) {
-        init();
-        Runnable r = runs.getOrDefault(e.getKeyCode(), null);
-        if (r != null) {
-          r.run();
-        }
-      }
-
-      @Override
-      public void keyReleased(KeyEvent e) {
-        // No actions to be taken on key release
-      }
-    });
     this.addMouseListener(new MouseListener() {
 
       @Override
@@ -135,6 +106,17 @@ public class GuiContainer extends JPanel {
     int beat = this.editorPanel.updateCursor(forward);
     this.pianoPanel.updateHighlights(this.model.getNotesAtBeat(beat));
     repaint();
+  }
+
+  protected void goToBegining() {
+    this.editorPanel.cursorToBegining();
+    this.pianoPanel.updateHighlights(this.model.getNotesAtBeat(0));
+    repaint();
+  }
+
+  protected void goToEnd() {
+    this.editorPanel.cursorToEnd();
+    this.pianoPanel.updateHighlights(this.model.getNotesAtBeat(this.model.getLength() - 1));
   }
 
   /**

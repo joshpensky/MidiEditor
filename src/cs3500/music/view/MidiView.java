@@ -13,6 +13,7 @@ import javax.sound.midi.MidiEvent;
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.ShortMessage;
 
+import java.awt.event.KeyEvent;
 import java.util.List;
 
 /**
@@ -182,5 +183,10 @@ public class MidiView implements MusicEditorView {
   @Override
   public String getLog() {
     return this.log.toString();
+  }
+
+  @Override
+  public void doKeyEvent(KeyEvent e) {
+    //does nothing for now
   }
 }
