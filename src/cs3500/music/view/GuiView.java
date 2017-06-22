@@ -90,7 +90,11 @@ public class GuiView extends JFrame implements MusicEditorView {
     this.addMouseListener(clicks);
   }
 
-  protected GuiContainer getContonainer() {
+  protected GuiContainer getContainer() {
     return this.container;
+  }
+
+  protected int getCursorPosition() {
+    return this.container.getCursorPosition();
   }
 }

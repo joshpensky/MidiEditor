@@ -60,6 +60,7 @@ public class GuiContainer extends JPanel {
 
       @Override
       public void mouseClicked(MouseEvent e) {
+        //stub
       }
 
       @Override
@@ -79,17 +80,17 @@ public class GuiContainer extends JPanel {
 
       @Override
       public void mouseReleased(MouseEvent e) {
-
+        //stub
       }
 
       @Override
       public void mouseEntered(MouseEvent e) {
-
+        //stub
       }
 
       @Override
       public void mouseExited(MouseEvent e) {
-
+        //stub
       }
     });
   }
@@ -120,8 +121,12 @@ public class GuiContainer extends JPanel {
     while (this.editorPanel.getCursorPosition() < this.model.getLength()) {
       this.editorPanel.updateCursor(true);
     }
-    this.pianoPanel.updateHighlights(this.model.getNotesAtBeat(this.model.getLength() - 1));
+    this.pianoPanel.updateHighlights(this.model.getNotesAtBeat(this.model.getLength()));
     repaint();
+  }
+
+  protected int getCursorPosition() {
+    return this.editorPanel.getCursorPosition();
   }
 
   /**
