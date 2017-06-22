@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import cs3500.music.model.MusicEditorBuilder;
 import cs3500.music.model.MusicEditorOperations;
+import cs3500.music.model.ViewOnlyModel;
 import cs3500.music.util.MusicReader;
 import cs3500.music.view.MusicEditorView;
 import cs3500.music.view.MusicEditorViewFactory;
@@ -24,7 +25,7 @@ public class MusicEditorController implements KeyListener {
 
   public MusicEditorController(String model, String view) throws IOException {
     this.model = MusicReader.parseFile(new FileReader(model), new MusicEditorBuilder());
-    this.view = MusicEditorViewFactory.getView(view, this.model);
+    this.view = MusicEditorViewFactory.getView(view, new ViewOnlyModel(this.model));
     this.view.setListeners(this, this);
     this.view.initialize();
   }
