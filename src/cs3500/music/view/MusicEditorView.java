@@ -29,5 +29,5 @@ public interface MusicEditorView {
 
   void setListeners(MusicEditorController controls, KeyListener keys);
 
-  void update(List<Integer[]> notes, int tempo, int length);
+  void update();
 }

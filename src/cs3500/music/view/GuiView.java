@@ -94,7 +94,7 @@ public class GuiView extends JFrame implements MusicEditorView {
     MouseListener m = new MouseListener() {
       @Override
       public void mouseClicked(MouseEvent e) {
-        //stub
+        return; // no need for detection of mouse clicking
       }
 
       @Override
@@ -104,32 +104,32 @@ public class GuiView extends JFrame implements MusicEditorView {
           controls.addNote(note[MidiConversion.NOTE_START], note[MidiConversion.NOTE_END],
             note[MidiConversion.NOTE_INSTRUMENT], note[MidiConversion.NOTE_PITCH],
             note[MidiConversion.NOTE_VOLUME]);
-          container.updatePosition(true);
-          container.updatePanels();
+          update();
         }
       }
 
       @Override
       public void mouseReleased(MouseEvent e) {
-        //stub
+        return; // no need for detection of mouse releasing
       }
 
       @Override
       public void mouseEntered(MouseEvent e) {
-        //stub
+        return; // no need for detection of mouse entering
       }
 
       @Override
       public void mouseExited(MouseEvent e) {
-        //stub
+        return; // no need for detection of mouse exiting
       }
     };
     this.addMouseListener(m);
   }
 
   @Override
-  public void update(List<Integer[]> notes, int tempo, int length) {
-
+  public void update() {
+    this.container.updatePosition(true);
+    container.updatePanels();
   }
 
   protected GuiContainer getContainer() {

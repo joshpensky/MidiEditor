@@ -130,7 +130,7 @@ public class MidiView implements MusicEditorView {
     //this.sequencer.setTempoInMPQ(this.tempo);
     this.sequencer.setTickPosition(this.tickPosition);
     this.sequencer.start();
-    this.sequencer.setTempoInMPQ(this.tempo);
+    this.sequencer.setTempoInMPQ(this.tempo);/*
     while (this.sequencer.isRunning()) {
       this.setTickPosition((int) this.sequencer.getTickPosition());
       if (this.sequencer.getTickPosition() == this.length) {
@@ -141,7 +141,7 @@ public class MidiView implements MusicEditorView {
           this.log.append("Encountered InterruptedException:\n" + e.getMessage() + "\n");
         }
       }
-    }
+    }*/
   }
 
   protected void pause() {
@@ -153,6 +153,7 @@ public class MidiView implements MusicEditorView {
   }
 
   protected int getTickPosition() {
+    this.tickPosition = (int) this.sequencer.getTickPosition();
     return this.tickPosition;
   }
 
@@ -209,9 +210,9 @@ public class MidiView implements MusicEditorView {
   }
 
   @Override
-  public void update(List<Integer[]> notes, int tempo, int length) {
+  public void update() {
     try {
-      this.sequence = createSequence(notes);
+      this.sequence = createSequence(this.model.getNotes());
       if (this.sequencer.isOpen()) {
         this.sequencer.close();
       }
@@ -220,7 +221,7 @@ public class MidiView implements MusicEditorView {
     } catch (InvalidMidiDataException | MidiUnavailableException e) {
       //
     }
-    this.tempo = tempo;
-    this.length = length;
+    this.tempo = this.model.getTempo();
+    this.length = this.model.getLength();
   }
 }

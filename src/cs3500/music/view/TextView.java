@@ -104,11 +104,11 @@ public class TextView implements MusicEditorView {
 
   @Override
   public void setListeners(MusicEditorController controls, KeyListener keys) {
-
+    return;
   }
 
   @Override
-  public void update(List<Integer[]> notes, int tempo, int length) {
-
+  public void update() {
+    return;
   }
 }

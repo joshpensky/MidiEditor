@@ -6,13 +6,9 @@ import cs3500.music.util.MidiConversion;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * Represents the main container panel in the {@link GuiView}. This panel contains the
@@ -103,11 +99,11 @@ public class GuiContainer extends JPanel {
   protected Integer[] getNote(MouseEvent e) {
     int x = e.getX();
     int y = e.getY() - this.editorContainer.getHeight();
-    int pit = pianoPanel.getPitch(x, y);
-    System.out.println(x + " " + y);
-    if (pit > 0) {
+    int pitch = pianoPanel.getPitch(x, y);
+    //System.out.println(x + " " + y);
+    if (pitch > 0) {
       int start = editorPanel.getCursorPosition();
-      return new Integer[] {start, start + 1, 1, pit, 64};
+      return new Integer[] {start, start + 1, 1, pitch, 64};
     } else {
       return null;
     }

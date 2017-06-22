@@ -38,9 +38,7 @@ public class MusicEditorController implements KeyListener {
 
   @Override
   public void keyPressed(KeyEvent e) {
-    //System.out.println(e.toString());
     Runnable r = view.getKeyEvents().getOrDefault(e.getKeyCode(), null);
-    //System.out.println(e.getKeyCode());
     if (r != null) {
       r.run();
     }
