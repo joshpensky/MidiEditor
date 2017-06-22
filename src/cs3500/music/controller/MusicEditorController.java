@@ -37,7 +37,7 @@ public class MusicEditorController implements KeyListener, MouseListener {
 
   @Override
   public void keyPressed(KeyEvent e) {
-    System.out.println(e.toString());
+    //System.out.println(e.toString());
     Runnable r = view.getKeyEvents().getOrDefault(e.getKeyCode(), null);
     //System.out.println(e.getKeyCode());
     if (r != null) {
