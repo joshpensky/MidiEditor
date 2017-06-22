@@ -17,7 +17,7 @@ import cs3500.music.view.MusicEditorViewFactory;
 /**
  * Created by Will on 6/20/2017.
  */
-public class MusicEditorController implements KeyListener, MouseListener {
+public class MusicEditorController implements KeyListener {
   private final MusicEditorOperations model;
   private final MusicEditorView view;
 
@@ -50,28 +50,7 @@ public class MusicEditorController implements KeyListener, MouseListener {
 
   }
 
-  @Override
-  public void mouseClicked(MouseEvent e) {
-
-  }
-
-  @Override
-  public void mousePressed(MouseEvent e) {
-
-  }
-
-  @Override
-  public void mouseReleased(MouseEvent e) {
-
-  }
-
-  @Override
-  public void mouseEntered(MouseEvent e) {
-
-  }
-
-  @Override
-  public void mouseExited(MouseEvent e) {
-
+  public void addNote(int start, int end, int instrument, int pitch, int volume) {
+    this.model.addNote(start, end, instrument, pitch, volume);
   }
 }

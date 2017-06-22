@@ -1,5 +1,6 @@
 package cs3500.music.view;
 
+import cs3500.music.controller.MusicEditorController;
 import cs3500.music.model.MusicEditorOperations;
 
 import java.awt.event.KeyEvent;
@@ -7,6 +8,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -101,7 +103,12 @@ public class TextView implements MusicEditorView {
   }
 
   @Override
-  public void setListeners(MouseListener clicks, KeyListener keys) {
-    //do nothing for now
+  public void setListeners(MusicEditorController controls, KeyListener keys) {
+
+  }
+
+  @Override
+  public void update(List<Integer[]> notes, int tempo, int length) {
+
   }
 }

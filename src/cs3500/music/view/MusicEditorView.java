@@ -1,8 +1,11 @@
 package cs3500.music.view;
 
+import cs3500.music.controller.MusicEditorController;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,8 +26,8 @@ public interface MusicEditorView {
   String getLog();
 
   Map<Integer, Runnable> getKeyEvents();
-//
-//  AMEMouseListener getMouseListener();
 
-  void setListeners(MouseListener clicks, KeyListener keys);
+  void setListeners(MusicEditorController controls, KeyListener keys);
+
+  void update(List<Integer[]> notes, int tempo, int length);
 }

@@ -1,5 +1,6 @@
 package cs3500.music.view;
 
+import cs3500.music.model.MusicEditorModel;
 import cs3500.music.model.MusicEditorOperations;
 import cs3500.music.util.MidiConversion;
 
@@ -58,17 +59,9 @@ public class EditorPanel extends JViewport {
     } else if (width <= 0 || height <= 0) {
       throw new IllegalArgumentException("Width and height must be positive and non-zero.");
     }
-
-    this.notes = model.getNotes();
-    this.highPitch = this.getHighestPitch();
-    this.lowPitch = this.getLowestPitch();
-    this.numRows = highPitch - lowPitch + 1;
-    this.pieceLength = model.getLength();
     this.cursorPosition = 0;
     this.scrollOffset = 0;
-    this.cellHeight = getCellHeight(height);
-    this.setPreferredSize(new Dimension(width,
-        START_HEIGHT + (this.numRows * this.cellHeight) + 5));
+    update(model, width, height);
     this.log = new StringBuilder();
   }
 
@@ -311,5 +304,16 @@ public class EditorPanel extends JViewport {
 
   protected int getCursorPosition() {
     return this.cursorPosition;
+  }
+
+  protected void update(MusicEditorOperations model, int width, int height) {
+    this.notes = model.getNotes();
+    this.highPitch = this.getHighestPitch();
+    this.lowPitch = this.getLowestPitch();
+    this.numRows = highPitch - lowPitch + 1;
+    this.pieceLength = model.getLength();
+    this.cellHeight = getCellHeight(height);
+    this.setPreferredSize(new Dimension(width,
+      START_HEIGHT + (this.numRows * this.cellHeight) + 5));
   }
 }

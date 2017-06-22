@@ -54,46 +54,6 @@ public class GuiContainer extends JPanel {
     // Adds the piano panel and starts piano at note 0
     this.pianoPanel = new PianoPanel(this.model.getNotesAtBeat(0), width);
     this.add(this.pianoPanel, BorderLayout.SOUTH);
-//    // Adds the key listener to the container for moving the cursor
-//    this.setFocusable(true);
-//    this.requestFocusInWindow();
-//    this.addMouseListener(new MouseListener() {
-//
-//      @Override
-//      public void mouseClicked(MouseEvent e) {
-//        //stub
-//      }
-//
-//      @Override
-//      public void mousePressed(MouseEvent e) {
-//        int x = e.getX();
-//        int y = e.getY() - editorContainer.getHeight();
-//        int pit = pianoPanel.getPitch(x, y);
-//        System.out.println(x + " " + y);
-//        if (pit > 0) {
-//          int start = editorPanel.getCursorPosition();
-//          System.out.print("note " + start + " " + (start + 1) + " " + 1 + " ");
-//          System.out.println(pit + " " + 64);
-//        } else {
-//          System.out.println("Nope");
-//        }
-//      }
-//
-//      @Override
-//      public void mouseReleased(MouseEvent e) {
-//        //stub
-//      }
-//
-//      @Override
-//      public void mouseEntered(MouseEvent e) {
-//        //stub
-//      }
-//
-//      @Override
-//      public void mouseExited(MouseEvent e) {
-//        //stub
-//      }
-//    });
   }
 
   /**
@@ -145,12 +105,16 @@ public class GuiContainer extends JPanel {
     int y = e.getY() - this.editorContainer.getHeight();
     int pit = pianoPanel.getPitch(x, y);
     System.out.println(x + " " + y);
-    if (pit >= 0) {
+    if (pit > 0) {
       int start = editorPanel.getCursorPosition();
       return new Integer[] {start, start + 1, 1, pit, 64};
     } else {
       return null;
     }
+  }
 
+  protected void updatePanels() {
+    this.editorPanel.update(this.model, this.getWidth(), this.getHeight());
+    this.pianoPanel.updateHighlights(this.model.getNotesAtBeat(this.getCursorPosition()));
   }
 }

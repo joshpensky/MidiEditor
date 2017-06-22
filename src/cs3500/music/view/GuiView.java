@@ -1,9 +1,13 @@
 package cs3500.music.view;
 
+import cs3500.music.controller.MusicEditorController;
 import cs3500.music.model.MusicEditorOperations;
+import cs3500.music.util.MidiConversion;
 
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.List;
 import java.util.Map;
 import javax.swing.JFrame;
 import java.awt.Dimension;
@@ -85,9 +89,47 @@ public class GuiView extends JFrame implements MusicEditorView {
   }
 
   @Override
-  public void setListeners(MouseListener clicks, KeyListener keys) {
+  public void setListeners(MusicEditorController controls, KeyListener keys) {
     this.addKeyListener(keys);
-    this.addMouseListener(clicks);
+    MouseListener m = new MouseListener() {
+      @Override
+      public void mouseClicked(MouseEvent e) {
+        //stub
+      }
+
+      @Override
+      public void mousePressed(MouseEvent e) {
+        Integer[] note = container.getNote(e);
+        if (note != null) {
+          controls.addNote(note[MidiConversion.NOTE_START], note[MidiConversion.NOTE_END],
+            note[MidiConversion.NOTE_INSTRUMENT], note[MidiConversion.NOTE_PITCH],
+            note[MidiConversion.NOTE_VOLUME]);
+          container.updatePosition(true);
+          container.updatePanels();
+        }
+      }
+
+      @Override
+      public void mouseReleased(MouseEvent e) {
+        //stub
+      }
+
+      @Override
+      public void mouseEntered(MouseEvent e) {
+        //stub
+      }
+
+      @Override
+      public void mouseExited(MouseEvent e) {
+        //stub
+      }
+    };
+    this.addMouseListener(m);
+  }
+
+  @Override
+  public void update(List<Integer[]> notes, int tempo, int length) {
+
   }
 
   protected GuiContainer getContainer() {

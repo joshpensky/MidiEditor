@@ -1,5 +1,6 @@
 package cs3500.music.view;
 
+import cs3500.music.controller.MusicEditorController;
 import cs3500.music.model.MusicEditorOperations;
 import cs3500.music.util.MidiConversion;
 
@@ -100,6 +101,7 @@ public class MidiView implements MusicEditorView {
     this.tickPosition = 0;
     this.tempo = this.model.getTempo();
     this.length = this.model.getLength();
+    this.runs = new TreeMap<>();
   }
 
   @Override
@@ -202,9 +204,23 @@ public class MidiView implements MusicEditorView {
   }
 
   @Override
-  public void setListeners(MouseListener clicks, KeyListener keys) {
-    //does nothing for now
+  public void setListeners(MusicEditorController controls, KeyListener keys) {
+    // no listeners to set
   }
 
-
+  @Override
+  public void update(List<Integer[]> notes, int tempo, int length) {
+    try {
+      this.sequence = createSequence(notes);
+      if (this.sequencer.isOpen()) {
+        this.sequencer.close();
+      }
+      this.sequencer.open();
+      this.sequencer.setSequence(this.sequence);
+    } catch (InvalidMidiDataException | MidiUnavailableException e) {
+      //
+    }
+    this.tempo = tempo;
+    this.length = length;
+  }
 }
