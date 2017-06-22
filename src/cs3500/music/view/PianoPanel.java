@@ -128,6 +128,12 @@ public class PianoPanel extends JPanel {
     return position;
   }
 
+  /**
+   * does math to figure out which pitch was pressed on mouse event.
+   * @param mX x position of the mouse event
+   * @param mY y position of mouse event
+   * @return int of pitch
+   */
   protected int getPitch(int mX, int mY) {
     int position = getStartPos();
     for (int i = 0; i < 10; i++) {
@@ -144,6 +150,13 @@ public class PianoPanel extends JPanel {
     return -1;
   }
 
+  /**
+   * helper for getPitch.
+   * @param startPos start position for octave
+   * @param mX x position for mouse event
+   * @param mY y position for mouse event
+   * @return
+   */
   private Pitch getPitchHelp(int startPos, int mX, int mY) {
     int pos = startPos;
     int sharpKeyWidth = (int) (KEY_WIDTH * SHARP_KEY_MULTIPLIER);
