@@ -31,7 +31,6 @@ public class EditorPanel extends JViewport {
   private static final int CELL_WIDTH = 30;
   private int cellHeight = 5;
 
-
   private final StringBuilder log;
   private List<Integer[]> notes;
   private int highPitch;

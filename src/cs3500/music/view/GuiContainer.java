@@ -53,12 +53,11 @@ public class GuiContainer extends JPanel {
   }
 
   /**
-   * Updates the position of the cursor in the editor panel, as well as the keys highlighted in
-   * the piano panel, based on key press.
-   * Left arrow will move the cursor back one beat, while the right arrow will move the cursor
-   * forward one beat.
+   * Updates the position of the cursor in the editor view, as well as the keys highlighted in
+   * the piano view. Won't move the cursor past the limitations of the editor (before 0 or after
+   * the last beat displayed).
    *
-   * @param forward   the key event created from pressing a key on the keyboard
+   * @param forward   moves cursor forward if true, backward if false
    */
   protected void updatePosition(boolean forward) {
     int beat = this.editorPanel.updateCursor(forward);
@@ -66,6 +65,10 @@ public class GuiContainer extends JPanel {
     repaint();
   }
 
+  /**
+   * Moves the cursor to the very beginning of the piece (position 0). Updates the piano panel as
+   * well to reflect this change.
+   */
   protected void jumpToBeginning() {
     while (this.editorPanel.getCursorPosition() > 0) {
       this.editorPanel.updateCursor(false);
@@ -74,6 +77,10 @@ public class GuiContainer extends JPanel {
     repaint();
   }
 
+  /**
+   * Moves the cursor to the very end of the piece (length of the piece). Updates the piano panel as
+   * well to reflect this change.
+   */
   protected void jumpToEnd() {
     while (this.editorPanel.getCursorPosition() < this.model.getLength()) {
       this.editorPanel.updateCursor(true);
@@ -82,6 +89,11 @@ public class GuiContainer extends JPanel {
     repaint();
   }
 
+  /**
+   * Gets the current position of the cursor in the editor view.
+   *
+   * @return the current position of the cursor
+   */
   protected int getCursorPosition() {
     return this.editorPanel.getCursorPosition();
   }
@@ -104,9 +116,12 @@ public class GuiContainer extends JPanel {
    *
    * @param e   the event of a mouse press
    * @return the note data created from the press of a key on the piano
+   * @throws IllegalArgumentException if the given mouse event is uninitialized
    */
-  protected Integer[] getNote(MouseEvent e) {
-    System.out.println(e.getX() + ", " + e.getY());
+  protected Integer[] getNote(MouseEvent e) throws IllegalArgumentException {
+    if (e == null) {
+      throw new IllegalArgumentException("Cannot pass uninitialized mouse event.");
+    }
     int x = e.getX();
     int y = e.getY() - this.editorContainer.getHeight();
     int pitch = pianoPanel.getPitch(x, y);
@@ -126,6 +141,12 @@ public class GuiContainer extends JPanel {
     this.pianoPanel.updateHighlights(this.model.getNotesAtBeat(this.getCursorPosition()));
   }
 
+  /**
+   * Toggles scrolling on and off, for when adding new notes to the end of a piece. This allows
+   * it to momentarily stop scrolling and then resume to push the cursor forward.
+   *
+   * @param on   true to turn scrolling on, false otherwise
+   */
   protected void scrollToggle(boolean on) {
     this.editorPanel.scrollToggle(on);
   }

@@ -242,7 +242,7 @@ public class MusicEditorControllerTest {
     initCompositeView();
     controller.keyPressed(home);
     controller.keyPressed(right);
-    assertEquals(1, cursorPos(controller.getLog()));
+    assertEquals(2, cursorPos(controller.getLog()));
     controller.keyPressed(left);
     assertEquals(0, cursorPos(controller.getLog()));
     controller.keyPressed(left);

@@ -51,10 +51,21 @@ public class GuiView extends JFrame implements MusicEditorView {
     return this.container.getLog();
   }
 
+  /**
+   * Updates the position of the cursor in the editor view, as well as the keys highlighted in
+   * the piano view. Won't move the cursor past the limitations of the editor (before 0 or after
+   * the last beat displayed).
+   *
+   * @param forward   moves cursor forward if true, backward if false
+   */
   protected void updateCursor(boolean forward) {
     this.container.updatePosition(forward);
   }
 
+  /**
+   * Sets the different key events for a KeyListener attached to this view. Provides
+   * {@code Runnable}s per keyCode for the KeyListener to run when the respective key is pressed.
+   */
   private void setKeyEvents() {
     this.keyEventRunnables = new TreeMap<>();
     this.keyEventRunnables.put(KeyEvent.VK_RIGHT, () -> container.updatePosition(true));

@@ -30,6 +30,12 @@ public class MouseArea {
     this.botRight = botRight;
   }
 
+  @Override
+  public String toString() {
+    return "(" + topLeft.getX() + ", " + topLeft.getY() + ") (" + botRight.getX() + ", " +
+      botRight.getY() + ")";
+  }
+
   /**
    * Checks whether or not a mouse is within the given area.
    *
