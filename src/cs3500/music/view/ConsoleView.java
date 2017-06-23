@@ -288,19 +288,20 @@ public class ConsoleView implements MusicEditorView {
   }
 
   @Override
-  public Map<Integer, Runnable> getKeyEvents() {
+  public Map<Integer, Runnable> getKeyEventRunnables() {
     // no key events
     return new TreeMap<>();
   }
 
   @Override
-  public void setListeners(MusicEditorController controls, KeyListener keys) {
+  public void addListeners(MusicEditorController controller, KeyListener keyListener) {
     // no listeners to set
     return;
   }
 
   @Override
   public void update() {
+    // nothing to update
     return;
   }
 }

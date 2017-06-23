@@ -16,8 +16,8 @@ public class CompositeView implements MusicEditorView {
   private final MusicEditorOperations model;
   private final MidiView midi;
   private final GuiView gui;
-  private Map<Integer, Runnable> runs;
-  private Runnable matchMidi;
+  private Map<Integer, Runnable> keyEventRunnables;
+  private final Runnable guiMatchMidi;
   private StringBuilder log;
 
   /**
@@ -35,18 +35,18 @@ public class CompositeView implements MusicEditorView {
     this.gui.setFocusable(true);
     this.gui.requestFocus();
     this.log = new StringBuilder();
-    this.matchMidi = () -> {
-      while (!midi.isRunning()) {
+    this.guiMatchMidi = () -> {
+      while (!midi.isPlaying()) {
         try {
           // has to update thread
           Thread.sleep(1);
         } catch (InterruptedException e) {
-          this.log.append("Unexpected InterruptedException: " + e.getMessage() + "\n");
+          this.log.append("Encountered InterruptedException: " + e.getMessage() + "\n");
         }
       }
       int currPosition = midi.getTickPosition();
       while (midi.getTickPosition() <= model.getLength()) {
-        if (!midi.isRunning()) {
+        if (!midi.isPlaying()) {
           break;
         }
         if (currPosition != midi.getTickPosition()) {
@@ -61,14 +61,12 @@ public class CompositeView implements MusicEditorView {
   @Override
   public void initialize() {
     this.gui.initialize();
-    new Thread(this.matchMidi).start();
+    new Thread(this.guiMatchMidi).start();
     try {
       Thread.sleep(3000);
     } catch (InterruptedException e) {
-      //
+      this.log.append("Encountered InterruptedException: " + e.getMessage() + "\n");
     }
-    int currPosition = gui.getCursorPosition();
-    midi.setTickPosition(currPosition);
     this.midi.initialize();
   }
 
@@ -78,18 +76,22 @@ public class CompositeView implements MusicEditorView {
   }
 
   @Override
-  public Map<Integer, Runnable> getKeyEvents() {
-    return this.runs;
+  public Map<Integer, Runnable> getKeyEventRunnables() {
+    return this.keyEventRunnables;
   }
 
   @Override
-  public void setListeners(MusicEditorController controls, KeyListener keys) {
-    this.gui.setListeners(controls, keys);
+  public void addListeners(MusicEditorController controller, KeyListener keyListener)
+      throws IllegalArgumentException {
+    if (keyListener == null || controller == null) {
+      throw new IllegalArgumentException("Cannot pass uninitialized controller or key listener.");
+    }
+    this.gui.addListeners(controller, keyListener);
     MouseListener guiMouse = this.gui.getMouseListeners()[0];
     MouseListener compositeMouse = new MouseAdapter() {
       @Override
       public void mousePressed(MouseEvent e) {
-        if (!midi.isRunning()) {
+        if (!midi.isPlaying()) {
           guiMouse.mousePressed(e);
           midi.update();
         }
@@ -112,20 +114,20 @@ public class CompositeView implements MusicEditorView {
    * not running.
    */
   private void setKeyEvents() {
-    this.runs = new TreeMap<>();
-    Map<Integer, Runnable> guiKeyEvents = this.gui.getKeyEvents();
+    this.keyEventRunnables = new TreeMap<>();
+    Map<Integer, Runnable> guiKeyEvents = this.gui.getKeyEventRunnables();
     for (Integer keyCode : guiKeyEvents.keySet()) {
-      this.runs.put(keyCode, () -> {
-        if (!this.midi.isRunning()) {
+      this.keyEventRunnables.put(keyCode, () -> {
+        if (!this.midi.isPlaying()) {
           guiKeyEvents.get(keyCode).run();
         }
       });
     }
-    this.runs.put(KeyEvent.VK_SPACE, () -> {
-      if (this.midi.isRunning()) {
+    this.keyEventRunnables.put(KeyEvent.VK_SPACE, () -> {
+      if (this.midi.isPlaying()) {
         this.midi.pause();
       } else {
-        new Thread(matchMidi).start();
+        new Thread(guiMatchMidi).start();
         int currPosition = gui.getCursorPosition();
         midi.setTickPosition(currPosition);
         if (midi.isOver()) {

@@ -28,6 +28,10 @@ public class MusicEditorViewFactory {
    *     <th>"midi"</th>
    *     <th>{@link MidiView}</th>
    *   </tr>
+   *   <tr>
+   *     <th>"composite"</th>
+   *     <th>{@link CompositeView}</th>
+   *   </tr>
    * </table>
    *
    * @param viewName   the name of the desired view (case-insensitive, see above table for details)
@@ -35,7 +39,6 @@ public class MusicEditorViewFactory {
    * @return a new view object based on the desired view
    * @throws IllegalArgumentException the given view name is uninitialized, or the given model is
    *                                  uninitialized
-   * @throws MidiUnavailableException if midi is currently unavailable when choosing the MIDI view
    */
   public static MusicEditorView getView(String viewName, MusicEditorOperations model)
       throws IllegalArgumentException {

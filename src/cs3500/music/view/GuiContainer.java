@@ -96,6 +96,15 @@ public class GuiContainer extends JPanel {
     return this.log.append(this.editorPanel.getLog()).append(this.pianoPanel.getLog()).toString();
   }
 
+  /**
+   * Gets the note data for the note created when a key is pressed on the piano view, with the
+   * pitch of the note being that of the key pressed. The note will start at the current cursor's
+   * position and be one beat long. It will be played on the piano instrument at volume 64.
+   * If the mouse did not press on a key, null will be returned instead.
+   *
+   * @param e   the event of a mouse press
+   * @return the note data created from the press of a key on the piano
+   */
   protected Integer[] getNote(MouseEvent e) {
     int x = e.getX();
     int y = e.getY() - this.editorContainer.getHeight();
@@ -108,6 +117,9 @@ public class GuiContainer extends JPanel {
     }
   }
 
+  /**
+   * Updates both of the panels with the most up to date information from the model.
+   */
   protected void updatePanels() {
     this.editorPanel.update(this.model, this.getWidth(), this.getHeight());
     this.pianoPanel.updateHighlights(this.model.getNotesAtBeat(this.getCursorPosition()));

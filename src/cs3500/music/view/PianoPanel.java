@@ -31,6 +31,7 @@ public class PianoPanel extends JPanel {
   private Map<Integer, List<Pitch>> highlights;
   private int numOctaves;
   private int numKeys;
+  private Map<Integer, Map<Pitch, MouseArea>> keyMouseAreas;
 
   /**
    * Constructs a new {@code PianoPanel} with the given width, and highlighting all of the given
@@ -45,11 +46,9 @@ public class PianoPanel extends JPanel {
     if (width <= 0) {
       throw new IllegalArgumentException("Cannot pass negative or zero width.");
     }
-
     if (notes == null || notes.contains(null)) {
       throw new IllegalArgumentException("Cannot pass null list of notes");
     }
-
     this.updateHighlights(notes);
     this.numOctaves = 10;
     this.numKeys = 0;
@@ -59,15 +58,36 @@ public class PianoPanel extends JPanel {
       }
     }
     this.setPreferredSize(new Dimension(width, KEY_HEIGHT + 30));
+    this.initKeyMouseAreas(width);
     this.log = new StringBuilder();
   }
 
   @Override
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
-    int position = getStartPos();
+    int position = getStartPos(getWidth());
     for (int i = 0; i < 10; i++) {
-      position = drawOctave(g, position, this.highlights.getOrDefault(i, new ArrayList<>()));
+      position = drawOctave(g, position, i, this.highlights.getOrDefault(i, new ArrayList<>()));
+    }
+  }
+
+  /**
+   * Initializes the mouse areas for the keys on the piano view for use with mouse events.
+   *
+   * @param windowWidth   the width of the window
+   */
+  private void initKeyMouseAreas(int windowWidth) {
+    this.keyMouseAreas = new TreeMap<>();
+    for (int i = 1; i <= 10; i++) {
+      Map<Pitch, MouseArea> pitchMap = new TreeMap<>();
+      for (Pitch p : Pitch.values()) {
+        pitchMap.put(p, null);
+      }
+      this.keyMouseAreas.put(i, pitchMap);
+    }
+    int position = getStartPos(windowWidth);
+    for (int i = 0; i < 10; i++) {
+      position = drawOctave(null, position, i, new ArrayList<>());
     }
   }
 
@@ -77,38 +97,40 @@ public class PianoPanel extends JPanel {
    *
    * @return the starting position of the piano drawing
    */
-  private int getStartPos() {
-    int windowWidth = getWidth();
+  private int getStartPos(int windowWidth) {
     int pianoWidth = numOctaves * numKeys * KEY_WIDTH;
     return (windowWidth - pianoWidth) / 2;
   }
 
   /**
    * Draws a single octave on a piano, starting at the given position on the x-axis. Highlights
-   * any keys in the octave if the respective pitches are in the given list.
+   * any keys in the octave if the respective pitches are in the given list. IF the given
+   * graphics is null, it adds the mouse areas for the keys to be recognized by mouse events.
    *
    * @param g             the graphics object to draw on
    * @param startPos      the starting x-position of the drawing of this octave
+   * @param octave        the number of current octave being drawn
    * @param highlighted   the list of pitches to be highlighted in this octave
    * @return the ending x-position of the draw
-   * @throws IllegalArgumentException if the given graphics is null, or the given list of pitches
-   *                                  is or contains null
+   * @throws IllegalArgumentException if the given list of pitches is or contains null
    */
-  private int drawOctave(Graphics g, int startPos, List<Pitch> highlighted)
+  private int drawOctave(Graphics g, int startPos, int octave, List<Pitch> highlighted)
       throws IllegalArgumentException {
-    if (g == null) {
-      throw new IllegalArgumentException("Given graphics is uninitialized.");
-    } else if (highlighted == null || highlighted.contains(null)) {
-      System.out.println(highlighted);
+    if (highlighted == null || highlighted.contains(null)) {
       throw new IllegalArgumentException("Given list of pitches is or contains null.");
     }
     int position = startPos;
     for (Pitch p : Pitch.values()) {
       if (!p.isSharp()) {
-        g.setColor(this.getKeyColor(false, highlighted.contains(p)));
-        g.fillRect(position, 0, KEY_WIDTH, KEY_HEIGHT);
-        g.setColor(COLOR_KEY_OUTLINE);
-        g.drawRect(position, 0, KEY_WIDTH, KEY_HEIGHT);
+        if (g == null) {
+          this.keyMouseAreas.get(octave + 1).replace(p,
+              new MouseArea(new Posn(position, 0), new Posn(position + KEY_WIDTH, KEY_HEIGHT)));
+        } else {
+          g.setColor(this.getKeyColor(false, highlighted.contains(p)));
+          g.fillRect(position, 0, KEY_WIDTH, KEY_HEIGHT);
+          g.setColor(COLOR_KEY_OUTLINE);
+          g.drawRect(position, 0, KEY_WIDTH, KEY_HEIGHT);
+        }
         position += KEY_WIDTH;
       }
     }
@@ -117,10 +139,16 @@ public class PianoPanel extends JPanel {
     position = startPos;
     for (Pitch p : Pitch.values()) {
       if (p.isSharp()) {
-        g.setColor(this.getKeyColor(true, highlighted.contains(p)));
-        g.fillRect(position - ((3 * sharpKeyWidth) / 4), 0, sharpKeyWidth, sharpKeyHeight);
-        g.setColor(COLOR_KEY_OUTLINE);
-        g.drawRect(position - ((3 * sharpKeyWidth) / 4), 0, sharpKeyWidth, sharpKeyHeight);
+        if (g == null) {
+          this.keyMouseAreas.get(octave + 1).replace(p,
+              new MouseArea(new Posn(position - ((3 * sharpKeyWidth) / 4), 0),
+              new Posn(position + (sharpKeyWidth / 4), sharpKeyHeight)));
+        } else {
+          g.setColor(this.getKeyColor(true, highlighted.contains(p)));
+          g.fillRect(position - ((3 * sharpKeyWidth) / 4), 0, sharpKeyWidth, sharpKeyHeight);
+          g.setColor(COLOR_KEY_OUTLINE);
+          g.drawRect(position - ((3 * sharpKeyWidth) / 4), 0, sharpKeyWidth, sharpKeyHeight);
+        }
       } else {
         position += KEY_WIDTH;
       }
@@ -129,61 +157,28 @@ public class PianoPanel extends JPanel {
   }
 
   /**
-   * does math to figure out which pitch was pressed on mouse event.
-   * @param mX x position of the mouse event
-   * @param mY y position of mouse event
-   * @return int of pitch
+   * Calculates which key has been clicked on the piano and returns the MIDI representation of
+   * that key's pitch.
+   *
+   * @param mouseX   the x-position of current cursor position
+   * @param mouseY   the y-position of current cursor position
+   * @return the MIDI representation of pitch
    */
-  protected int getPitch(int mX, int mY) {
-    int position = getStartPos();
-    for (int oct = 0; oct < 10; oct++) {
-      Pitch p = getPitchHelp(position, mX, mY);
-      if (p != null) {
-        return MidiConversion.getMidiPitch(oct + 1, p);
+  protected int getPitch(int mouseX, int mouseY) {
+    for (Integer oct : keyMouseAreas.keySet()) {
+      Map<Pitch, MouseArea> pitchMap = keyMouseAreas.get(oct);
+      for (Pitch p : Pitch.values()) {
+        if (p.isSharp() && pitchMap.get(p).mouseWithinArea(mouseX, mouseY)) {
+          return MidiConversion.getMidiPitch(oct, p);
+        }
       }
-      for (Pitch x : Pitch.values()) {
-        if (!x.isSharp()) {
-          position += KEY_WIDTH;
+      for (Pitch p : Pitch.values()) {
+        if (!p.isSharp() && pitchMap.get(p).mouseWithinArea(mouseX, mouseY)) {
+          return MidiConversion.getMidiPitch(oct, p);
         }
       }
     }
     return -1;
-  }
-
-  /**
-   * helper for getPitch.
-   * @param startPos start position for octave
-   * @param mX x position for mouse event
-   * @param mY y position for mouse event
-   * @return
-   */
-  private Pitch getPitchHelp(int startPos, int mX, int mY) {
-    int pos = startPos;
-    int sharpKeyWidth = (int) (KEY_WIDTH * SHARP_KEY_MULTIPLIER);
-    int sharpKeyHeight = (int) (KEY_HEIGHT * SHARP_KEY_MULTIPLIER);
-    for (Pitch p : Pitch.values()) {
-      if (p.isSharp()) {
-        if ((mX > pos - (3 * sharpKeyWidth) / 4) && (mX < pos + (sharpKeyWidth / 4))
-            && (mY > 0) && (mY < sharpKeyHeight)) {
-          this.log.append("<PP>" + p.toString() + "</PP>\n");
-          return p;
-        }
-      } else {
-        pos += KEY_WIDTH;
-      }
-    }
-    pos = startPos;
-    for (Pitch p : Pitch.values()) {
-      if (!p.isSharp()) {
-        if ((mX > pos) && (mX < pos + KEY_WIDTH)
-          && (mY > 0) && (mY < KEY_HEIGHT)) {
-          this.log.append("<PP>" + p.toString() + "</PP>\n");
-          return p;
-        }
-        pos += KEY_WIDTH;
-      }
-    }
-    return null;
   }
 
   /**

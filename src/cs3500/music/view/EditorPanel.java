@@ -316,10 +316,21 @@ public class EditorPanel extends JViewport {
     return this.log.toString();
   }
 
+  /**
+   * Gets the current position of the cursor in this editor view.
+   *
+   * @return the current position of the cursor
+   */
   protected int getCursorPosition() {
     return this.cursorPosition;
   }
 
+  /**
+   * Toggles scrolling on and off, for when adding new notes to the end of a piece. This allows
+   * it to momentarily stop scrolling and then resume to push the cursor forward.
+   *
+   * @param on   true to turn scrolling on, false otherwise
+   */
   protected void scrollToggle(boolean on) {
     if (on) {
       int cellsShown = (this.getWidth() - START_WIDTH) / CELL_WIDTH;

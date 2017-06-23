@@ -17,7 +17,7 @@ import java.util.TreeMap;
 public class GuiView extends JFrame implements MusicEditorView {
   private static final int WIDTH = 1100;
   private final GuiContainer container;
-  private Map<Integer, Runnable> runs;
+  private Map<Integer, Runnable> keyEventRunnables;
 
   /**
    * Constructs a new {@code GuiView} using the given model to display notes in the
@@ -56,35 +56,31 @@ public class GuiView extends JFrame implements MusicEditorView {
   }
 
   private void setKeyEvents() {
-    this.runs = new TreeMap<>();
-    this.runs.put(KeyEvent.VK_RIGHT, () -> {
-      container.updatePosition(true);
-    });
-    this.runs.put(KeyEvent.VK_LEFT, () -> {
-      container.updatePosition(false);
-    });
-    this.runs.put(KeyEvent.VK_HOME, () -> {
-      container.jumpToBeginning();
-    });
-    this.runs.put(KeyEvent.VK_END, () -> {
-      container.jumpToEnd();
-    });
+    this.keyEventRunnables = new TreeMap<>();
+    this.keyEventRunnables.put(KeyEvent.VK_RIGHT, () -> container.updatePosition(true));
+    this.keyEventRunnables.put(KeyEvent.VK_LEFT, () -> container.updatePosition(false));
+    this.keyEventRunnables.put(KeyEvent.VK_HOME, () -> container.jumpToBeginning());
+    this.keyEventRunnables.put(KeyEvent.VK_END, () -> container.jumpToEnd());
   }
 
   @Override
-  public Map<Integer, Runnable> getKeyEvents() {
-    return this.runs;
+  public Map<Integer, Runnable> getKeyEventRunnables() {
+    return this.keyEventRunnables;
   }
 
   @Override
-  public void setListeners(MusicEditorController controls, KeyListener keys) {
-    this.addKeyListener(keys);
+  public void addListeners(MusicEditorController controller, KeyListener keyListener)
+      throws IllegalArgumentException {
+    if (keyListener == null || controller == null) {
+      throw new IllegalArgumentException("Cannot pass uninitialized controller or key listener.");
+    }
+    this.addKeyListener(keyListener);
     MouseListener m = new MouseAdapter() {
       @Override
       public void mousePressed(MouseEvent e) {
         Integer[] note = container.getNote(e);
         if (note != null) {
-          controls.addNote(note[MidiConversion.NOTE_START], note[MidiConversion.NOTE_END],
+          controller.addNote(note[MidiConversion.NOTE_START], note[MidiConversion.NOTE_END],
               note[MidiConversion.NOTE_INSTRUMENT], note[MidiConversion.NOTE_PITCH],
               note[MidiConversion.NOTE_VOLUME]);
           update();
@@ -102,6 +98,11 @@ public class GuiView extends JFrame implements MusicEditorView {
     this.container.scrollToggle(true);
   }
 
+  /**
+   * Gets the current cursor position in the editor view.
+   *
+   * @return the current cursor position
+   */
   protected int getCursorPosition() {
     return this.container.getCursorPosition();
   }

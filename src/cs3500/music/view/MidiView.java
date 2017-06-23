@@ -14,9 +14,7 @@ import javax.sound.midi.MidiEvent;
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.ShortMessage;
 
-import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseListener;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -31,9 +29,6 @@ public class MidiView implements MusicEditorView {
   private final Sequencer sequencer;
   private Sequence sequence;
   private int tickPosition;
-  private Map<Integer, Runnable> runs;
-  private int tempo;
-  private int length;
 
   /**
    * Represents the builder class for a MidiView. Sets the sequencer of the MidiView to the
@@ -99,57 +94,66 @@ public class MidiView implements MusicEditorView {
     this.sequencer = builder.sequencer;
     this.sequence = null;
     this.tickPosition = 0;
-    this.tempo = this.model.getTempo();
-    this.length = this.model.getLength();
-    this.runs = new TreeMap<>();
   }
 
   @Override
   public void initialize() {
-    try {
-      this.sequence = this.createSequence(this.model.getNotes());
-      this.sequencer.open();
-      this.sequencer.setSequence(this.sequence);
-      this.play();
-    } catch (InvalidMidiDataException e) {
-      this.log.append("Encountered fatal InvalidMidiDataException:\n" + e.getMessage() + "\n");
-    } catch (MidiUnavailableException e) {
-      this.log.append("Encountered fatal MidiUnavailableException:\n" + e.getMessage() + "\n");
-    }
+    this.update();
+    this.play();
   }
 
   /**
-   * Helper to the initialize method. Opens the sequencer, then plays the sequence of notes
-   * currently in the model at the tempo specified in the model. Closes the sequencer after all
-   * notes have been played.
-   *
-   * @throws InvalidMidiDataException if an invalid note or tempo in the model is passed to the MIDI
-   * @throws MidiUnavailableException if MIDI is currently unavailable for the system
+   * Starts or resumes playback of the set sequence in the view at the set tick position in the
+   * set tempo.
    */
   protected void play() {
-    this.sequencer.setTempoInMPQ(this.tempo);
+    this.sequencer.setTempoInMPQ(this.model.getTempo());
     this.sequencer.setTickPosition(this.tickPosition);
     this.sequencer.start();
-    this.sequencer.setTempoInMPQ(this.tempo);
+    this.sequencer.setTempoInMPQ(this.model.getTempo());
   }
 
+  /**
+   * Pauses playback of the view.
+   */
   protected void pause() {
     this.sequencer.stop();
   }
 
+  /**
+   * Sets the tick position of the midi view safely (in that it will push it to position 0 if
+   * given negative, or pull it back to the length of the sequence if longer than).
+   *
+   * @param tickPosition   the new position of the MIDI's tick
+   */
   protected void setTickPosition(int tickPosition) {
-    this.tickPosition = Math.min(Math.max(0, tickPosition), this.length);
+    this.tickPosition = Math.min(Math.max(0, tickPosition), this.model.getLength());
   }
 
+  /**
+   * Gets the current tick position of the midi view.
+   *
+   * @return the current tick position
+   */
   protected int getTickPosition() {
     this.tickPosition = (int) this.sequencer.getTickPosition();
     return this.tickPosition;
   }
 
-  protected boolean isRunning() {
+  /**
+   * Checks whether or not the sequencer in the midi is actively playing something.
+   *
+   * @return true if the midi is playing the sequence, false otherwise
+   */
+  protected boolean isPlaying() {
     return this.sequencer.isRunning();
   }
 
+  /**
+   * Checks whether or not the sequencer has finished playing the sequence.
+   *
+   * @return true if the midi has finished playing, false otherwise
+   */
   protected boolean isOver() {
     return this.sequencer.getSequence() == null;
   }
@@ -186,13 +190,13 @@ public class MidiView implements MusicEditorView {
   }
 
   @Override
-  public Map<Integer, Runnable> getKeyEvents() {
+  public Map<Integer, Runnable> getKeyEventRunnables() {
     // no key events
     return new TreeMap<>();
   }
 
   @Override
-  public void setListeners(MusicEditorController controls, KeyListener keys) {
+  public void addListeners(MusicEditorController controller, KeyListener keyListener) {
     // no listeners to set
     return;
   }
@@ -207,11 +211,9 @@ public class MidiView implements MusicEditorView {
       this.sequencer.open();
       this.sequencer.setSequence(this.sequence);
     } catch (InvalidMidiDataException e) {
-      this.log.append("Encountered InvalidMidiDataException: " + e.getMessage() + "\n");
+      this.log.append("Encountered fatal InvalidMidiDataException: " + e.getMessage() + "\n");
     } catch (MidiUnavailableException e) {
-      this.log.append("Encountered MidiUnavailableException: " + e.getMessage() + "\n");
+      this.log.append("Encountered fatal MidiUnavailableException: " + e.getMessage() + "\n");
     }
-    this.tempo = this.model.getTempo();
-    this.length = this.model.getLength();
   }
 }
