@@ -62,7 +62,7 @@ public class MusicEditorControllerTest {
     controller = MusicEditorController.initialize();
     controller.setModelAndView("build/mary-little-lamb.txt", "composite");
     try {
-      Thread.sleep(2000);
+      Thread.sleep(4000);
     }
     catch (InterruptedException e) {
       e.printStackTrace();
