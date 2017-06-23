@@ -165,6 +165,7 @@ public class PianoPanel extends JPanel {
       if (p.isSharp()) {
         if ((mX > pos - (3 * sharpKeyWidth) / 4) && (mX < pos + (sharpKeyWidth / 4))
             && (mY > 0) && (mY < sharpKeyHeight)) {
+          this.log.append("<PP>" + p.toString() + "</PP>\n");
           return p;
         }
       } else {
@@ -176,6 +177,7 @@ public class PianoPanel extends JPanel {
       if (!p.isSharp()) {
         if ((mX > pos) && (mX < pos + KEY_WIDTH)
           && (mY > 0) && (mY < KEY_HEIGHT)) {
+          this.log.append("<PP>" + p.toString() + "</PP>\n");
           return p;
         }
         pos += KEY_WIDTH;
