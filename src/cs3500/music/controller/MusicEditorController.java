@@ -19,20 +19,56 @@ import cs3500.music.view.MusicEditorViewFactory;
  * Controller in MVC design for music editor.
  */
 public class MusicEditorController implements KeyListener {
-  private final MusicEditorOperations model;
-  private final MusicEditorView view;
+  private MusicEditorOperations model;
+  private MusicEditorView view;
+  private static MusicEditorController controller;
 
   /**
-   * Constructs a music editor controller and sets up both the view to be used and the model to be used.
-   * @param model the String argument for which type of model to use
-   * @param view the String argument for which type of view to use
-   * @throws IOException if input or output files are improperly initialized
+   * Constructor for singleton pattern.
    */
-  public MusicEditorController(String model, String view) throws IOException {
-    this.model = MusicReader.parseFile(new FileReader(model), new MusicEditorBuilder());
+  protected MusicEditorController() {
+    //does nothing
+  }
+
+  /**
+   * initializer for singleton pattern for controller. Only one will ever be created.
+   * @return this's controller
+   */
+  public static MusicEditorController initialize () {
+    if (controller == null) {
+      controller = new MusicEditorController();
+    }
+    return controller;
+  }
+
+  /**
+   * Setter for the model and controller
+   * @param model the model to be used
+   * @param view the view to be used
+   * @throws IOException
+   */
+  public void setModelAndView(String model, String view) throws IOException {
+    this.setModel(model);
+    this.setView(view);
+  }
+
+  /**
+   * Sets the view of this controller.
+   * @param view the view this controller should use.
+   */
+  private void setView(String view) {
     this.view = MusicEditorViewFactory.getView(view, new ViewOnlyModel(this.model));
     this.view.setListeners(this, this);
     this.view.initialize();
+  }
+
+  /**
+   * Sets the model of this controller.
+   * @param model the model to be used.
+   * @throws IOException when file reader is not initialized properly or when file does not exist.
+   */
+  private void setModel(String model) throws IOException{
+    this.model = MusicReader.parseFile(new FileReader(model), new MusicEditorBuilder());
   }
 
   /**

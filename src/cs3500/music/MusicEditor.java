@@ -39,6 +39,8 @@ public class MusicEditor {
           + "1) the file name (ex.: \"mary-little-lamb.txt\")\n"
           + "2) the desired view (either \"console\", \"visual\", or \"midi\")");
     }
-    MusicEditorController mec = new MusicEditorController(args[0], args[1]);
+    MusicEditorController mec = MusicEditorController.initialize();
+    mec.setModelAndView(args[0], args[1]);
+
   }
 }
