@@ -112,4 +112,12 @@ public class MusicEditorController implements KeyListener {
   public void addNote(int start, int end, int instrument, int pitch, int volume) {
     this.model.addNote(start, end, instrument, pitch, volume);
   }
+
+  /**
+   * Gets the log for the view this controller is using.
+   * @return the log of events for the view.
+   */
+  public String getLog() {
+    return this.view.getLog();
+  }
 }
