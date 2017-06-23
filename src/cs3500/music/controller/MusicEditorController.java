@@ -114,4 +114,12 @@ public class MusicEditorController extends KeyAdapter {
     }
     this.model.addNote(start, end, instrument, pitch, volume);
   }
+
+  /**
+   * Gets the log for the view this controller is using.
+   * @return the log of events for the view.
+   */
+  public String getLog() {
+    return this.view.getLog();
+  }
 }
