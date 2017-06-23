@@ -1,21 +1,15 @@
 package cs3500.music.controller;
 
-
-import cs3500.music.model.MusicEditorBuilder;
-import cs3500.music.model.MusicEditorOperations;
-import cs3500.music.view.MusicEditorView;
-import cs3500.music.view.MusicEditorViewFactory;
 import org.junit.Test;
 
-import java.awt.*;
+import java.awt.Button;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Created by Will on 6/23/2017.
+ * Tests for the {@code MusicEditorController} class.
  */
 public class MusicEditorControllerTest {
   private MusicEditorController controller;
@@ -28,7 +22,7 @@ public class MusicEditorControllerTest {
   private KeyEvent doesNothing;
   private static final int MARY_LAMB_PIECE_SIZE = 64;
 
-
+  // Initializes the visual view
   private void initVisualView() {
     app = new StringBuilder();
     controller = MusicEditorController.initialize();
@@ -43,6 +37,7 @@ public class MusicEditorControllerTest {
     doesNothing = new KeyEvent(a, 2, 20, 1, KeyEvent.VK_3, '3');
   }
 
+  // Initializes the composite view
   private void initCompositeView() {
     Button a = new Button("click");
 
@@ -66,27 +61,22 @@ public class MusicEditorControllerTest {
   }
 
   private int cursorPos(String s) {
-
-    int n1 = 0;
-    int n2 = 0;
-    String place = "";
-    n2 = s.lastIndexOf("</EP>");
-    n1 = s.lastIndexOf(":- ");
+    int n2 = s.lastIndexOf("</EP>");
+    int n1 = s.lastIndexOf(":- ");
     s = s.substring(n1 + 3, n2 - 1);
     return Integer.parseInt(s);
+  }
+
+  @Test
+  public void testCursorPosHelper() {
+    String s = "erdctfyuhnijmo<EP>stuff:- 42 </EP>\n";
+    assertEquals(this.cursorPos(s), 42);
   }
 
   @Test
   public void testSingletonPatternForController() {
     initVisualView();
     assertEquals(MusicEditorController.initialize(), controller);
-  }
-
-  @Test
-  public void testCursorPosHelper() {
-    String s = "erdctfyuhnijmo<EP>stuff:- 42 </EP>\n";
-
-    assertEquals(this.cursorPos(s), 42);
   }
 
   @Test
@@ -265,7 +255,6 @@ public class MusicEditorControllerTest {
     int place1 = cursorPos(controller.getLog());
     controller.keyPressed(space);
 
-
     try {
       Thread.sleep(3000);
     } catch (InterruptedException e) {
@@ -273,17 +262,10 @@ public class MusicEditorControllerTest {
     }
     //pauses the view again
     controller.keyPressed(space);
-    //moves the cursor forwards 1 and back 1 to log the current position correctly. does not modify end result 1-1=0
+    // moves the cursor forwards 1 and back 1 to log the current position correctly.
+    // does not modify end result 1-1=0
     controller.keyPressed(right);
     controller.keyPressed(left);
     assertTrue(place1 < cursorPos(controller.getLog()));
-  }
-
-  @Test
-  public void testMouseVisual() {
-    initVisualView();
-    Component a = new Button("click");
-    MouseEvent lowKey = new MouseEvent(a, MouseEvent.MOUSE_PRESSED, 1, 1, 29, 609, 1, false);
-
   }
 }
