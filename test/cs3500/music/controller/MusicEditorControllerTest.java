@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by Will on 6/23/2017.
@@ -61,11 +62,12 @@ public class MusicEditorControllerTest {
     controller = MusicEditorController.initialize();
     controller.setModelAndView("build/mary-little-lamb.txt", "composite");
     try {
-      Thread.sleep(4000);
+      Thread.sleep(2000);
     }
     catch (InterruptedException e) {
       e.printStackTrace();
     }
+    controller.keyPressed(space);
   }
 
   private int cursorPos(String s) {
@@ -111,7 +113,9 @@ public class MusicEditorControllerTest {
   @Test
   public void testHomeWorks() {
     init();
-    controller.keyPressed(end);
+    controller.keyPressed(right);
+    controller.keyPressed(right);
+    assertEquals(2, cursorPos(controller.getLog()));
     controller.keyPressed(home);
     assertEquals(0, cursorPos(controller.getLog()));
   }
@@ -182,9 +186,8 @@ public class MusicEditorControllerTest {
   }
 
   @Test
-  public void testSleepThenPause() {
+  public void testCompPausedLeft() {
     init2();
-    controller.keyPressed(space);
     controller.keyPressed(end);
     assertEquals(MARY_LAMB_PIECE_SIZE, cursorPos(controller.getLog()));
     controller.keyPressed(left);
@@ -196,6 +199,90 @@ public class MusicEditorControllerTest {
     controller.keyPressed(left);
     assertEquals(MARY_LAMB_PIECE_SIZE - 4, cursorPos(controller.getLog()));
   }
+
+
+  @Test
+  public void testCompPausedRight() {
+    init2();
+    controller.keyPressed(home);
+    controller.keyPressed(right);
+    assertEquals(1, cursorPos(controller.getLog()));
+    controller.keyPressed(right);
+    assertEquals(2, cursorPos(controller.getLog()));
+    controller.keyPressed(right);
+    assertEquals(3, cursorPos(controller.getLog()));
+    controller.keyPressed(right);
+    assertEquals(4, cursorPos(controller.getLog()));
+  }
+
+  @Test
+  public void testKeyPressNothingShouldHappenInPausedComp() {
+    init2();
+    String before = controller.getLog();
+    controller.keyPressed(doesNothing);
+    assertEquals(before, controller.getLog());
+  }
+
+  @Test
+  public void testCompPausedEndWorks() {
+    init2();
+    controller.keyPressed(end);
+    assertEquals(MARY_LAMB_PIECE_SIZE, cursorPos(controller.getLog()));
+  }
+
+  @Test
+  public void testCompPausedHomeWorks() {
+    init2();
+    controller.keyPressed(right);
+    controller.keyPressed(right);
+    assertEquals(2, cursorPos(controller.getLog()));
+    controller.keyPressed(home);
+    assertEquals(0, cursorPos(controller.getLog()));
+  }
+
+
+  @Test
+  public void testCompPausedEndIsTheEnd() {
+    init2();
+    controller.keyPressed(end);
+    assertEquals(MARY_LAMB_PIECE_SIZE, cursorPos(controller.getLog()));
+    controller.keyPressed(right);
+    assertEquals(MARY_LAMB_PIECE_SIZE, cursorPos(controller.getLog()));
+    controller.keyPressed(left);
+    assertEquals(MARY_LAMB_PIECE_SIZE - 1, cursorPos(controller.getLog()));
+  }
+
+  @Test
+  public void testCompPausedBeginingIsTheBegining() {
+    init2();
+    controller.keyPressed(right);
+    assertEquals(1, cursorPos(controller.getLog()));
+    controller.keyPressed(left);
+    assertEquals(0, cursorPos(controller.getLog()));
+    controller.keyPressed(left);
+    assertEquals(0, cursorPos(controller.getLog()));
+  }
+
+  @Test
+  public void testCompPausedThenPlayedAtDiffLocations() {
+    init2();
+    int place1 = cursorPos(controller.getLog());
+    controller.keyPressed(space);
+
+
+    try {
+      Thread.sleep(3000);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+    //pauses the view again
+    controller.keyPressed(space);
+    //moves the cursor forwards 1 and back 1 to log the current possition correctly. does not modify end result 1-1=0
+    controller.keyPressed(right);
+    controller.keyPressed(left);
+    assertTrue(place1 < cursorPos(controller.getLog()));
+  }
+
 
 
 }
