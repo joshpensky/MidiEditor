@@ -275,10 +275,13 @@ public class EditorPanel extends JViewport {
       if ((cellsShown + this.scrollOffset - 2) >= this.pieceLength) {
         this.reachedEnd = true;
       }
+      this.log.append("<EP>cFor:- ");
     } else {
       this.cursorPosition = Math.max(0, this.cursorPosition - 1);
+      this.log.append("<EP>cBac:- ");
     }
     this.updateScrollOffset(this.cursorPosition - startingPos);
+    this.log.append(cursorPosition + " </EP>\n");
     return this.cursorPosition;
   }
 
