@@ -3,16 +3,12 @@ package cs3500.music.controller;
 
 import cs3500.music.model.MusicEditorBuilder;
 import cs3500.music.model.MusicEditorOperations;
-
-import cs3500.music.view.GuiView;
 import cs3500.music.view.MusicEditorView;
 import cs3500.music.view.MusicEditorViewFactory;
 import org.junit.Test;
 
-
 import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 
@@ -33,14 +29,12 @@ public class MusicEditorControllerTest {
   private static final int MARY_LAMB_PIECE_SIZE = 64;
 
 
-
-
   private void init() {
     app = new StringBuilder();
     this.model = new MusicEditorBuilder().build();
     this.view = MusicEditorViewFactory.getView("visual", model);
     controller = MusicEditorController.initialize();
-    controller.setModelAndView("build\\mary-little-lamb.txt", "visual");
+    controller.setModelAndView("build/mary-little-lamb.txt", "visual");
     Button a = new Button("click");
 
     left = new KeyEvent(a, 2, 20, 1, KeyEvent.VK_LEFT, 'l');
@@ -65,23 +59,24 @@ public class MusicEditorControllerTest {
     this.model = new MusicEditorBuilder().build();
     this.view = MusicEditorViewFactory.getView("composite", model);
     controller = MusicEditorController.initialize();
-    controller.setModelAndView("build\\mary-little-lamb.txt", "composite");
+    controller.setModelAndView("build/mary-little-lamb.txt", "composite");
     try {
       Thread.sleep(4000);
-    } catch (InterruptedException e) {
+    }
+    catch (InterruptedException e) {
       e.printStackTrace();
     }
   }
 
   private int cursorPos(String s) {
 
-      int n1 = 0;
-      int n2 = 0;
-      String place = "";
-      n2 = s.lastIndexOf("</EP>");
-      n1 = s.lastIndexOf(":- ");
-      s = s.substring(n1 + 3, n2 - 1);
-      return Integer.parseInt(s);
+    int n1 = 0;
+    int n2 = 0;
+    String place = "";
+    n2 = s.lastIndexOf("</EP>");
+    n1 = s.lastIndexOf(":- ");
+    s = s.substring(n1 + 3, n2 - 1);
+    return Integer.parseInt(s);
   }
 
   @Test
@@ -177,7 +172,7 @@ public class MusicEditorControllerTest {
     init();
     this.view = MusicEditorViewFactory.getView("composite", model);
     controller = MusicEditorController.initialize();
-    controller.setModelAndView("build\\mary-little-lamb.txt", "composite");
+    controller.setModelAndView("build/mary-little-lamb.txt", "composite");
     controller.keyPressed(right);
     assertEquals(controller.getLog().length(), 0);
     controller.keyPressed(end);
@@ -193,15 +188,14 @@ public class MusicEditorControllerTest {
     controller.keyPressed(end);
     assertEquals(MARY_LAMB_PIECE_SIZE, cursorPos(controller.getLog()));
     controller.keyPressed(left);
-  assertEquals(MARY_LAMB_PIECE_SIZE - 1, cursorPos(controller.getLog()));
+    assertEquals(MARY_LAMB_PIECE_SIZE - 1, cursorPos(controller.getLog()));
     controller.keyPressed(left);
-  assertEquals(MARY_LAMB_PIECE_SIZE - 2, cursorPos(controller.getLog()));
+    assertEquals(MARY_LAMB_PIECE_SIZE - 2, cursorPos(controller.getLog()));
     controller.keyPressed(left);
-  assertEquals(MARY_LAMB_PIECE_SIZE - 3, cursorPos(controller.getLog()));
+    assertEquals(MARY_LAMB_PIECE_SIZE - 3, cursorPos(controller.getLog()));
     controller.keyPressed(left);
-  assertEquals(MARY_LAMB_PIECE_SIZE - 4, cursorPos(controller.getLog()));
-}
-
+    assertEquals(MARY_LAMB_PIECE_SIZE - 4, cursorPos(controller.getLog()));
+  }
 
 
 }
