@@ -4,6 +4,9 @@ import cs3500.music.model.MusicEditorBuilder;
 import cs3500.music.model.MusicEditorOperations;
 import cs3500.music.model.ViewOnlyModel;
 import org.junit.Test;
+
+import javax.swing.text.View;
+
 import static org.junit.Assert.assertEquals;
 
 
@@ -81,4 +84,29 @@ public class ViewOnlyModelTest {
 
         assertEquals(1000, vom.getTempo());
     }
+
+    @Test
+    public void getTempoTest() {
+        init();
+        assertEquals(vom.getTempo(), 1000);
+    }
+
+    @Test
+    public void getNotesTest() {
+        init();
+        assertEquals(vom.getNotes().size(), 2);
+    }
+
+    @Test
+    public void getNotesAtBeatTest() {
+        init();
+        assertEquals(vom.getNotesAtBeat(0).size(), model.getNotesAtBeat(0).size());
+    }
+
+    @Test
+    public void getLengthTest() {
+        init();
+        assertEquals(vom.getLength(), model.getLength());
+    }
+
 }
