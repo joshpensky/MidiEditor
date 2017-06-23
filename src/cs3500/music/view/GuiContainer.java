@@ -112,8 +112,4 @@ public class GuiContainer extends JPanel {
     this.editorPanel.update(this.model, this.getWidth(), this.getHeight());
     this.pianoPanel.updateHighlights(this.model.getNotesAtBeat(this.getCursorPosition()));
   }
-
-  protected void scrollToggle(boolean on) {
-    this.editorPanel.scrollToggle(on);
-  }
 }

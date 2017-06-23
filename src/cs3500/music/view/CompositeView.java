@@ -33,7 +33,7 @@ public class CompositeView implements MusicEditorView {
           // has to update thread
           Thread.sleep(1);
         } catch (InterruptedException e) {
-          this.log.append("Unexpected InterruptedException: " + e.getMessage() + "\n");
+          //this.log.append("Unexpected InterruptedException: " + e.getMessage() + "\n");
         }
       }
       int currPosition = midi.getTickPosition();
@@ -54,8 +54,14 @@ public class CompositeView implements MusicEditorView {
   public void initialize() {
     this.gui.initialize();
     new Thread(this.matchMidi).start();
+    try {
+      Thread.sleep(3000);
+    } catch (InterruptedException e) {
+      //
+    }
+    int currPosition = gui.getCursorPosition();
+    midi.setTickPosition(currPosition);
     this.midi.initialize();
-    this.midi.pause();
   }
 
   @Override
@@ -72,7 +78,6 @@ public class CompositeView implements MusicEditorView {
   public void setListeners(MusicEditorController controls, KeyListener keys) {
     this.gui.setListeners(controls, keys);
     MouseListener guiMouse = this.gui.getMouseListeners()[0];
-    this.gui.removeMouseListener(guiMouse);
     MouseListener compositeMouse = new MouseListener() {
       @Override
       public void mouseClicked(MouseEvent e) {
@@ -102,6 +107,7 @@ public class CompositeView implements MusicEditorView {
         return; // no need for detection of mouse exiting
       }
     };
+    this.gui.removeMouseListener(guiMouse);
     this.gui.addMouseListener(compositeMouse);
   }
 

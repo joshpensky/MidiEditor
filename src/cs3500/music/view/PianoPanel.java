@@ -99,6 +99,7 @@ public class PianoPanel extends JPanel {
     if (g == null) {
       throw new IllegalArgumentException("Given graphics is uninitialized.");
     } else if (highlighted == null || highlighted.contains(null)) {
+      System.out.println(highlighted);
       throw new IllegalArgumentException("Given list of pitches is or contains null.");
     }
     int position = startPos;

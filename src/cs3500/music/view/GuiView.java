@@ -57,15 +57,6 @@ public class GuiView extends JFrame implements MusicEditorView {
   protected void updateCursor(boolean forward) {
     this.container.updatePosition(forward);
   }
-//  @Override
-//  public AMEKeyListener getKeyListener() {
-//    return this.runs;
-//  }
-//
-//  @Override
-//  public AMEMouseListener getMouseListener() {
-//    return null;
-//  }
 
   private void setRunnable() {
     this.runs = new TreeMap<>();
@@ -102,8 +93,8 @@ public class GuiView extends JFrame implements MusicEditorView {
         Integer[] note = container.getNote(e);
         if (note != null) {
           controls.addNote(note[MidiConversion.NOTE_START], note[MidiConversion.NOTE_END],
-            note[MidiConversion.NOTE_INSTRUMENT], note[MidiConversion.NOTE_PITCH],
-            note[MidiConversion.NOTE_VOLUME]);
+              note[MidiConversion.NOTE_INSTRUMENT], note[MidiConversion.NOTE_PITCH],
+              note[MidiConversion.NOTE_VOLUME]);
           update();
         }
       }
@@ -129,9 +120,7 @@ public class GuiView extends JFrame implements MusicEditorView {
   @Override
   public void update() {
     this.container.updatePanels();
-    this.container.scrollToggle(false);
     this.container.updatePosition(true);
-    this.container.scrollToggle(true);
   }
 
   protected GuiContainer getContainer() {
