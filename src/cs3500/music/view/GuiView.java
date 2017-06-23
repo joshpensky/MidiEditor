@@ -4,10 +4,7 @@ import cs3500.music.controller.MusicEditorController;
 import cs3500.music.model.MusicEditorOperations;
 import cs3500.music.util.MidiConversion;
 
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.List;
+import java.awt.event.*;
 import java.util.Map;
 import javax.swing.JFrame;
 import java.awt.Dimension;
@@ -38,7 +35,7 @@ public class GuiView extends JFrame implements MusicEditorView {
     this.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
     this.pack();
     this.setPreferredSize(new Dimension(WIDTH, this.container.getHeight()));
-    this.setRunnable();
+    this.setKeyEvents();
     this.setFocusable(true);
     this.requestFocus();
   }
@@ -58,18 +55,18 @@ public class GuiView extends JFrame implements MusicEditorView {
     this.container.updatePosition(forward);
   }
 
-  private void setRunnable() {
+  private void setKeyEvents() {
     this.runs = new TreeMap<>();
-    this.runs.put(39, () -> {
+    this.runs.put(KeyEvent.VK_RIGHT, () -> {
       container.updatePosition(true);
     });
-    this.runs.put(37, () -> {
+    this.runs.put(KeyEvent.VK_LEFT, () -> {
       container.updatePosition(false);
     });
-    this.runs.put(36, () -> {
+    this.runs.put(KeyEvent.VK_HOME, () -> {
       container.jumpToBeginning();
     });
-    this.runs.put(35, () -> {
+    this.runs.put(KeyEvent.VK_END, () -> {
       container.jumpToEnd();
     });
   }
@@ -82,12 +79,7 @@ public class GuiView extends JFrame implements MusicEditorView {
   @Override
   public void setListeners(MusicEditorController controls, KeyListener keys) {
     this.addKeyListener(keys);
-    MouseListener m = new MouseListener() {
-      @Override
-      public void mouseClicked(MouseEvent e) {
-        return; // no need for detection of mouse clicking
-      }
-
+    MouseListener m = new MouseAdapter() {
       @Override
       public void mousePressed(MouseEvent e) {
         Integer[] note = container.getNote(e);
@@ -97,21 +89,6 @@ public class GuiView extends JFrame implements MusicEditorView {
               note[MidiConversion.NOTE_VOLUME]);
           update();
         }
-      }
-
-      @Override
-      public void mouseReleased(MouseEvent e) {
-        return; // no need for detection of mouse releasing
-      }
-
-      @Override
-      public void mouseEntered(MouseEvent e) {
-        return; // no need for detection of mouse entering
-      }
-
-      @Override
-      public void mouseExited(MouseEvent e) {
-        return; // no need for detection of mouse exiting
       }
     };
     this.addMouseListener(m);
@@ -123,10 +100,6 @@ public class GuiView extends JFrame implements MusicEditorView {
     this.container.scrollToggle(false);
     this.container.updatePosition(true);
     this.container.scrollToggle(true);
-  }
-
-  protected GuiContainer getContainer() {
-    return this.container;
   }
 
   protected int getCursorPosition() {

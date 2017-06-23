@@ -25,6 +25,10 @@ public interface MusicEditorView {
    */
   String getLog();
 
+  /**
+   * Gets a map of KeyCodes
+   * @return
+   */
   Map<Integer, Runnable> getKeyEvents();
 
   void setListeners(MusicEditorController controls, KeyListener keys);
