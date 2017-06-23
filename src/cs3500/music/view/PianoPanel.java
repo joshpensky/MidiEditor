@@ -71,7 +71,6 @@ public class PianoPanel extends JPanel {
     }
   }
 
-
   /**
    * Gets the starting position of the piano drawing, so that the drawing of the piano would be
    * centered in the panel.
@@ -136,10 +135,10 @@ public class PianoPanel extends JPanel {
    */
   protected int getPitch(int mX, int mY) {
     int position = getStartPos();
-    for (int i = 0; i < 10; i++) {
+    for (int oct = 0; oct < 10; oct++) {
       Pitch p = getPitchHelp(position, mX, mY);
       if (p != null) {
-        return MidiConversion.getMidiPitch(i + 1, p);
+        return MidiConversion.getMidiPitch(oct + 1, p);
       }
       for (Pitch x : Pitch.values()) {
         if (!x.isSharp()) {
@@ -220,7 +219,11 @@ public class PianoPanel extends JPanel {
       if (this.highlights.containsKey(octave)) {
         this.highlights.get(octave).add(pitch);
       } else {
-        this.highlights.put(octave, new ArrayList<>(Arrays.asList(pitch)));
+        try {
+          this.highlights.put(octave, new ArrayList<>(Arrays.asList(pitch)));
+        } catch (NullPointerException e) {
+          System.out.println(pitch.toString() + octave);
+        }
       }
     }
   }

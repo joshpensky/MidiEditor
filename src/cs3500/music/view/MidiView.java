@@ -130,18 +130,7 @@ public class MidiView implements MusicEditorView {
     //this.sequencer.setTempoInMPQ(this.tempo);
     this.sequencer.setTickPosition(this.tickPosition);
     this.sequencer.start();
-    this.sequencer.setTempoInMPQ(this.tempo);/*
-    while (this.sequencer.isRunning()) {
-      this.setTickPosition((int) this.sequencer.getTickPosition());
-      if (this.sequencer.getTickPosition() == this.length) {
-        try {
-          Thread.sleep(1000);
-          this.sequencer.close();
-        } catch (InterruptedException e) {
-          this.log.append("Encountered InterruptedException:\n" + e.getMessage() + "\n");
-        }
-      }
-    }*/
+    this.sequencer.setTempoInMPQ(this.tempo);
   }
 
   protected void pause() {
@@ -179,16 +168,14 @@ public class MidiView implements MusicEditorView {
       int start = note[MidiConversion.NOTE_START];
       int end = note[MidiConversion.NOTE_END];
       int instrum = note[MidiConversion.NOTE_INSTRUMENT];
-      int pitch = note[MidiConversion.NOTE_PITCH];
+      int pitch = Math.max(0, Math.min(127, note[MidiConversion.NOTE_PITCH]));
       int volume = note[MidiConversion.NOTE_VOLUME];
-      if (pitch >= 0 && pitch <= 127) {
-        MidiMessage startMsg = new ShortMessage(ShortMessage.NOTE_ON, 0, pitch, volume);
-        MidiMessage stopMsg = new ShortMessage(ShortMessage.NOTE_OFF, 0, pitch, volume);
-        MidiMessage addInstrum = new ShortMessage(ShortMessage.PROGRAM_CHANGE, 0, instrum, 0);
-        tr.add(new MidiEvent(addInstrum, start));
-        tr.add(new MidiEvent(startMsg, start));
-        tr.add(new MidiEvent(stopMsg, end));
-      }
+      MidiMessage startMsg = new ShortMessage(ShortMessage.NOTE_ON, 0, pitch, volume);
+      MidiMessage stopMsg = new ShortMessage(ShortMessage.NOTE_OFF, 0, pitch, volume);
+      MidiMessage addInstrum = new ShortMessage(ShortMessage.PROGRAM_CHANGE, 0, instrum, 0);
+      tr.add(new MidiEvent(addInstrum, start));
+      tr.add(new MidiEvent(startMsg, start));
+      tr.add(new MidiEvent(stopMsg, end));
     }
     return sequence;
   }
@@ -200,13 +187,14 @@ public class MidiView implements MusicEditorView {
 
   @Override
   public Map<Integer, Runnable> getKeyEvents() {
-    //does nothing for now
-    return this.runs;
+    // no key events
+    return new TreeMap<>();
   }
 
   @Override
   public void setListeners(MusicEditorController controls, KeyListener keys) {
     // no listeners to set
+    return;
   }
 
   @Override
@@ -218,8 +206,10 @@ public class MidiView implements MusicEditorView {
       }
       this.sequencer.open();
       this.sequencer.setSequence(this.sequence);
-    } catch (InvalidMidiDataException | MidiUnavailableException e) {
-      //
+    } catch (InvalidMidiDataException e) {
+      this.log.append("Encountered InvalidMidiDataException: " + e.getMessage() + "\n");
+    } catch (MidiUnavailableException e) {
+      this.log.append("Encountered MidiUnavailableException: " + e.getMessage() + "\n");
     }
     this.tempo = this.model.getTempo();
     this.length = this.model.getLength();

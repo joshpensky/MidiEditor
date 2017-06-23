@@ -54,15 +54,26 @@ public class EditorPanel extends JViewport {
    */
   protected EditorPanel(MusicEditorOperations model, int width, int height)
       throws IllegalArgumentException {
+    this.cursorPosition = 0;
+    this.scrollOffset = 0;
+    update(model, width, height);
+    this.log = new StringBuilder();
+  }
+
+  protected void update(MusicEditorOperations model, int width, int height) {
     if (model == null) {
       throw new IllegalArgumentException("Given model is uninitialized.");
     } else if (width <= 0 || height <= 0) {
       throw new IllegalArgumentException("Width and height must be positive and non-zero.");
     }
-    this.cursorPosition = 0;
-    this.scrollOffset = 0;
-    update(model, width, height);
-    this.log = new StringBuilder();
+    this.notes = model.getNotes();
+    this.highPitch = this.getHighestPitch();
+    this.lowPitch = this.getLowestPitch();
+    this.numRows = highPitch - lowPitch + 1;
+    this.pieceLength = model.getLength();
+    this.cellHeight = getCellHeight(height);
+    this.setPreferredSize(new Dimension(width,
+        START_HEIGHT + (this.numRows * this.cellHeight) + 5));
   }
 
   /**
@@ -293,6 +304,17 @@ public class EditorPanel extends JViewport {
     }
   }
 
+  protected void scrollToggle(boolean on) {
+    if (on) {
+      int cellsShown = (this.getWidth() - START_WIDTH) / CELL_WIDTH;
+      if ((cellsShown + this.scrollOffset - 2) >= this.pieceLength) {
+        this.reachedEnd = true;
+      }
+    } else {
+      this.reachedEnd = false;
+    }
+  }
+
   /**
    * Returns a log of all of the drawing necessary for the editor view.
    *
@@ -304,16 +326,5 @@ public class EditorPanel extends JViewport {
 
   protected int getCursorPosition() {
     return this.cursorPosition;
-  }
-
-  protected void update(MusicEditorOperations model, int width, int height) {
-    this.notes = model.getNotes();
-    this.highPitch = this.getHighestPitch();
-    this.lowPitch = this.getLowestPitch();
-    this.numRows = highPitch - lowPitch + 1;
-    this.pieceLength = model.getLength();
-    this.cellHeight = getCellHeight(height);
-    this.setPreferredSize(new Dimension(width,
-      START_HEIGHT + (this.numRows * this.cellHeight) + 5));
   }
 }

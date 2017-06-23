@@ -9,14 +9,6 @@ public class ViewOnlyModel implements MusicEditorOperations {
     private MusicEditorOperations model;
 
     /**
-     * Default constructor for this model. Should never be called.
-     * @throws UnsupportedOperationException
-     */
-    public ViewOnlyModel() throws UnsupportedOperationException {
-        throw new UnsupportedOperationException("Cannot construct default view only mode");
-    }
-
-    /**
      * Constructor for view only model.
      * @param m model this model calls on for getter methods.
      */
@@ -41,7 +33,7 @@ public class ViewOnlyModel implements MusicEditorOperations {
      */
     @Override
     public String view() throws IllegalStateException, UnsupportedOperationException {
-        return  "";
+        return "";
     }
 
 
@@ -84,7 +76,7 @@ public class ViewOnlyModel implements MusicEditorOperations {
      */
     @Override
     public void editNotePitch(int start, int instrument, int pitch, int editedPitch) throws IllegalStateException, IllegalArgumentException {
-        throw new UnsupportedOperationException("Cannot edit pitch in view only mode");
+        return;
     }
 
     /**

@@ -3,13 +3,11 @@ package cs3500.music.view;
 import cs3500.music.controller.MusicEditorController;
 import cs3500.music.model.MusicEditorOperations;
 
-import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Represents the text view for a music editor model. Prints the String representation of the
@@ -98,12 +96,13 @@ public class TextView implements MusicEditorView {
 
   @Override
   public Map<Integer, Runnable> getKeyEvents() {
-    //do nothing for now
-    return null;
+    // no key events
+    return new TreeMap<>();
   }
 
   @Override
   public void setListeners(MusicEditorController controls, KeyListener keys) {
+    // no listeners to set
     return;
   }
 

@@ -4,9 +4,7 @@ import cs3500.music.controller.MusicEditorController;
 import cs3500.music.model.MusicEditorOperations;
 
 import javax.sound.midi.MidiUnavailableException;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -19,21 +17,23 @@ public class CompositeView implements MusicEditorView {
   private final GuiView gui;
   private Map<Integer, Runnable> runs;
   private Runnable matchMidi;
+  private StringBuilder log;
 
   protected CompositeView(MusicEditorOperations model) throws MidiUnavailableException {
     this.model = model;
     this.midi = new MidiView.Builder(this.model).build();
     this.gui = new GuiView(this.model);
-    this.setRunnable();
+    this.setKeyEvents();
     this.gui.setFocusable(true);
     this.gui.requestFocus();
+    this.log = new StringBuilder();
     this.matchMidi = () -> {
       while (!midi.isRunning()) {
         try {
           // has to update thread
           Thread.sleep(1);
         } catch (InterruptedException e) {
-          // interrupted
+          this.log.append("Unexpected InterruptedException: " + e.getMessage() + "\n");
         }
       }
       int currPosition = midi.getTickPosition();
@@ -60,7 +60,7 @@ public class CompositeView implements MusicEditorView {
 
   @Override
   public String getLog() {
-    return null;
+    return this.log.append(this.gui.getLog()).append(this.midi.getLog()).toString();
   }
 
   @Override
@@ -71,9 +71,9 @@ public class CompositeView implements MusicEditorView {
   @Override
   public void setListeners(MusicEditorController controls, KeyListener keys) {
     this.gui.setListeners(controls, keys);
-    MouseListener mouse = this.gui.getMouseListeners()[0];
-    this.gui.removeMouseListener(mouse);
-    MouseListener m = new MouseListener() {
+    MouseListener guiMouse = this.gui.getMouseListeners()[0];
+    this.gui.removeMouseListener(guiMouse);
+    MouseListener compositeMouse = new MouseListener() {
       @Override
       public void mouseClicked(MouseEvent e) {
         return; // no need for detection of mouse clicking
@@ -82,7 +82,7 @@ public class CompositeView implements MusicEditorView {
       @Override
       public void mousePressed(MouseEvent e) {
         if (!midi.isRunning()) {
-          mouse.mousePressed(e);
+          guiMouse.mousePressed(e);
           midi.update();
         }
       }
@@ -102,7 +102,7 @@ public class CompositeView implements MusicEditorView {
         return; // no need for detection of mouse exiting
       }
     };
-    this.gui.addMouseListener(m);
+    this.gui.addMouseListener(compositeMouse);
   }
 
   @Override
@@ -111,7 +111,7 @@ public class CompositeView implements MusicEditorView {
     this.gui.update();
   }
 
-  private void setRunnable() {
+  private void setKeyEvents() {
     this.runs = new TreeMap<>();
     GuiContainer container = this.gui.getContainer();
     this.runs.put(39, () -> {

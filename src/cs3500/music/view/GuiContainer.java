@@ -100,7 +100,6 @@ public class GuiContainer extends JPanel {
     int x = e.getX();
     int y = e.getY() - this.editorContainer.getHeight();
     int pitch = pianoPanel.getPitch(x, y);
-    //System.out.println(x + " " + y);
     if (pitch > 0) {
       int start = editorPanel.getCursorPosition();
       return new Integer[] {start, start + 1, 1, pitch, 64};
@@ -112,5 +111,9 @@ public class GuiContainer extends JPanel {
   protected void updatePanels() {
     this.editorPanel.update(this.model, this.getWidth(), this.getHeight());
     this.pianoPanel.updateHighlights(this.model.getNotesAtBeat(this.getCursorPosition()));
+  }
+
+  protected void scrollToggle(boolean on) {
+    this.editorPanel.scrollToggle(on);
   }
 }
