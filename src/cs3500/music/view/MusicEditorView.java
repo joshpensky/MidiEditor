@@ -26,7 +26,7 @@ public interface MusicEditorView {
   String getLog();
 
   Map<Integer, Runnable> getKeyEvents();
-
+  
   void setListeners(MusicEditorController controls, KeyListener keys);
 
   void update();

@@ -17,5 +17,6 @@ public class MusicEditorControllerTest {
     assertEquals(MusicEditorController.initialize(), controller);
   }
 
-  //TEST OTHER PARTS OF CONTROLLER
+  @Test
+  public void test
 }
