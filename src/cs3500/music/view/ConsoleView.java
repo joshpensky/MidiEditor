@@ -2,7 +2,6 @@ package cs3500.music.view;
 
 import cs3500.music.controller.MusicEditorController;
 import cs3500.music.model.MusicEditorOperations;
-import cs3500.music.model.Note;
 import cs3500.music.model.Pitch;
 import cs3500.music.model.Utils;
 import cs3500.music.util.MidiConversion;
@@ -19,13 +18,13 @@ import java.util.TreeMap;
  * Represents the text view for a music editor model. Prints the String representation of the
  * currently opened piece to the console.
  */
-public class TextView implements MusicEditorView {
+public class ConsoleView implements MusicEditorView {
   private final MusicEditorOperations model;
   private final Appendable app;
   private final StringBuilder log;
 
   /**
-   * Represents the builder class for a TextView. Defaults the appendable of the TextView to the
+   * Represents the builder class for a ConsoleView. Defaults the appendable of the ConsoleView to the
    * console (System.out), but allows for the appendable to be changed.
    */
   public static final class Builder {
@@ -33,7 +32,7 @@ public class TextView implements MusicEditorView {
     private Appendable app;
 
     /**
-     * Constructs a new {@code Builder} for a TextView.
+     * Constructs a new {@code Builder} for a ConsoleView.
      *
      * @param model   the model to be represented musically using MIDI
      * @throws IllegalArgumentException if the given model is uninitialized
@@ -47,9 +46,9 @@ public class TextView implements MusicEditorView {
     }
 
     /**
-     * Sets the appendable for a new TextView to the given one.
+     * Sets the appendable for a new ConsoleView to the given one.
      *
-     * @param app   the appendable to be set for the TextView
+     * @param app   the appendable to be set for the ConsoleView
      * @return this builder
      * @throws IllegalArgumentException if the given appendable is uninitialized
      */
@@ -62,25 +61,25 @@ public class TextView implements MusicEditorView {
     }
 
     /**
-     * Returns a new TextView with the given specifications set in this builder. If no appendable
+     * Returns a new ConsoleView with the given specifications set in this builder. If no appendable
      * has been set, it is defaulted to the console (System.out).
      *
-     * @return a new TextView with this builder's instructions
+     * @return a new ConsoleView with this builder's instructions
      */
-    public TextView build() {
+    public ConsoleView build() {
       if (this.app == null) {
         this.app = new OutputStreamWriter(System.out);
       }
-      return new TextView(this);
+      return new ConsoleView(this);
     }
   }
 
   /**
-   * Constructs a new {@code TextView} using an instance of the nested builder class.
+   * Constructs a new {@code ConsoleView} using an instance of the nested builder class.
    *
-   * @param builder   the builder for this TextView
+   * @param builder   the builder for this ConsoleView
    */
-  private TextView(Builder builder) {
+  private ConsoleView(Builder builder) {
     this.model = builder.model;
     this.app = builder.app;
     this.log = new StringBuilder();

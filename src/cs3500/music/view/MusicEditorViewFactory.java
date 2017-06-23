@@ -18,7 +18,7 @@ public class MusicEditorViewFactory {
    *   </tr>
    *   <tr>
    *     <th>"console"</th>
-   *     <th>{@link TextView}</th>
+   *     <th>{@link ConsoleView}</th>
    *   </tr>
    *   <tr>
    *     <th>"visual"</th>
@@ -45,7 +45,7 @@ public class MusicEditorViewFactory {
     viewName = viewName.toLowerCase();
     switch (viewName) {
       case "console":
-        return new TextView.Builder(model).build();
+        return new ConsoleView.Builder(model).build();
       case "visual":
         return new GuiView(model);
       case "midi":
