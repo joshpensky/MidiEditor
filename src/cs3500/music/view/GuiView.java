@@ -120,7 +120,9 @@ public class GuiView extends JFrame implements MusicEditorView {
   @Override
   public void update() {
     this.container.updatePanels();
+    this.container.scrollToggle(false);
     this.container.updatePosition(true);
+    this.container.scrollToggle(true);
   }
 
   protected GuiContainer getContainer() {

@@ -316,4 +316,15 @@ public class EditorPanel extends JViewport {
   protected int getCursorPosition() {
     return this.cursorPosition;
   }
+
+  protected void scrollToggle(boolean on) {
+    if (on) {
+      int cellsShown = (this.getWidth() - START_WIDTH) / CELL_WIDTH;
+      if ((cellsShown + this.scrollOffset - 2) >= this.pieceLength) {
+        this.reachedEnd = true;
+      }
+    } else {
+      this.reachedEnd = false;
+    }
+  }
 }
