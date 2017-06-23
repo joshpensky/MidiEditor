@@ -26,7 +26,7 @@ public class MusicEditorController implements KeyListener {
   /**
    * Constructor for singleton pattern.
    */
-  protected MusicEditorController() {
+  private MusicEditorController() {
     //does nothing
   }
 
