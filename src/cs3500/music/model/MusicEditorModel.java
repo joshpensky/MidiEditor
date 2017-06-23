@@ -29,12 +29,6 @@ public final class MusicEditorModel implements MusicEditorOperations {
   }
 
   @Override
-  public String view() {
-    this.openedPieceException();
-    return this.opened.toString();
-  }
-
-  @Override
   public void addNote(int start, int end, int instrument, int pitch, int volume)
       throws IllegalStateException, IllegalArgumentException {
     this.openedPieceException();

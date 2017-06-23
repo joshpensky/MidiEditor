@@ -219,11 +219,7 @@ public class PianoPanel extends JPanel {
       if (this.highlights.containsKey(octave)) {
         this.highlights.get(octave).add(pitch);
       } else {
-        try {
-          this.highlights.put(octave, new ArrayList<>(Arrays.asList(pitch)));
-        } catch (NullPointerException e) {
-          System.out.println(pitch.toString() + octave);
-        }
+        this.highlights.put(octave, new ArrayList<>(Arrays.asList(pitch)));
       }
     }
   }

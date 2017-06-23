@@ -14,15 +14,6 @@ public interface MusicEditorOperations {
   void create();
 
   /**
-   * Returns a String representation of the current state of the currently opened piece, or an
-   * empty string if there is no piece opened.
-   *
-   * @return a String representation of the opened piece
-   * @throws IllegalStateException if there is no currently opened piece
-   */
-  String view() throws IllegalStateException;
-
-  /**
    * Adds a new note to the currently opened piece at the given location details.
    *
    * @param start        the starting position of the note (measured in beats)
