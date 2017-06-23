@@ -24,17 +24,17 @@ public class MusicEditorController implements KeyListener {
   private static MusicEditorController controller;
 
   /**
-   * Constructor for singleton pattern.
+   * Constructor for controller, using the singleton pattern.
    */
   private MusicEditorController() {
-    //does nothing
+    // Singleton pattern requires a private constructor
   }
 
   /**
    * initializer for singleton pattern for controller. Only one will ever be created.
    * @return this's controller
    */
-  public static MusicEditorController initialize () {
+  public static MusicEditorController initialize() {
     if (controller == null) {
       controller = new MusicEditorController();
     }
