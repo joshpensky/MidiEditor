@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -18,8 +19,6 @@ import static org.junit.Assert.assertTrue;
  */
 public class MusicEditorControllerTest {
   private MusicEditorController controller;
-  private MusicEditorView view;
-  private MusicEditorOperations model;
   private Appendable app;
   private KeyEvent left;
   private KeyEvent right;
@@ -32,8 +31,6 @@ public class MusicEditorControllerTest {
 
   private void initVisualView() {
     app = new StringBuilder();
-    this.model = new MusicEditorBuilder().build();
-    this.view = MusicEditorViewFactory.getView("visual", model);
     controller = MusicEditorController.initialize();
     controller.setModelAndView("build/mary-little-lamb.txt", "visual");
     Button a = new Button("click");
@@ -57,8 +54,6 @@ public class MusicEditorControllerTest {
     doesNothing = new KeyEvent(a, 2, 20, 1, KeyEvent.VK_3, '3');
 
     app = new StringBuilder();
-    this.model = new MusicEditorBuilder().build();
-    this.view = MusicEditorViewFactory.getView("composite", model);
     controller = MusicEditorController.initialize();
     controller.setModelAndView("build/mary-little-lamb.txt", "composite");
     try {
@@ -174,7 +169,6 @@ public class MusicEditorControllerTest {
   @Test
   public void testCannotActDuringCompositeViewPlaying() {
     initVisualView();
-    this.view = MusicEditorViewFactory.getView("composite", model);
     controller = MusicEditorController.initialize();
     controller.setModelAndView("build/mary-little-lamb.txt", "composite");
     controller.keyPressed(right);
@@ -285,4 +279,11 @@ public class MusicEditorControllerTest {
     assertTrue(place1 < cursorPos(controller.getLog()));
   }
 
+  @Test
+  public void testMouseVisual() {
+    initVisualView();
+    Component a = new Button("click");
+    MouseEvent lowKey = new MouseEvent(a, MouseEvent.MOUSE_PRESSED, 1, 1, 29, 609, 1, false);
+
+  }
 }

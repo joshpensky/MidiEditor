@@ -106,6 +106,7 @@ public class GuiContainer extends JPanel {
    * @return the note data created from the press of a key on the piano
    */
   protected Integer[] getNote(MouseEvent e) {
+    System.out.println(e.getX() + ", " + e.getY());
     int x = e.getX();
     int y = e.getY() - this.editorContainer.getHeight();
     int pitch = pianoPanel.getPitch(x, y);
