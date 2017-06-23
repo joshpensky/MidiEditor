@@ -13,16 +13,6 @@ public class MidiConversionTest {
   private final MidiConversion mc = new MidiConversion();
 
   // Tests for the getPitch method
-  @Test(expected = IllegalArgumentException.class)
-  public void getPitchTooLow() {
-    mc.getPitch(-1);
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void getPitchTooHigh() {
-    mc.getPitch(128);
-  }
-
   @Test
   public void getPitchMiddleC() {
     assertEquals(Pitch.C, mc.getPitch(60));
@@ -39,16 +29,6 @@ public class MidiConversionTest {
   }
 
   // Tests for the getOctave method
-  @Test(expected = IllegalArgumentException.class)
-  public void getOctaveTooLow() {
-    mc.getOctave(-1);
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void getOctaveTooHigh() {
-    mc.getOctave(128);
-  }
-
   @Test
   public void getOctaveMiddleC() {
     assertEquals(4, mc.getOctave(60));
@@ -136,16 +116,6 @@ public class MidiConversionTest {
   }
 
   // Tests for the getPitchName method
-  @Test(expected = IllegalArgumentException.class)
-  public void getPitchNameTooLow() {
-    mc.getPitchName(-1);
-  }
-
-  @Test(expected = IllegalArgumentException.class)
-  public void getPitchNameTooHigh() {
-    mc.getPitchName(128);
-  }
-
   @Test
   public void getPitchNameMiddleC() {
     assertEquals("C4", mc.getPitchName(60));
