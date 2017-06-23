@@ -30,7 +30,7 @@ public class MusicEditorControllerTest {
   private static final int MARY_LAMB_PIECE_SIZE = 64;
 
 
-  private void init() {
+  private void initVisualView() {
     app = new StringBuilder();
     this.model = new MusicEditorBuilder().build();
     this.view = MusicEditorViewFactory.getView("visual", model);
@@ -46,7 +46,7 @@ public class MusicEditorControllerTest {
     doesNothing = new KeyEvent(a, 2, 20, 1, KeyEvent.VK_3, '3');
   }
 
-  private void init2() {
+  private void initCompositeView() {
     Button a = new Button("click");
 
     left = new KeyEvent(a, 2, 20, 1, KeyEvent.VK_LEFT, 'l');
@@ -83,7 +83,7 @@ public class MusicEditorControllerTest {
 
   @Test
   public void testSingletonPatternForController() {
-    init();
+    initVisualView();
     assertEquals(MusicEditorController.initialize(), controller);
   }
 
@@ -96,7 +96,7 @@ public class MusicEditorControllerTest {
 
   @Test
   public void testKeyPressNothingShouldHappen() {
-    init();
+    initVisualView();
 
     String before = controller.getLog();
     controller.keyPressed(doesNothing);
@@ -105,14 +105,14 @@ public class MusicEditorControllerTest {
 
   @Test
   public void testEndWorks() {
-    init();
+    initVisualView();
     controller.keyPressed(end);
     assertEquals(MARY_LAMB_PIECE_SIZE, cursorPos(controller.getLog()));
   }
 
   @Test
   public void testHomeWorks() {
-    init();
+    initVisualView();
     controller.keyPressed(right);
     controller.keyPressed(right);
     assertEquals(2, cursorPos(controller.getLog()));
@@ -122,7 +122,7 @@ public class MusicEditorControllerTest {
 
   @Test
   public void testRightWorks() {
-    init();
+    initVisualView();
     controller.keyPressed(right);
     assertEquals(1, cursorPos(controller.getLog()));
     controller.keyPressed(right);
@@ -135,7 +135,7 @@ public class MusicEditorControllerTest {
 
   @Test
   public void testLeftWorks() {
-    init();
+    initVisualView();
     controller.keyPressed(end);
     assertEquals(MARY_LAMB_PIECE_SIZE, cursorPos(controller.getLog()));
     controller.keyPressed(left);
@@ -151,7 +151,7 @@ public class MusicEditorControllerTest {
 
   @Test
   public void testEndIsTheEnd() {
-    init();
+    initVisualView();
     controller.keyPressed(end);
     assertEquals(MARY_LAMB_PIECE_SIZE, cursorPos(controller.getLog()));
     controller.keyPressed(right);
@@ -162,7 +162,7 @@ public class MusicEditorControllerTest {
 
   @Test
   public void testBeginingIsTheBegining() {
-    init();
+    initVisualView();
     controller.keyPressed(right);
     assertEquals(1, cursorPos(controller.getLog()));
     controller.keyPressed(left);
@@ -173,7 +173,7 @@ public class MusicEditorControllerTest {
 
   @Test
   public void testCannotActDuringCompositeViewPlaying() {
-    init();
+    initVisualView();
     this.view = MusicEditorViewFactory.getView("composite", model);
     controller = MusicEditorController.initialize();
     controller.setModelAndView("build/mary-little-lamb.txt", "composite");
@@ -187,7 +187,7 @@ public class MusicEditorControllerTest {
 
   @Test
   public void testCompPausedLeft() {
-    init2();
+    initCompositeView();
     controller.keyPressed(end);
     assertEquals(MARY_LAMB_PIECE_SIZE, cursorPos(controller.getLog()));
     controller.keyPressed(left);
@@ -203,7 +203,7 @@ public class MusicEditorControllerTest {
 
   @Test
   public void testCompPausedRight() {
-    init2();
+    initCompositeView();
     controller.keyPressed(home);
     controller.keyPressed(right);
     assertEquals(1, cursorPos(controller.getLog()));
@@ -217,22 +217,23 @@ public class MusicEditorControllerTest {
 
   @Test
   public void testKeyPressNothingShouldHappenInPausedComp() {
-    init2();
-    String before = controller.getLog();
+    initCompositeView();
+    int before = cursorPos(controller.getLog());
     controller.keyPressed(doesNothing);
-    assertEquals(before, controller.getLog());
+    assertEquals(before, cursorPos(controller.getLog()));
   }
 
   @Test
   public void testCompPausedEndWorks() {
-    init2();
+    initCompositeView();
     controller.keyPressed(end);
     assertEquals(MARY_LAMB_PIECE_SIZE, cursorPos(controller.getLog()));
   }
 
   @Test
   public void testCompPausedHomeWorks() {
-    init2();
+    initCompositeView();
+    controller.keyPressed(home);
     controller.keyPressed(right);
     controller.keyPressed(right);
     assertEquals(2, cursorPos(controller.getLog()));
@@ -243,7 +244,7 @@ public class MusicEditorControllerTest {
 
   @Test
   public void testCompPausedEndIsTheEnd() {
-    init2();
+    initCompositeView();
     controller.keyPressed(end);
     assertEquals(MARY_LAMB_PIECE_SIZE, cursorPos(controller.getLog()));
     controller.keyPressed(right);
@@ -254,7 +255,8 @@ public class MusicEditorControllerTest {
 
   @Test
   public void testCompPausedBeginingIsTheBegining() {
-    init2();
+    initCompositeView();
+    controller.keyPressed(home);
     controller.keyPressed(right);
     assertEquals(1, cursorPos(controller.getLog()));
     controller.keyPressed(left);
@@ -265,7 +267,7 @@ public class MusicEditorControllerTest {
 
   @Test
   public void testCompPausedThenPlayedAtDiffLocations() {
-    init2();
+    initCompositeView();
     int place1 = cursorPos(controller.getLog());
     controller.keyPressed(space);
 
@@ -277,12 +279,10 @@ public class MusicEditorControllerTest {
     }
     //pauses the view again
     controller.keyPressed(space);
-    //moves the cursor forwards 1 and back 1 to log the current possition correctly. does not modify end result 1-1=0
+    //moves the cursor forwards 1 and back 1 to log the current position correctly. does not modify end result 1-1=0
     controller.keyPressed(right);
     controller.keyPressed(left);
     assertTrue(place1 < cursorPos(controller.getLog()));
   }
-
-
 
 }
