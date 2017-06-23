@@ -127,7 +127,7 @@ public class MidiView implements MusicEditorView {
    * @throws MidiUnavailableException if MIDI is currently unavailable for the system
    */
   protected void play() {
-    //this.sequencer.setTempoInMPQ(this.tempo);
+    this.sequencer.setTempoInMPQ(this.tempo);
     this.sequencer.setTickPosition(this.tickPosition);
     this.sequencer.start();
     this.sequencer.setTempoInMPQ(this.tempo);

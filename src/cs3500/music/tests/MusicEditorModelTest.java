@@ -24,154 +24,8 @@ public class MusicEditorModelTest {
   @Test
   public void defaultConstructor() {
     model.create();
-    assertEquals("", model.view());
     assertEquals(0, model.getNotes().size());
     assertEquals(0, model.getTempo());
-  }
-
-  // Tests for the view method
-  @Test
-  public void viewEmptyPiece() {
-    model.create();
-    assertEquals("", model.view());
-  }
-
-  @Test
-  public void viewSingleNote() {
-    model.create();
-    model.addNote(1, 3, 1, 50, 100);
-    String view = "     D3 \n"
-                + "0       \n"
-                + "1    X  \n"
-                + "2    |  \n"
-                + "3    |  \n";
-    assertEquals(view, model.view());
-  }
-
-  @Test
-  public void viewOverlayingNotes() {
-    model.create();
-    model.addNote(2, 5, 1, 48, 100);
-    model.addNote(1, 3, 1, 50, 100);
-    model.addNote(4, 6, 1, 51, 100);
-    model.addNote(6, 9, 1, 51, 100);
-    String view = "     C3  C#3   D3  D#3 \n"
-                + "0                      \n"
-                + "1              X       \n"
-                + "2    X         |       \n"
-                + "3    |         |       \n"
-                + "4    |              X  \n"
-                + "5    |              |  \n"
-                + "6                   X  \n"
-                + "7                   |  \n"
-                + "8                   |  \n"
-                + "9                   |  \n";
-    assertEquals(view, model.view());
-  }
-
-  @Test
-  public void toStringLineNumbersRightAligned() {
-    model.create();
-    model.addNote(2, 5, 1, 48, 100);
-    model.addNote(1, 3, 1, 50, 100);
-    model.addNote(4, 6, 1, 51, 100);
-    model.addNote(6, 8, 1, 51, 100);
-    model.addNote(8, 11, 1, 51, 100);
-    String view = "      C3  C#3   D3  D#3 \n"
-                + " 0                      \n"
-                + " 1              X       \n"
-                + " 2    X         |       \n"
-                + " 3    |         |       \n"
-                + " 4    |              X  \n"
-                + " 5    |              |  \n"
-                + " 6                   X  \n"
-                + " 7                   |  \n"
-                + " 8                   X  \n"
-                + " 9                   |  \n"
-                + "10                   |  \n"
-                + "11                   |  \n";
-    assertEquals(view, model.view());
-  }
-
-  @Test
-  public void viewSpanOneOctave() {
-    model.create();
-    model.addNote(2, 9, 1, 48, 100);
-    model.addNote(1, 3, 1, 50, 100);
-    model.addNote(0, 0, 1, 59, 100);
-    String view = "     C3  C#3   D3  D#3   E3   F3  F#3   G3  G#3   A3  A#3   B3 \n"
-                + "0                                                           X  \n"
-                + "1              X                                               \n"
-                + "2    X         |                                               \n"
-                + "3    |         |                                               \n"
-                + "4    |                                                         \n"
-                + "5    |                                                         \n"
-                + "6    |                                                         \n"
-                + "7    |                                                         \n"
-                + "8    |                                                         \n"
-                + "9    |                                                         \n";
-    assertEquals(view, model.view());
-  }
-
-  @Test
-  public void viewSpanTwoOctaves() {
-    model.create();
-    model.addNote(4, 9, 1, 56, 100);
-    model.addNote(2, 5, 1, 62, 100);
-    String view = "    G#3   A3  A#3   B3   C4  C#4   D4 \n"
-                + "0                                     \n"
-                + "1                                     \n"
-                + "2                                  X  \n"
-                + "3                                  |  \n"
-                + "4    X                             |  \n"
-                + "5    |                             |  \n"
-                + "6    |                                \n"
-                + "7    |                                \n"
-                + "8    |                                \n"
-                + "9    |                                \n";
-    assertEquals(view, model.view());
-  }
-
-  @Test
-  public void viewSpanMultipleOctaves() {
-    model.create();
-    model.addNote(2, 4, 1, 47, 100);
-    model.addNote(4, 8, 1, 47, 100);
-    model.addNote(4, 9, 1, 56, 100);
-    model.addNote(2, 5, 1, 62, 100);
-    String view = ""
-        + "     B2   C3  C#3   D3  D#3   E3   F3  F#3   G3  G#3   A3  A#3   B3   C4  C#4   D4 \n"
-        + "0                                                                                  \n"
-        + "1                                                                                  \n"
-        + "2    X                                                                          X  \n"
-        + "3    |                                                                          |  \n"
-        + "4    X                                            X                             |  \n"
-        + "5    |                                            |                             |  \n"
-        + "6    |                                            |                                \n"
-        + "7    |                                            |                                \n"
-        + "8    |                                            |                                \n"
-        + "9                                                 |                                \n";
-    assertEquals(view, model.view());
-  }
-
-  @Test
-  public void toStringSpanMultipleOctavesNoneInMiddle() {
-    model.create();
-    model.addNote(2, 4, 1, 47, 100);
-    model.addNote(4, 8, 1, 47, 0);
-    model.addNote(2, 5, 1, 62, 0);
-    String view = ""
-        + "     B2   C3  C#3   D3  D#3   E3   F3  F#3   G3  G#3   A3  A#3   B3   C4  C#4   D4 \n"
-        + "0                                                                                  \n"
-        + "1                                                                                  \n"
-        + "2    X                                                                          X  \n"
-        + "3    |                                                                          |  \n"
-        + "4    X                                                                          |  \n"
-        + "5    |                                                                          |  \n"
-        + "6    |                                                                             \n"
-        + "7    |                                                                             \n"
-        + "8    |                                                                             \n";
-    assertEquals(view, model.view());
   }
 
   // Tests for the addNote method
@@ -195,24 +49,12 @@ public class MusicEditorModelTest {
   }
 
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void addNoteAlreadyExistsAtLocation() {
     model.create();
     model.addNote(0, 1, 1, 50, 100);
     model.addNote(0, 1, 1, 50, 100);
-  }
-
-  @Test
-  public void addNoteValid() {
-    model.create();
-    model.addNote(2, 4, 1, 55, 100);
-    String view = "     G3 \n"
-                + "0       \n"
-                + "1       \n"
-                + "2    X  \n"
-                + "3    |  \n"
-                + "4    |  \n";
-    assertEquals(view, model.view());
+    assertEquals(2, model.getNotes().size());
   }
 
   // Tests for the removeNote method
@@ -235,14 +77,6 @@ public class MusicEditorModelTest {
     model.removeNote(1, 2, 60);
   }
 
-  @Test
-  public void removeNoteValid() {
-    model.create();
-    model.addNote(0, 1, 1, 60, 100);
-    model.removeNote(0, 1, 60);
-    assertEquals("", model.view());
-  }
-
   // Tests for the editNotePitch method
   @Test(expected = IllegalArgumentException.class)
   public void editNotePitchInvalidOctave() {
@@ -263,32 +97,13 @@ public class MusicEditorModelTest {
     model.editNotePitch(0, 1, 60, 62);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void editNotePitchNoteAtNewPosition() {
     model.create();
     model.addNote(0, 2, 1, 60, 100);
     model.addNote(0, 2, 1, 70, 100);
     model.editNotePitch(0, 1, 60, 70);
-  }
-
-  @Test
-  public void editNotePitchValid() {
-    model.create();
-    model.addNote(3, 6, 1, 57, 100);
-    model.editNotePitch(3, 1, 57, 59);
-    String view = "     B3 \n"
-                + "0       \n"
-                + "1       \n"
-                + "2       \n"
-                + "3    X  \n"
-                + "4    |  \n"
-                + "5    |  \n"
-                + "6    |  \n";
-    assertEquals(view, model.view());
-
-    model.create();
-    model.addNote(3, 6, 1, 59, 100);
-    assertEquals(view, model.view());
+    assertEquals(2, model.getNotes().size());
   }
 
   // Tests for the editNotePosition method
@@ -322,34 +137,13 @@ public class MusicEditorModelTest {
     model.editNotePosition(1, 3, 50, 20);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void editPositionNoteAtNewPosition() {
     model.create();
     model.addNote(0, 2, 1, 60, 100);
     model.addNote(1, 2, 1, 60, 100);
     model.editNotePosition(0, 1, 60, 1);
-  }
-
-  @Test
-  public void editNotePositionValid() {
-    model.create();
-    model.addNote(0,3, 1, 60, 100);
-    model.editNotePosition(0, 1, 60, 6);
-    String view = "     C4 \n"
-                + "0       \n"
-                + "1       \n"
-                + "2       \n"
-                + "3       \n"
-                + "4       \n"
-                + "5       \n"
-                + "6    X  \n"
-                + "7    |  \n"
-                + "8    |  \n"
-                + "9    |  \n";
-    assertEquals(view, model.view());
-    model.create();
-    model.addNote(6, 9, 1, 60, 100  );
-    assertEquals(view, model.view());
+    assertEquals(2, model.getNotes().size());
   }
 
   // Tests for the editNoteDuration method
@@ -381,27 +175,6 @@ public class MusicEditorModelTest {
   public void editNoteDurationNoNoteAtPosition() {
     model.create();
     model.editNoteDuration(0, 1, 60, 2);
-  }
-
-  @Test
-  public void editNoteDurationValid() {
-    model.create();
-    model.addNote(3, 4, 1, 62, 100);
-    model.editNoteDuration(3, 1, 62, 6);
-    String view = "     D4 \n"
-                + "0       \n"
-                + "1       \n"
-                + "2       \n"
-                + "3    X  \n"
-                + "4    |  \n"
-                + "5    |  \n"
-                + "6    |  \n"
-                + "7    |  \n"
-                + "8    |  \n";
-    assertEquals(view, model.view());
-    model.create();
-    model.addNote(3, 8, 1, 62, 100);
-    assertEquals(view, model.view());
   }
 
   // Tests for the setTempo method

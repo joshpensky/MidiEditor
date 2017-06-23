@@ -88,7 +88,9 @@ public class ConsoleView implements MusicEditorView {
   @Override
   public void initialize() {
     try {
-      this.app.append(this.stringBuilder());
+      if (this.model.getLength() > 0) {
+        this.app.append(this.stringBuilder());
+      }
     } catch (IOException e) {
       this.log.append("Encountered fatal IOException: " + e.getMessage() + "\n");
     }

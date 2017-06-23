@@ -38,21 +38,21 @@ public class ViewOnlyModelTest {
         init();
         ViewOnlyModel vom2 = vom;
         vom2.create();
-        assertEquals(vom, vom2);
+        assertEquals(vom2, vom);
     }
 
     @Test
     public void testAddNote() {
         init();
         vom.addNote(5, 6, 1, 60, 30);
-        assertEquals(vom.getLength(), 4);
+        assertEquals(3, vom.getLength());
     }
 
     @Test
     public void testRemoveNote() {
         init();
         vom.removeNote(0, 1, 60);
-        assertEquals(vom.getLength(), 4);
+        assertEquals(3, vom.getLength());
     }
 
     @Test
@@ -60,21 +60,21 @@ public class ViewOnlyModelTest {
         init();
         vom.editNotePitch(0, 1, 60, 80);
         int curPitch = vom.getNotesAtBeat(0).get(0)[3];
-        assertEquals(curPitch, 60);
+        assertEquals(60, curPitch);
     }
 
     @Test
     public void testEditNotePosition() {
         init();
         vom.editNotePosition(0, 1, 60, 5);
-        assertEquals(vom.getLength(), 4);
+        assertEquals(3, vom.getLength());
     }
 
     @Test
     public void testEditNoteDuration() {
         init();
         vom.editNoteDuration(2, 1, 60, 30);
-        assertEquals(vom.getLength(), 4);
+        assertEquals(3, vom.getLength());
     }
 
     @Test
@@ -82,7 +82,7 @@ public class ViewOnlyModelTest {
         init();
         vom.setTempo(2);
 
-        assertEquals(vom.getTempo(), 1000);
+        assertEquals(1000, vom.getTempo());
     }
 
     @Test
@@ -108,4 +108,5 @@ public class ViewOnlyModelTest {
         init();
         assertEquals(vom.getLength(), model.getLength());
     }
+
 }
