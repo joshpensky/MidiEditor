@@ -6,7 +6,7 @@ import java.util.List;
  * View Only version of the MusicEditorOperations. Used by the views so they cannot modify the state of the model.
  */
 public class ViewOnlyModel implements MusicEditorOperations {
-  private MusicEditorOperations model;
+  private final MusicEditorOperations model;
 
   /**
    * Constructor for view only model.
@@ -36,8 +36,8 @@ public class ViewOnlyModel implements MusicEditorOperations {
    * @param instrument the instrument the note is played in [0, 127]
    * @param pitch      the pitch at which the note is played [0, 127]
    * @param volume     the volume at which the note is played [0, 127]
-   * @throws IllegalStateException    will not throw in view only
-   * @throws IllegalArgumentException will not throw in view only model
+   * @throws IllegalStateException      will not throw in view only model
+   * @throws IllegalArgumentException   will not throw in view only model
    */
   @Override
   public void addNote(int start, int end, int instrument, int pitch, int volume) throws IllegalStateException, IllegalArgumentException {
@@ -50,8 +50,8 @@ public class ViewOnlyModel implements MusicEditorOperations {
    * @param start      the starting position of the note (measured in beats)
    * @param instrument the instrument the note is played in [0, 127]
    * @param pitch      the pitch at which the note is played [0, 127]
-   * @throws IllegalStateException    will not throw in view only model
-   * @throws IllegalArgumentException will not throw in view only model
+   * @throws IllegalStateException      will not throw in view only model
+   * @throws IllegalArgumentException   will not throw in view only model
    */
   @Override
   public void removeNote(int start, int instrument, int pitch) throws IllegalStateException, IllegalArgumentException {
@@ -65,11 +65,12 @@ public class ViewOnlyModel implements MusicEditorOperations {
    * @param instrument  the instrument the note is played in [0, 127]
    * @param pitch       the pitch at which the note is played [0, 127]
    * @param editedPitch the new pitch of the note [0, 127]
-   * @throws IllegalStateException    will not throw in view only model
-   * @throws IllegalArgumentException will not throw in view only model
+   * @throws IllegalStateException      will not throw in view only model
+   * @throws IllegalArgumentException   will not throw in view only model
    */
   @Override
-  public void editNotePitch(int start, int instrument, int pitch, int editedPitch) throws IllegalStateException, IllegalArgumentException {
+  public void editNotePitch(int start, int instrument, int pitch, int editedPitch)
+      throws IllegalStateException, IllegalArgumentException {
     return;
   }
 
@@ -80,12 +81,12 @@ public class ViewOnlyModel implements MusicEditorOperations {
    * @param instrument  the instrument the note is played in [0, 127]
    * @param pitch       the pitch at which the note is played [0, 127]
    * @param editedStart the new start position of the note (measured in beats)
-   * @throws IllegalStateException         throws only unsupported exception; view only
-   * @throws IllegalArgumentException      will not throw in view only model
-   * @throws UnsupportedOperationException will not throw in view only model
+   * @throws IllegalStateException      will not throw in view only model
+   * @throws IllegalArgumentException   will not throw in view only model
    */
   @Override
-  public void editNotePosition(int start, int instrument, int pitch, int editedStart) throws IllegalStateException, IllegalArgumentException {
+  public void editNotePosition(int start, int instrument, int pitch, int editedStart)
+      throws IllegalStateException, IllegalArgumentException {
     return;
   }
 
@@ -96,11 +97,12 @@ public class ViewOnlyModel implements MusicEditorOperations {
    * @param instrument the instrument the note is played in [0, 127]
    * @param pitch      the pitch at which the note is played [0, 127]
    * @param editedEnd  the new end position of the note (measured in beats)
-   * @throws IllegalStateException    will not throw in view only model
-   * @throws IllegalArgumentException will not throw in view only model
+   * @throws IllegalStateException      will not throw in view only model
+   * @throws IllegalArgumentException   will not throw in view only model
    */
   @Override
-  public void editNoteDuration(int start, int instrument, int pitch, int editedEnd) throws IllegalStateException, IllegalArgumentException {
+  public void editNoteDuration(int start, int instrument, int pitch, int editedEnd)
+      throws IllegalStateException, IllegalArgumentException {
     return;
   }
 
@@ -108,9 +110,8 @@ public class ViewOnlyModel implements MusicEditorOperations {
    * should never be called, view only method.
    *
    * @param tempo the tempo to set the piece
-   * @throws IllegalStateException         throws only unsupported exception; view only
-   * @throws IllegalArgumentException      will not throw in view only model
-   * @throws UnsupportedOperationException will not throw in view only model
+   * @throws IllegalStateException      will not throw in view only model
+   * @throws IllegalArgumentException   will not throw in view only model
    */
   @Override
   public void setTempo(int tempo) throws IllegalStateException, IllegalArgumentException {

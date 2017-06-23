@@ -99,10 +99,11 @@ public class MusicEditorBuilderTest {
     builder.addNote(3, 5, 1, 60, 128);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test
   public void addNoteAlreadyExistsAtStartAndPitchSameInstrument() {
     builder.addNote(0, 50, 1, 60, 100);
     builder.addNote(0, 20, 1, 60, 70);
+    assertEquals(2, builder.build().getNotes().size());
   }
 
   @Test
