@@ -9,7 +9,7 @@ import static org.junit.Assert.assertEquals;
 
 
 /**
- * Created by Will on 6/23/2017.
+ * Tests for the {@link ViewOnlyModel} class.
  */
 public class ViewOnlyModelTest {
   MusicEditorOperations model;

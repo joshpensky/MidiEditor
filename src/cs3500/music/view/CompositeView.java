@@ -4,7 +4,11 @@ import cs3500.music.controller.MusicEditorController;
 import cs3500.music.model.MusicEditorOperations;
 
 import javax.sound.midi.MidiUnavailableException;
-import java.awt.event.*;
+import java.awt.event.KeyListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -13,7 +17,6 @@ import java.util.TreeMap;
  * editor and piano visuals, as well as playback from the MIDI view.
  */
 public class CompositeView implements MusicEditorView {
-  private final MusicEditorOperations model;
   private final MidiView midi;
   private final GuiView gui;
   private Map<Integer, Runnable> keyEventRunnables;
@@ -26,11 +29,12 @@ public class CompositeView implements MusicEditorView {
    *
    * @param model   the model to be represented in the composite view
    * @throws MidiUnavailableException if MIDI is currently unavailable for the system
+   * @throws IllegalArgumentException if the given model is uninitialized
    */
-  protected CompositeView(MusicEditorOperations model) throws MidiUnavailableException {
-    this.model = model;
-    this.midi = new MidiView.Builder(this.model).build();
-    this.gui = new GuiView(this.model);
+  protected CompositeView(MusicEditorOperations model) throws MidiUnavailableException,
+      IllegalArgumentException {
+    this.midi = new MidiView.Builder(model).build();
+    this.gui = new GuiView(model);
     this.setKeyEvents();
     this.gui.setFocusable(true);
     this.gui.requestFocus();

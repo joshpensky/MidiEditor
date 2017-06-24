@@ -24,8 +24,8 @@ public class ConsoleView implements MusicEditorView {
   private final StringBuilder log;
 
   /**
-   * Represents the builder class for a ConsoleView. Defaults the appendable of the ConsoleView to the
-   * console (System.out), but allows for the appendable to be changed.
+   * Represents the builder class for a ConsoleView. Defaults the appendable of the ConsoleView to
+   * the console (System.out), but allows for the appendable to be changed.
    */
   public static final class Builder {
     private MusicEditorOperations model;
@@ -117,7 +117,7 @@ public class ConsoleView implements MusicEditorView {
         builder.append(Utils.padString("", lineNumPaddingString, Utils.Alignment.RIGHT));
       } else {
         builder.append(Utils.padString(Integer.toString(i - 1), lineNumPaddingString,
-          Utils.Alignment.RIGHT));
+            Utils.Alignment.RIGHT));
       }
       builder.append("  ");
       for (List<String> pitchCol : arr) {

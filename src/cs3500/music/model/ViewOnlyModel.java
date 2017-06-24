@@ -3,7 +3,8 @@ package cs3500.music.model;
 import java.util.List;
 
 /**
- * View Only version of the MusicEditorOperations. Used by the views so they cannot modify the state of the model.
+ * View-only version of the MusicEditorOperations interface. Used by the views so they cannot
+ * modify the state of the given model.
  */
 public class ViewOnlyModel implements MusicEditorOperations {
   private final MusicEditorOperations model;
@@ -11,13 +12,13 @@ public class ViewOnlyModel implements MusicEditorOperations {
   /**
    * Constructor for view only model.
    *
-   * @param m model this model calls on for getter methods.
+   * @param model   model this model calls on for getter methods.
    */
-  public ViewOnlyModel(MusicEditorOperations m) {
-    if (m == null) {
+  public ViewOnlyModel(MusicEditorOperations model) {
+    if (model == null) {
       throw new IllegalArgumentException("Cannot construct a null with a null model");
     }
-    this.model = m;
+    this.model = model;
   }
 
   /**
@@ -40,12 +41,13 @@ public class ViewOnlyModel implements MusicEditorOperations {
    * @throws IllegalArgumentException   will not throw in view only model
    */
   @Override
-  public void addNote(int start, int end, int instrument, int pitch, int volume) throws IllegalStateException, IllegalArgumentException {
+  public void addNote(int start, int end, int instrument, int pitch, int volume)
+      throws IllegalStateException, IllegalArgumentException {
     return;
   }
 
   /**
-   * Should never be called. This is view only model.
+   * Should never be called on this implementation. This is a view only model.
    *
    * @param start      the starting position of the note (measured in beats)
    * @param instrument the instrument the note is played in [0, 127]
@@ -54,12 +56,13 @@ public class ViewOnlyModel implements MusicEditorOperations {
    * @throws IllegalArgumentException   will not throw in view only model
    */
   @Override
-  public void removeNote(int start, int instrument, int pitch) throws IllegalStateException, IllegalArgumentException {
+  public void removeNote(int start, int instrument, int pitch)
+      throws IllegalStateException, IllegalArgumentException {
     return;
   }
 
   /**
-   * Should never be called.
+   * Should never be called on this implementation. This is a view only model.
    *
    * @param start       the starting position of the note (measured in beats)
    * @param instrument  the instrument the note is played in [0, 127]
@@ -75,7 +78,7 @@ public class ViewOnlyModel implements MusicEditorOperations {
   }
 
   /**
-   * should never be called
+   * Should never be called on this implementation. This is a view only model.
    *
    * @param start       the starting position of the note (measured in beats)
    * @param instrument  the instrument the note is played in [0, 127]
@@ -91,7 +94,7 @@ public class ViewOnlyModel implements MusicEditorOperations {
   }
 
   /**
-   * should never be called, this is view only
+   * Should never be called on this implementation. This is a view only model.
    *
    * @param start      the starting position of the note (measured in beats)
    * @param instrument the instrument the note is played in [0, 127]
@@ -107,7 +110,7 @@ public class ViewOnlyModel implements MusicEditorOperations {
   }
 
   /**
-   * should never be called, view only method.
+   * Should never be called on this implementation. This is a view only model.
    *
    * @param tempo the tempo to set the piece
    * @throws IllegalStateException      will not throw in view only model
@@ -117,7 +120,6 @@ public class ViewOnlyModel implements MusicEditorOperations {
   public void setTempo(int tempo) throws IllegalStateException, IllegalArgumentException {
     return;
   }
-
 
   @Override
   public int getTempo() throws IllegalStateException {

@@ -1,6 +1,5 @@
 package cs3500.music.view;
 
-import cs3500.music.model.Note;
 import cs3500.music.model.Pitch;
 import cs3500.music.util.MidiConversion;
 import org.junit.Test;
@@ -36,21 +35,24 @@ public class PianoPanelTest {
   @Test
   public void testGetPitchMinPitch() {
     init();
-    Posn min_note_position = new Posn(15,9);
-    assertEquals(MidiConversion.getPitch(p.getPitch(min_note_position.getX(), min_note_position.getY())), Pitch.C);
+    Posn minNotePosition = new Posn(15,9);
+    assertEquals(MidiConversion.getPitch(p.getPitch(minNotePosition.getX(),
+        minNotePosition.getY())), Pitch.C);
   }
 
   @Test
   public void testGetPitchSharpPitch() {
     init();
-    Posn sharp_note_position = new Posn(490,34);
-    assertEquals(MidiConversion.getPitch(p.getPitch(sharp_note_position.getX(), sharp_note_position.getY())), Pitch.FSHARP);
+    Posn sharpNotePosition = new Posn(490,34);
+    assertEquals(MidiConversion.getPitch(p.getPitch(sharpNotePosition.getX(),
+        sharpNotePosition.getY())), Pitch.FSHARP);
   }
 
   @Test
   public void testGetPitchMaxPitch() {
     init();
-    Posn max_note_position = new Posn(1068,63);
-    assertEquals(MidiConversion.getPitch(p.getPitch(max_note_position.getX(), max_note_position.getY())), Pitch.B);
+    Posn maxNotePosition = new Posn(1068,63);
+    assertEquals(MidiConversion.getPitch(p.getPitch(maxNotePosition.getX(),
+        maxNotePosition.getY())), Pitch.B);
   }
 }

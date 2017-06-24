@@ -1,6 +1,5 @@
 package cs3500.music.view;
 
-import cs3500.music.model.MusicEditorModel;
 import cs3500.music.model.MusicEditorOperations;
 import cs3500.music.util.MidiConversion;
 

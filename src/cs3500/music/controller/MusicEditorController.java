@@ -13,7 +13,7 @@ import cs3500.music.view.MusicEditorView;
 import cs3500.music.view.MusicEditorViewFactory;
 
 /**
- * Controller in MVC design for music editor.
+ * Represents the controller in the MVC scheme for the MusicEditor.
  */
 public class MusicEditorController extends KeyAdapter {
   private MusicEditorOperations model;

@@ -26,7 +26,7 @@ public class MusicEditorControllerTest {
   private void initVisualView() {
     app = new StringBuilder();
     controller = MusicEditorController.initialize();
-    controller.setModelAndView("build/mary-little-lamb.txt", "visual");
+    controller.setModelAndView("resources/mary-little-lamb.txt", "visual");
     Button a = new Button("click");
 
     left = new KeyEvent(a, 2, 20, 1, KeyEvent.VK_LEFT, 'l');
@@ -50,7 +50,7 @@ public class MusicEditorControllerTest {
 
     app = new StringBuilder();
     controller = MusicEditorController.initialize();
-    controller.setModelAndView("build/mary-little-lamb.txt", "composite");
+    controller.setModelAndView("resources/mary-little-lamb.txt", "composite");
     try {
       Thread.sleep(4000);
     }

@@ -6,7 +6,7 @@ import cs3500.music.model.Pitch;
 import cs3500.music.util.MidiConversion;
 import org.junit.Test;
 
-import java.awt.*;
+import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 
 import static org.junit.Assert.assertArrayEquals;

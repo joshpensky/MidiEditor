@@ -7,7 +7,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
- * Tests for the {@code Posn} class.
+ * Tests for the {@link Posn} class.
  */
 public class PosnTest {
   @Test

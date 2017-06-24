@@ -1,22 +1,8 @@
 package cs3500.music;
 
 import cs3500.music.controller.MusicEditorController;
-import cs3500.music.model.MusicEditorOperations;
-import cs3500.music.model.MusicEditorBuilder;
-import cs3500.music.tests.MusicEditorBuilderTest;
-import cs3500.music.util.MusicReader;
-import cs3500.music.view.MidiView;
-import cs3500.music.view.MusicEditorView;
-import cs3500.music.view.MusicEditorViewFactory;
-
-import java.io.FileReader;
-import java.io.IOException;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiUnavailableException;
-
-import static java.awt.event.KeyEvent.VK_COLON;
-import static java.awt.event.KeyEvent.VK_END;
-import static java.awt.event.KeyEvent.VK_HOME;
 
 /**
  * The main class for the music editor that (currently) handles model and view.
@@ -28,11 +14,12 @@ public class MusicEditor {
    *
    * @param args   arguments for program to be run, needs to be in format: textFileName
    *              desiredViewType
-   * @throws IOException appendable/readable not initialized correctly
+   * @throws IllegalArgumentException if the given file name does not point to a file, or the view
+   *                                  name is not a valid view
    * @throws InvalidMidiDataException data given to midi player not correctly formatted
    * @throws MidiUnavailableException midi is unavailable for system at this time
    */
-  public static void main(String[] args) throws IOException, InvalidMidiDataException,
+  public static void main(String[] args) throws IllegalArgumentException, InvalidMidiDataException,
       MidiUnavailableException {
     if (args.length != 2) {
       throw new IllegalArgumentException("Must give two arguments:\n"
