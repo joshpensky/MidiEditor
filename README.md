@@ -1,6 +1,6 @@
 # MidiEditor
 
-This was a project for a Northeastern University class, CS 3500 - Object-Oriented Design. The object of assignment was to build the model and view of a MIDI editor (controller would be added to the project later).
+This was a project for a Northeastern University class, CS 3500 - Object-Oriented Design. The object of assignment was to build the model, view, and controller of a MIDI/Music editor.
 
 ## Running the Jar
 Navigate to the resources folder in the command line or Terminal, and execute the following line:
