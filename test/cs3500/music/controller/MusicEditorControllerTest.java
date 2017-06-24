@@ -190,6 +190,8 @@ public class MusicEditorControllerTest {
     initCompositeView();
     controller.keyPressed(home);
     controller.keyPressed(right);
+    controller.keyPressed(home);
+    controller.keyPressed(right);
     assertEquals(1, cursorPos(controller.getLog()));
     controller.keyPressed(right);
     assertEquals(2, cursorPos(controller.getLog()));
@@ -242,7 +244,8 @@ public class MusicEditorControllerTest {
     initCompositeView();
     controller.keyPressed(home);
     controller.keyPressed(right);
-    assertEquals(2, cursorPos(controller.getLog()));
+    controller.keyPressed(home);
+    assertEquals(0, cursorPos(controller.getLog()));
     controller.keyPressed(left);
     assertEquals(0, cursorPos(controller.getLog()));
     controller.keyPressed(left);
