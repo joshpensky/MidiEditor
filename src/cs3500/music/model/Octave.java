@@ -72,61 +72,6 @@ public final class Octave {
   }
 
   /**
-   * Creates a 2-dimensional list of Strings, or table of Strings, representing an octave. The
-   * inner lists (the columns) represent the different pitches, and the notes in those pitches.
-   *
-   * @param octaveNum   the number of this octane
-   * @param padding     the amount of spaced padding for each String in the list
-   * @return a 2-dimensional list of Strings representing this octane
-   */
-  List<List<String>> getOctaveTable(int octaveNum, int padding) {
-    String empty = Utils.padString("", padding, Utils.Alignment.CENTER);
-    List<List<String>> builder = new ArrayList<>();
-    int maxLength = this.length();
-    for (Pitch p : Pitch.values()) {
-      builder.add(getPitchColumn(p, octaveNum, padding, maxLength));
-    }
-    for (List<String> pitchCol : builder) {
-      while (pitchCol.size() < maxLength) {
-        pitchCol.add(empty);
-      }
-    }
-    return builder;
-  }
-
-  /**
-   * Helper to the getOctaveTable method. Creates a list of Strings that represents a single
-   * pitch within this octave. Notes are represented with {@code X}'s for onsets and {@code |}'s
-   * for sustains. Rests are represented with empty spaces.
-   *
-   * @param pitch       the pitch being represented
-   * @param octaveNum   the number of this octane
-   * @param padding     the amount of spaced padding for each String in the list
-   * @param length      the length of the returned list
-   * @return a list of Strings representing the given pitch in this octane
-   */
-  private List<String> getPitchColumn(Pitch pitch, int octaveNum, int padding, int length) {
-    List<String> pitchCol = new ArrayList<>();
-    List<Note> notes = this.pitches.get(pitch);
-    String empty = Utils.padString("", padding, Utils.Alignment.CENTER);
-    for (int i = 0; i <= length; i++) {
-      pitchCol.add(empty);
-    }
-    String onset = Utils.padString("X", padding, Utils.Alignment.CENTER);
-    String sustain = Utils.padString("|", padding, Utils.Alignment.CENTER);
-    for (Note n : notes) {
-      int start = n.getStartPos();
-      int end = n.getEndPos();
-      pitchCol.set(start, onset);
-      for (int i = start + 1; i <= end; i++) {
-        pitchCol.set(i, sustain);
-      }
-    }
-    pitchCol.add(0, Utils.padString(pitch.toString() + octaveNum, padding, Utils.Alignment.CENTER));
-    return pitchCol;
-  }
-
-  /**
    * Checks if this octave is empty, or has no notes.
    *
    * @return true if this octave is empty, false otherwise
@@ -322,10 +267,7 @@ public final class Octave {
     List<Note> pitchList = this.pitches.get(pitch);
     int addIndex = 0;
     for (int i = 0; i < pitchList.size(); i++) {
-      int comparison = Integer.compare(pitchList.get(i).getStartPos(), note.getStartPos());
-      if (comparison == 0 && pitchList.get(i).getInstrument() == note.getInstrument()) {
-        //throw new IllegalArgumentException("Note already exists at this position.");
-      } else if (comparison > 0) {
+      if (Integer.compare(pitchList.get(i).getStartPos(), note.getStartPos()) > 0) {
         break;
       }
       addIndex++;
@@ -345,7 +287,7 @@ public final class Octave {
     for (Pitch p : this.pitches.keySet()) {
       for (Note n : this.pitches.get(p)) {
         Integer[] arr = {n.getStartPos(), n.getEndPos(), n.getInstrument(),
-          MidiConversion.getMidiPitch(octave, p), n.getVolume()};
+            MidiConversion.getMidiPitch(octave, p), n.getVolume()};
         notes.add(arr);
       }
     }

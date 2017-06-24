@@ -23,6 +23,7 @@ public class EditorPanelTest {
     ep = new EditorPanel(model, 20, 20);
   }
 
+  // Tests for the constructor
   @Test(expected = IllegalArgumentException.class)
   public void constructorNullModel() {
     this.ep = new EditorPanel(null, 20, 20);
@@ -65,6 +66,7 @@ public class EditorPanelTest {
     assertEquals(ep.updateCursor(true), 1);
   }
 
+  // Tests for the updateCursor method
   @Test
   public void testCursorBackAndForwardsEquality() {
     init();
@@ -86,5 +88,30 @@ public class EditorPanelTest {
     ep.updateCursor(true);
     ep.updateCursor(true);
     assertEquals(ep.updateCursor(false), 2);
+  }
+
+  // Tests for the getCursorPosition method
+  @Test
+  public void getCursorPositionInit() {
+    init();
+    assertEquals(0, ep.getCursorPosition());
+  }
+
+  @Test
+  public void getCursorPositionMoveForward() {
+    init();
+    ep.updateCursor(true);
+    assertEquals(1, ep.getCursorPosition());
+    ep.updateCursor(true);
+    assertEquals(2, ep.getCursorPosition());
+  }
+
+  @Test
+  public void getCursorPositionMoveBackward() {
+    init();
+    ep.updateCursor(true);
+    assertEquals(1, ep.getCursorPosition());
+    ep.updateCursor(false);
+    assertEquals(0, ep.getCursorPosition());
   }
 }

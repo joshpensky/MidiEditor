@@ -18,7 +18,7 @@ public class MusicEditorViewFactory {
    *   </tr>
    *   <tr>
    *     <th>"console"</th>
-   *     <th>{@link TextView}</th>
+   *     <th>{@link ConsoleView}</th>
    *   </tr>
    *   <tr>
    *     <th>"visual"</th>
@@ -28,6 +28,10 @@ public class MusicEditorViewFactory {
    *     <th>"midi"</th>
    *     <th>{@link MidiView}</th>
    *   </tr>
+   *   <tr>
+   *     <th>"composite"</th>
+   *     <th>{@link CompositeView}</th>
+   *   </tr>
    * </table>
    *
    * @param viewName   the name of the desired view (case-insensitive, see above table for details)
@@ -35,7 +39,6 @@ public class MusicEditorViewFactory {
    * @return a new view object based on the desired view
    * @throws IllegalArgumentException the given view name is uninitialized, or the given model is
    *                                  uninitialized
-   * @throws MidiUnavailableException if midi is currently unavailable when choosing the MIDI view
    */
   public static MusicEditorView getView(String viewName, MusicEditorOperations model)
       throws IllegalArgumentException {
@@ -45,7 +48,7 @@ public class MusicEditorViewFactory {
     viewName = viewName.toLowerCase();
     switch (viewName) {
       case "console":
-        return new TextView.Builder(model).build();
+        return new ConsoleView.Builder(model).build();
       case "visual":
         return new GuiView(model);
       case "midi":
@@ -55,7 +58,13 @@ public class MusicEditorViewFactory {
           System.err.println(e.getMessage());
         }
         throw new IllegalArgumentException("Midi player error");
-
+      case "composite":
+        try {
+          return new CompositeView(model);
+        } catch (MidiUnavailableException e) {
+          System.err.println(e.getMessage());
+        }
+        throw new IllegalArgumentException("Midi player error");
       default:
         throw new IllegalArgumentException("Given view, " + viewName + ", does not exist.");
     }

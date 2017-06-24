@@ -23,7 +23,7 @@ public class MusicEditorViewFactoryTest {
 
   @Test
   public void getViewConsole() {
-    assertTrue(MusicEditorViewFactory.getView("console", builder.build()) instanceof TextView);
+    assertTrue(MusicEditorViewFactory.getView("console", builder.build()) instanceof ConsoleView);
   }
 
   @Test

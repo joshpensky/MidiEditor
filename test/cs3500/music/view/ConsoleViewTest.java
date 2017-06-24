@@ -8,12 +8,12 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Tests for the {@link TextView} class.
+ * Tests for the {@link ConsoleView} class.
  */
-public class TextViewTest {
+public class ConsoleViewTest {
   private final MusicEditorBuilder builder = new MusicEditorBuilder();
   private final Appendable app = new StringBuilder();
-  private TextView view;
+  private ConsoleView view;
 
   /**
    * Initializes the MidiView to the given model, using the mock sequencer.
@@ -21,22 +21,22 @@ public class TextViewTest {
    * @param model   the model to set the view to
    */
   public void init(MusicEditorOperations model) {
-    this.view = new TextView.Builder(model).setAppendable(this.app).build();
+    this.view = new ConsoleView.Builder(model).setAppendable(this.app).build();
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void builderNullModel() {
-    TextView view = new TextView.Builder(null).build();
+    ConsoleView view = new ConsoleView.Builder(null).build();
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void builderNullAppendable() {
-    TextView view = new TextView.Builder(builder.build()).setAppendable(null).build();
+    ConsoleView view = new ConsoleView.Builder(builder.build()).setAppendable(null).build();
   }
 
   @Test
   public void builderValid() {
-    TextView view = new TextView.Builder(builder.addNote(0, 3, 4, 60, 64).build())
+    ConsoleView view = new ConsoleView.Builder(builder.addNote(0, 3, 4, 60, 64).build())
         .setAppendable(this.app).build();
     view.initialize();
     assertEquals(""
@@ -52,7 +52,6 @@ public class TextViewTest {
     MusicEditorOperations model = builder.build();
     init(model);
     this.view.initialize();
-    assertEquals(model.view(), this.app.toString());
     assertEquals("", this.app.toString());
   }
 
@@ -61,7 +60,6 @@ public class TextViewTest {
     MusicEditorOperations model = builder.addNote(0, 3, 4, 60, 64).build();
     init(model);
     this.view.initialize();
-    assertEquals(model.view(), this.app.toString());
     assertEquals(""
         + "     C4 \n"
         + "0    X  \n"
@@ -88,7 +86,6 @@ public class TextViewTest {
         + "8    |                                            |                                \n"
         + "9                                                 |                                \n";
     this.view.initialize();
-    assertEquals(model.view(), this.app.toString());
     assertEquals(output, this.app.toString());
   }
 
@@ -176,7 +173,6 @@ public class TextViewTest {
         + "62    |                                       |                                     \n"
         + "63    |                                       |                                     \n"
         + "64    |                                       |                                     \n";
-    assertEquals(model.view(), this.app.toString());
     assertEquals(output, this.app.toString());
   }
 }

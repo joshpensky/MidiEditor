@@ -1,4 +1,4 @@
-tempo 71428
+tempo 50000
 note 0 2 1 76 64
 note 3 5 1 76 64
 note 9 11 1 76 64

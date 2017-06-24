@@ -7,8 +7,7 @@ import javax.swing.JScrollPane;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
 
 /**
  * Represents the main container panel in the {@link GuiView}. This panel contains the
@@ -19,6 +18,7 @@ public class GuiContainer extends JPanel {
   private final PianoPanel pianoPanel;
   private final EditorPanel editorPanel;
   private final MusicEditorOperations model;
+  private final JScrollPane editorContainer;
 
   /**
    * Constructs a new {@code GuiContainer} using the given model. Sets the width of the container
@@ -41,49 +41,60 @@ public class GuiContainer extends JPanel {
     int contHeight = 500;
     // Adds the editor panel to a scroll pane, then adds the scroll pane
     this.editorPanel = new EditorPanel(this.model, width, contHeight);
-    JScrollPane editorContainer = new JScrollPane(this.editorPanel,
+    this.editorContainer = new JScrollPane(this.editorPanel,
         JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
         JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-    editorContainer.setPreferredSize(new Dimension(width, contHeight));
-    this.add(editorContainer, BorderLayout.NORTH);
+    this.editorContainer.setPreferredSize(new Dimension(width, contHeight));
+    this.add(this.editorContainer, BorderLayout.NORTH);
     // Adds the piano panel and starts piano at note 0
     this.pianoPanel = new PianoPanel(this.model.getNotesAtBeat(0), width);
     this.add(this.pianoPanel, BorderLayout.SOUTH);
-    // Adds the key listener to the container for moving the cursor
-    this.setFocusable(true);
-    this.requestFocusInWindow();
-    this.addKeyListener(new KeyListener() {
-      @Override
-      public void keyTyped(KeyEvent e) {
-        // No actions to be taken on key type
-      }
-
-      @Override
-      public void keyPressed(KeyEvent e) {
-        updatePosition(e);
-      }
-
-      @Override
-      public void keyReleased(KeyEvent e) {
-        // No actions to be taken on key release
-      }
-    });
   }
 
   /**
-   * Updates the position of the cursor in the editor panel, as well as the keys highlighted in
-   * the piano panel, based on key press.
-   * Left arrow will move the cursor back one beat, while the right arrow will move the cursor
-   * forward one beat.
+   * Updates the position of the cursor in the editor view, as well as the keys highlighted in
+   * the piano view. Won't move the cursor past the limitations of the editor (before 0 or after
+   * the last beat displayed).
    *
-   * @param e   the key event created from pressing a key on the keyboard
+   * @param forward   moves cursor forward if true, backward if false
    */
-  private void updatePosition(KeyEvent e) {
-    if (e.getKeyCode() == 39 || e.getKeyCode() == 37) {
-      int beat = this.editorPanel.updateCursor(e.getKeyCode() == 39);
-      this.pianoPanel.updateHighlights(this.model.getNotesAtBeat(beat));
-      repaint();
+  protected void updatePosition(boolean forward) {
+    int beat = this.editorPanel.updateCursor(forward);
+    this.pianoPanel.updateHighlights(this.model.getNotesAtBeat(beat));
+    repaint();
+  }
+
+  /**
+   * Moves the cursor to the very beginning of the piece (position 0). Updates the piano panel as
+   * well to reflect this change.
+   */
+  protected void jumpToBeginning() {
+    while (this.editorPanel.getCursorPosition() > 0) {
+      this.editorPanel.updateCursor(false);
     }
+    this.pianoPanel.updateHighlights(this.model.getNotesAtBeat(0));
+    repaint();
+  }
+
+  /**
+   * Moves the cursor to the very end of the piece (length of the piece). Updates the piano panel as
+   * well to reflect this change.
+   */
+  protected void jumpToEnd() {
+    while (this.editorPanel.getCursorPosition() < this.model.getLength()) {
+      this.editorPanel.updateCursor(true);
+    }
+    this.pianoPanel.updateHighlights(this.model.getNotesAtBeat(this.model.getLength()));
+    repaint();
+  }
+
+  /**
+   * Gets the current position of the cursor in the editor view.
+   *
+   * @return the current position of the cursor
+   */
+  protected int getCursorPosition() {
+    return this.editorPanel.getCursorPosition();
   }
 
   /**
@@ -94,5 +105,48 @@ public class GuiContainer extends JPanel {
    */
   protected String getLog() {
     return this.log.append(this.editorPanel.getLog()).append(this.pianoPanel.getLog()).toString();
+  }
+
+  /**
+   * Gets the note data for the note created when a key is pressed on the piano view, with the
+   * pitch of the note being that of the key pressed. The note will start at the current cursor's
+   * position and be one beat long. It will be played on the piano instrument at volume 64.
+   * If the mouse did not press on a key, null will be returned instead.
+   *
+   * @param e   the event of a mouse press
+   * @return the note data created from the press of a key on the piano
+   * @throws IllegalArgumentException if the given mouse event is uninitialized
+   */
+  protected Integer[] getNote(MouseEvent e) throws IllegalArgumentException {
+    if (e == null) {
+      throw new IllegalArgumentException("Cannot pass uninitialized mouse event.");
+    }
+    int x = e.getX();
+    int y = e.getY() - this.editorContainer.getHeight();
+    int pitch = pianoPanel.getPitch(x, y);
+    if (pitch > 0) {
+      int start = editorPanel.getCursorPosition();
+      return new Integer[] {start, start + 1, 1, pitch, 64};
+    } else {
+      return null;
+    }
+  }
+
+  /**
+   * Updates both of the panels with the most up to date information from the model.
+   */
+  protected void updatePanels() {
+    this.editorPanel.update(this.model, this.getWidth(), this.getHeight());
+    this.pianoPanel.updateHighlights(this.model.getNotesAtBeat(this.getCursorPosition()));
+  }
+
+  /**
+   * Toggles scrolling on and off, for when adding new notes to the end of a piece. This allows
+   * it to momentarily stop scrolling and then resume to push the cursor forward.
+   *
+   * @param on   true to turn scrolling on, false otherwise
+   */
+  protected void scrollToggle(boolean on) {
+    this.editorPanel.scrollToggle(on);
   }
 }

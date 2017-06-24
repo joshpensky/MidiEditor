@@ -24,12 +24,11 @@ public class EditorPanel extends JViewport {
   private static final Color COLOR_LINES_DARK = Color.decode("#95989A");
   private static final Color COLOR_TEXT = Color.decode("#5E6162");
 
-  private static final int SCROLL_PADDING = 3;
+  private static final int SCROLL_PADDING = 5;
   private static final int START_HEIGHT = 30;
   private static final int START_WIDTH = 40;
   private static final int CELL_WIDTH = 30;
   private int cellHeight = 5;
-
 
   private final StringBuilder log;
   private List<Integer[]> notes;
@@ -53,23 +52,26 @@ public class EditorPanel extends JViewport {
    */
   protected EditorPanel(MusicEditorOperations model, int width, int height)
       throws IllegalArgumentException {
+    this.cursorPosition = 0;
+    this.scrollOffset = 0;
+    update(model, width, height);
+    this.log = new StringBuilder();
+  }
+
+  protected void update(MusicEditorOperations model, int width, int height) {
     if (model == null) {
       throw new IllegalArgumentException("Given model is uninitialized.");
     } else if (width <= 0 || height <= 0) {
       throw new IllegalArgumentException("Width and height must be positive and non-zero.");
     }
-
     this.notes = model.getNotes();
     this.highPitch = this.getHighestPitch();
     this.lowPitch = this.getLowestPitch();
     this.numRows = highPitch - lowPitch + 1;
     this.pieceLength = model.getLength();
-    this.cursorPosition = 0;
-    this.scrollOffset = 0;
     this.cellHeight = getCellHeight(height);
     this.setPreferredSize(new Dimension(width,
         START_HEIGHT + (this.numRows * this.cellHeight) + 5));
-    this.log = new StringBuilder();
   }
 
   /**
@@ -271,10 +273,13 @@ public class EditorPanel extends JViewport {
       if ((cellsShown + this.scrollOffset - 2) >= this.pieceLength) {
         this.reachedEnd = true;
       }
+      this.log.append("<EP>cFor:- ");
     } else {
       this.cursorPosition = Math.max(0, this.cursorPosition - 1);
+      this.log.append("<EP>cBac:- ");
     }
     this.updateScrollOffset(this.cursorPosition - startingPos);
+    this.log.append(cursorPosition + " </EP>\n");
     return this.cursorPosition;
   }
 
@@ -307,5 +312,31 @@ public class EditorPanel extends JViewport {
    */
   protected String getLog() {
     return this.log.toString();
+  }
+
+  /**
+   * Gets the current position of the cursor in this editor view.
+   *
+   * @return the current position of the cursor
+   */
+  protected int getCursorPosition() {
+    return this.cursorPosition;
+  }
+
+  /**
+   * Toggles scrolling on and off, for when adding new notes to the end of a piece. This allows
+   * it to momentarily stop scrolling and then resume to push the cursor forward.
+   *
+   * @param on   true to turn scrolling on, false otherwise
+   */
+  protected void scrollToggle(boolean on) {
+    if (on) {
+      int cellsShown = (this.getWidth() - START_WIDTH) / CELL_WIDTH;
+      if ((cellsShown + this.scrollOffset - 2) >= this.pieceLength) {
+        this.reachedEnd = true;
+      }
+    } else {
+      this.reachedEnd = false;
+    }
   }
 }
